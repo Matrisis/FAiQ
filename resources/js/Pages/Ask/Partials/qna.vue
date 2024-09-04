@@ -3,6 +3,7 @@ import {onMounted, ref} from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import TextInput from "@/Components/TextInput.vue";
 import ActionSection from "@/Components/ActionSection.vue";
+import MarkdownRenderer from "@/Components/Markdown.vue";
 
 const props = defineProps({
     channel: String,
@@ -13,27 +14,23 @@ const form = useForm({
     question: '',
 });
 
-const answer = ref(null);
+const answer = ref('');
 const asking = ref(false);
 
 onMounted(() => {
     Echo.private(`ask.${props.channel}`)
         .listen('Ask', (event) => {
             asking.value = false
-            answer.value = event.answer.answer
+            if (answer.value === null) {
+                answer.value = event.answer.answer
+            } else {
+                answer.value = answer.value + event.answer.answer
+            }
         })
 })
 
-/*
-const sendQuestionStream = await axios.post(route("ask.create", {question: form.question}, {responseType: 'stream'}));
-const streamAnswer = sendQuestionStream.data;
-streamAnswer.on('answer', (data) => {
-    console.log(data)
-})
-*/
-
 const sendquestion = () => {
-    answer.value = null
+    answer.value = ''
     axios.post(route('ask.create', {team: props.team.id}), {
         question: form.question,
         channel: props.channel
@@ -68,8 +65,8 @@ const sendquestion = () => {
                 <div v-if="asking" class="bg-white p-4">
                     <p>Asking...</p>
                 </div>
-                <div v-if="answer" class="bg-white p-4">
-                    {{answer}}
+                <div v-if="answer !== ''" class="bg-white p-4">
+                    <MarkdownRenderer :source="answer" />
                 </div>
                 <div v-if="answer" class="text-red bg-white p-4">
                     <div v-for="error in form.errors">

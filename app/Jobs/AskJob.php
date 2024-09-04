@@ -50,13 +50,22 @@ class AskJob implements ShouldQueue
         );
         $data = [
             'question' => $this->question,
-            'answer' => $response["answer"],
-            'data' => json_encode($response),
+            'answer' => mb_convert_encoding($response["answer"], "UTF-8", 'UTF-8'),
         ];
+        print("Broadcasting ask event...\n");
+        if(strlen($data["answer"]) > 50) {
+            foreach (str_split($data["answer"], 10) as $chunk) {
+                print "Chunk : " . $chunk . "\n";
+                broadcast(new Ask(answer: [
+                    'question' => $this->question,
+                    'answer' => mb_convert_encoding($chunk, "UTF-8", 'UTF-8'),
+                ], channel: $this->channel));
+            }
+        } else
+            broadcast(new Ask(answer: $data, channel: $this->channel));
+        $data["data"] = json_encode($response);
         $data["channel"] = $this->channel;
         $data["team_id"] = $this->team->id;
-        print("Broadcasting ask event...\n");
-        broadcast(new Ask(answer: $data, channel: $this->channel));
         Answer::create($data);
     }
 }

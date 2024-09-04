@@ -14,6 +14,7 @@ class Answer extends Model
         'question',
         'answer',
         'data',
+        'type',
         'team_id'
     ];
 

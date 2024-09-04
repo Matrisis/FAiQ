@@ -63,7 +63,7 @@ class FileEmbeddingService
         $split_text = str_split($text, 50000);
         $cleaned_text = [];
         foreach ($split_text as $sp) {
-            foreach (str_split($this->cleanText($sp, $tries), 1536 * 3) as $scp) {
+            foreach (str_split($this->cleanText($sp, $tries), 3000) as $scp) {
                 $cleaned_text[] = [
                     "cleaned" => $scp,
                     "file_id" => $file->id
@@ -77,6 +77,7 @@ class FileEmbeddingService
     {
         $chat_service = new ChatService();
         $prompt = "You are a text cleaner assistant. You must remove from the text useless or incomprehensible data.
+        Remove useless characters.
         You will return the text cleaned, concisely without removing any details or information.";
         $messages = [
             ['role' => 'system', 'content' => $prompt],
@@ -88,7 +89,7 @@ class FileEmbeddingService
             if ($this->verification(original: $text, result: $result, context: $prompt, prompt: $custom_prompt))
                 return $result;
             $messages[1]["content"] = $messages[1]["content"]
-                . "You must return only the text cleaned.";
+                . "You must return a cleaned version of the original text.";
             $result = $chat_service->chat($messages, 1536)["answer"];
         }
         return $result;

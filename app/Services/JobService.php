@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Jobs\AskJob;
+use App\Jobs\AskStreamJob;
 use App\Jobs\Batch\BatchEmbedFile;
 use App\Jobs\Batch\BatchPublish;
 use App\Jobs\Batch\BatchRetrieve;
@@ -26,6 +27,18 @@ class JobService
                 question: $question,
                 tries: $tries,
                 verification_prompt: $verification_prompt
+            )
+        ])->onConnection('redis')->onQueue('ask')->dispatch();
+    }
+
+    public function askStream(string $channel, Team $team, string $question, int $max_tokens = null)
+    {
+        Bus::chain([
+            new AskStreamJob(
+                channel: $channel,
+                team: $team,
+                question: $question,
+                max_tokens: $max_tokens
             )
         ])->onConnection('redis')->onQueue('ask')->dispatch();
     }

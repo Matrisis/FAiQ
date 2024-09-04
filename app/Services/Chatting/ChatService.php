@@ -2,8 +2,11 @@
 
 namespace App\Services\Chatting;
 
+use App\Events\Ask;
+use App\Models\Answer;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
+use Psy\Readline\Hoa\Event;
 
 class ChatService
 {
@@ -37,6 +40,71 @@ class ChatService
             ];
         } catch (\Exception $e) {
             print($this->model);
+            print($e->getMessage());
+            return null;
+        }
+    }
+
+    public function steam(string $channel, $messages, int $max_tokens = null) : ?array {
+        $data = [
+            'model' => $this->model,
+            'messages' => $messages
+        ];
+        if ($max_tokens) $data['max_tokens'] = $max_tokens;
+        try {
+            $stream = OpenAI::chat()->createStreamed($data);
+            $response_answer = "";
+            $tmp_response = "";
+            $iteration = false;
+            foreach($stream as $response) {
+                $answer = $response->choices[0]->toArray()["delta"];
+                if (isset($answer["content"])) {
+                    $answer = $answer["content"];
+                    if (strlen($tmp_response) < 100) {
+                        $tmp_response .= mb_convert_encoding($answer, "UTF-8", 'UTF-8');
+                        $iteration = true;
+                    }
+                    else {
+                        $response_answer .= $tmp_response;
+                        broadcast(new Ask(answer: [
+                            'answer' => $tmp_response
+                        ], channel: $channel));
+                        $tmp_response = "";
+                        $iteration = false;
+                    }
+                    /*
+
+                    if (strlen($answer) > 50) {
+                        foreach (str_split($answer, 50) as $chunk) {
+                            $chunk_answer = mb_convert_encoding($chunk, "UTF-8", 'UTF-8');
+                            $response_answer .= $chunk_answer;
+                            broadcast(new Ask(answer: [
+                                'answer' => $chunk_answer,
+                            ], channel: $channel));
+                        }
+                    }
+                    else {
+                        $chunk_answer = mb_convert_encoding($answer, "UTF-8", 'UTF-8');
+                        $response_answer .= $chunk_answer;
+                        broadcast(new Ask(answer: [
+                            'answer' => $chunk_answer,
+                        ], channel: $channel));
+                    }
+
+                    */
+                }
+            }
+            if ($iteration) {
+                broadcast(new Ask(answer: [
+                    'answer' => $tmp_response
+                ], channel: $channel));
+                $tmp_response = "";
+            }
+            return [
+                "response" => $stream,
+                "answer" => $response_answer
+            ];
+        } catch (\Exception $e) {
             print($e->getMessage());
             return null;
         }
