@@ -42,6 +42,10 @@ class AskJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $previous_question = Answer::where('question', $this->question)->first();
+        if($previous_question)
+            $this->splitBroadcast($previous_question->only(['question', 'answer']));
+
         $response = $this->chatting_service->ask(
             team: $this->team,
             question: $this->question,
@@ -53,8 +57,19 @@ class AskJob implements ShouldQueue
             'answer' => mb_convert_encoding($response["answer"], "UTF-8", 'UTF-8'),
         ];
         print("Broadcasting ask event...\n");
-        if(strlen($data["answer"]) > 50) {
-            foreach (str_split($data["answer"], 10) as $chunk) {
+
+        $this->splitBroadcast($data);
+
+        $data["data"] = json_encode($response);
+        $data["channel"] = $this->channel;
+        $data["team_id"] = $this->team->id;
+        Answer::create($data);
+    }
+
+    private function splitBroadcast(array $data)
+    {
+        if(strlen($data["answer"]) > 100) {
+            foreach (str_split($data["answer"], 100) as $chunk) {
                 print "Chunk : " . $chunk . "\n";
                 broadcast(new Ask(answer: [
                     'question' => $this->question,
@@ -63,9 +78,5 @@ class AskJob implements ShouldQueue
             }
         } else
             broadcast(new Ask(answer: $data, channel: $this->channel));
-        $data["data"] = json_encode($response);
-        $data["channel"] = $this->channel;
-        $data["team_id"] = $this->team->id;
-        Answer::create($data);
     }
 }

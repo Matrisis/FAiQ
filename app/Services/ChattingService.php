@@ -38,11 +38,11 @@ class ChattingService
         return $answer;
     }
 
-    public function steam(string $channel, Team $team, string $question, int $max_tokens = null) : array
+    public function stream(string $channel, Team $team, string $question, int $max_tokens = null) : array
     {
         print("Asking stream: " . $question . "\n");
         $ask_service = new AskService(team: $team, model: $this->model);
-        return $ask_service->steam($channel, $question, $max_tokens);
+        return $ask_service->stream($channel, $question, $max_tokens);
     }
 
     private function getVerificationPrompt() : string

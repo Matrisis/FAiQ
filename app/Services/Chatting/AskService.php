@@ -40,7 +40,7 @@ class AskService
         ];
     }
 
-    public function steam(string $channel, string $question, int $max_tokens = null) : array
+    public function stream(string $channel, string $question, int $max_tokens = null) : array
     {
         $custom_prompt = $this->retrieveCustomPrompt();
         $embedding = $this->retrieveEmbedding($custom_prompt);
@@ -81,7 +81,8 @@ class AskService
             "You are a Support assistant for " . $this->team->name . " team. Your name is FAQ Assistant
             You are helpful, very concise, and friendly.
             You must answer users questions like an FAQ, based on the following context.";
-        return $prompt . "Format as markdown. If you cannot define a good and reliable answer to the question, say no matter the language exactly : I don't know.";
+        return $prompt . "Format as markdown. Only return the answer.
+        If you cannot define a good and reliable answer to the question, say no matter the language exactly : I don't know.";
     }
 
 }
