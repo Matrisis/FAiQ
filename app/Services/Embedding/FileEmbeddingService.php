@@ -5,6 +5,7 @@ namespace App\Services\Embedding;
 use App\Enum\FileTypeEnum;
 use App\Models\Embedding\Embedding;
 use App\Models\Embedding\File;
+use App\Models\FileQuestions;
 use App\Models\Team;
 use App\Services\Chatting\ChatService;
 use App\Services\VerifyingService;
@@ -62,8 +63,10 @@ class FileEmbeddingService
         $text = $pdf->getText();
         $split_text = str_split($text, 50000);
         $cleaned_text = [];
+        $verify_service = new VerifyingService();
         foreach ($split_text as $sp) {
-            foreach (str_split($this->cleanText($sp, $tries), 3000) as $scp) {
+            $file_question = $verify_service->questionsCreate(text: $sp, file: $file);
+            foreach (str_split($this->cleanText($file_question, $sp, $tries), 2000) as $scp) {
                 $cleaned_text[] = [
                     "cleaned" => $scp,
                     "file_id" => $file->id
@@ -73,7 +76,7 @@ class FileEmbeddingService
         return $cleaned_text;
     }
 
-    private function cleanText(string $text, int $tries)
+    private function cleanText(FileQuestions $file_question, string $text, int $tries)
     {
         $chat_service = new ChatService();
         $prompt = "You are a text cleaner assistant. You must remove from the text useless or incomprehensible data.
@@ -86,7 +89,7 @@ class FileEmbeddingService
         $result = $chat_service->chat($messages)["answer"];
         $custom_prompt = "Check if the RESULT matches the goal of prompt CONTEXT for the ORIGINAL text.";
         foreach (range(1, $tries) as $try ) {
-            if ($this->verification(original: $text, result: $result, context: $prompt, prompt: $custom_prompt))
+            if ($this->verification(file_question: $file_question, original: $text, result: $result, context: $prompt, prompt: $custom_prompt))
                 return $result;
             $messages[1]["content"] = $messages[1]["content"]
                 . "You must return a cleaned version of the original text.";
@@ -95,10 +98,12 @@ class FileEmbeddingService
         return $result;
     }
 
-    private function verification(string $original, string $result, string $context, string $prompt = null) : bool
+    private function verification(FileQuestions $file_question, string $original, string $result, string $context, string $prompt = null) : bool
     {
         $verify_service = new VerifyingService($this->model);
-        return $verify_service->verify(original: $original, result: $result, context: $context, prompt: $prompt);
+        return ($verify_service->verify(original: $original, result: $result, context: $context, prompt: $prompt)
+            && $verify_service->questionsCheck($file_question, $result)
+        );
     }
 
 }
