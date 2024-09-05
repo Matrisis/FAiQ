@@ -22,30 +22,30 @@ class QuestionVerifyService
             $messages = [
                 [
                     "role" => "system",
-                    "content" => $custom_prompt ?? "
-                    You are an assistant that generates question based on a text content.
-                    The questions must check knowledge of the text subject and information.
+                    "content" => $custom_prompt ? : "
+                    Your goal is to generate questions based on a text.
+                    The questions must check knowledge about the text content and information.
                     The user will provide the text to generate questions from.
-                 " . "Please provide" . $nb_questions . "questions.
+                 " . "Please provide" . 10 . "questions.
                  Each question should be at least 5 words.
-                 Only questions with high confidence should be returned.
-                 Separate each question with a newline.
+                 Provide high confidence should be returned.
+                 Separate each question with a comma.
                  "
                 ],
                 [
                     "role" => "user",
-                    "content" => $text
+                    "content" => "Provide questions for this text : " . $text
                 ]
             ];
             $response = $chat_service->chat(messages: $messages, max_tokens: $max_tokens);
-            $questions = json_encode(explode($response["answer"], "\n"));
 
             return FileQuestions::create([
                 "file_id" => $file->id,
-                "questions" => $questions
+                "questions" => $response["answer"]
             ]);
         }
         catch (\Exception $e) {
+            print($e->getMessage() . "\n");
             return null;
         }
     }
@@ -55,29 +55,25 @@ class QuestionVerifyService
         $questions = json_decode($file_question->questions);
         $chat_service = new ChatService($this->model);
         try {
-            foreach ($questions as $question) {
                 $messages = [
                     [
                         "role" => "system",
                         "content" => "
-                    You goal is to check if the QUESTION give per the user can be answered with data from the TEXT.
-                    Only answer with YES or NO.
-                "
+                            You goal is to check if all the QUESTIONS given per the user can be answered with data from the TEXT.
+                            Only answer with YES or NO.
+                        "
                     ],
                     [
                         "role" => "user",
-                        "content" => "QUESTIONS :  \"\"\"" . $question . "\"\"\". TEXT : \"\"\"" . $text . "\"\"\""
+                        "content" => "QUESTIONS :  \"\"\"" . $questions . "\"\"\". TEXT : \"\"\"" . $text . "\"\"\""
                     ],
                 ];
 
                 $response = $chat_service->chat(messages: $messages);
-                if ($response["answer"] !== "YES") {
-                    return false;
-                }
-            }
-            return true;
-        }
-        catch (\Exception $e) {
+                print("QUESTIONS VERIFICATION : " . $response["answer"] . "\n");
+                return $response["answer"] === "YES";
+        } catch (\Exception $e) {
+            print($e->getMessage() . "\n");
             return false;
         }
     }

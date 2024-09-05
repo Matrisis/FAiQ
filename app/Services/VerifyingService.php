@@ -27,10 +27,10 @@ class VerifyingService
         return $question_service->create($text, $file, $custom_prompt, $nb_questions, $max_tokens);
     }
 
-    public function questionsCheck(FileQuestions $file_question) : bool
+    public function questionsCheck(FileQuestions $file_question, string $text) : bool
     {
         $question_service = new QuestionVerifyService($this->model);
-        return $question_service->check($file_question);
+        return $question_service->check($file_question, $text);
     }
 
 }

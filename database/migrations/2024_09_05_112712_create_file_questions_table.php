@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('file_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('file_id')->constrained()->cascadeOnDelete();
-            $table->json('questions');
+            $table->foreignId('file_id')->constrained("file")->cascadeOnDelete();
+            $table->text('questions');
             $table->timestamps();
         });
     }
