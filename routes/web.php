@@ -5,15 +5,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -25,14 +16,23 @@ Route::middleware([
 });
 
 
+Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
+
+    Route::prefix('/ask')->name('ask.')->group(function () {
+        Route::get('/', [AskController::class, 'indexPublic'])->name('index');
+        Route::post("/", [AskController::class, 'create'])->name('create');
+    });
+
+});
+
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
+    ->name("admin.")
     ->prefix("/{team}/admin")
     ->group(function () {
 
     Route::prefix('/ask')->name('ask.')->group(function () {
-        Route::get('/', [AskController::class, 'index'])->name('index');
-        Route::post("/", [AskController::class, 'create'])->name('create');
+        Route::get('/', [AskController::class, 'indexAdmin'])->name('index');
     });
 
 });

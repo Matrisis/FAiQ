@@ -44,4 +44,9 @@ class Team extends JetstreamTeam
             'personal_team' => 'boolean',
         ];
     }
+
+    public function parameters()
+    {
+        return $this->hasOne(TeamParameters::class, 'team_id', "id");
+    }
 }

@@ -15,11 +15,31 @@ use Laravel\Prompts\Table;
 class AskController extends Controller
 {
 
-    public function index(Request $request, Team $team) {
+    public function indexAdmin(Request $request, Team $team) {
+        $team = Team::with('parameters')->find($team->id);
+       return $this->index($request, $team, 'admin');
+    }
+
+    public function indexPublic(Request $request, Team $team)
+    {
+        $team = Team::with('parameters')->find($team->id);
+        return $this->index($request, $team, 'public');
+    }
+
+    private function index(Request $request, Team $team, string $render)
+    {
         $channel = $team->id . '-' . Str::random(24);
-        return Inertia::render('Ask', [
+        return Inertia::render("Ask", [
+            // Settings
+            'load' => $render,
             'channel' => $channel,
-            'team' => $team->only(["id", "name"])
+            'team' => $team->only(["id", "name"]),
+
+            // Page custom parameters
+            'background_color' => $team->parameters->background_color,
+            'text_color' => $team->parameters->text_color,
+            'logo_path' => $team->parameters->logo_path,
+            'icon_path' => $team->parameters->icon_path,
         ]);
     }
 

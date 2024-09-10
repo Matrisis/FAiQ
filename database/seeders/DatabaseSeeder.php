@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Team;
+use App\Models\TeamParameters;
 use App\Models\User;
 use App\Services\Old\Assistant\TeamGenesisService;
 use Illuminate\Database\Seeder;
@@ -19,10 +20,15 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->withPersonalTeam()->create();
 
         if(app()->environment('local')) {
-            User::factory()->withPersonalTeam()->create([
+            $team = User::factory()->withPersonalTeam()->create([
                 'name' => 'Test User',
                 'email' => 'a@a.a',
                 'password' => bcrypt('password'),
+            ]);
+            TeamParameters::firstOrCreate([
+                "team_id" => $team->id,
+            ], [
+                "team_id" => $team->id,
             ]);
         }
 

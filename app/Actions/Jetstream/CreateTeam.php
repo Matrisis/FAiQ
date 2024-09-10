@@ -3,6 +3,7 @@
 namespace App\Actions\Jetstream;
 
 use App\Models\Team;
+use App\Models\TeamParameters;
 use App\Models\User;
 use App\Services\Old\Assistant\TeamGenesisService;
 use Illuminate\Support\Facades\Gate;
@@ -34,6 +35,12 @@ class CreateTeam implements CreatesTeams
         ]));
 
         $user->update(["current_team_id" => $team->id]);
+
+        TeamParameters::firstOrCreate([
+            "team_id" => $team->id,
+        ], [
+            "team_id" => $team->id,
+        ]);
 
         return $team;
     }
