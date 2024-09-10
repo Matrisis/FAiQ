@@ -30,16 +30,9 @@ class AskController extends Controller
     {
         $channel = $team->id . '-' . Str::random(24);
         return Inertia::render("Ask", [
-            // Settings
             'load' => $render,
             'channel' => $channel,
-            'team' => $team->only(["id", "name"]),
-
-            // Page custom parameters
-            'background_color' => $team->parameters->background_color,
-            'text_color' => $team->parameters->text_color,
-            'logo_path' => $team->parameters->logo_path,
-            'icon_path' => $team->parameters->icon_path,
+            'team' => $team->only(["id", "name", "parameters"]),
         ]);
     }
 

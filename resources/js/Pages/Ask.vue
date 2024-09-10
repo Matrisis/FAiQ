@@ -8,34 +8,21 @@ const props = defineProps({
     channel: String,
     team : Object,
     load: String,
-
-    // Page custom parameters
-    background_color: String,
-    text_color: String,
-    icon_path: String,
-    logo_path: String,
 })
 
 
 </script>
 
-<template>
+<template class="font-roboto">
 
     <AppLayout v-if="props.load === 'admin'" title="Ask">
-        <AskLayout :title="props.team.name"
-                   :text_color="props.text_color"
-                   :icon_path="props.icon_path"
-                   :logo_path="props.logo_path">
-            <Ask :channel="channel" :team="team" :background_color="props.background_color"/>
+        <AskLayout :team="team">
+            <Ask :channel="channel" :team="team"/>
         </AskLayout>
     </AppLayout>
     <div v-if="props.load === 'public'">
-        <AskLayout :title="props.team.name"
-
-                   :text_color="props.text_color"
-                   :icon_path="props.icon_path"
-                   :logo_path="props.logo_path">
-            <Ask :channel="channel" :team="team" :background_color="props.background_color"/>
+        <AskLayout :team="team">
+            <Ask :channel="channel" :team="team"/>
         </AskLayout>
     </div>
 </template>
