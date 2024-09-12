@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         if(app()->environment('local')) {
             $team = User::factory()->withPersonalTeam()->create([
-                'name' => 'Test User',
+                'name' => 'Free',
                 'email' => 'a@a.a',
                 'password' => bcrypt('password'),
             ]);

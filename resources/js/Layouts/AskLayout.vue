@@ -25,7 +25,7 @@ onMounted(function(){
 
 <template>
 
-    <Head :title="props.team.parameters.title" />
+    <Head :title="'FAQ - ' + props.team.name" />
     <div class="">
         <header class="w-3/4 mx-auto py-7 flex flex-row justify-start">
             <div class="flex">
