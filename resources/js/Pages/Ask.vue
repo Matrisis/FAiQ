@@ -8,6 +8,8 @@ const props = defineProps({
     channel: String,
     team : Object,
     load: String,
+
+    instant_answers: Object,
 })
 
 
@@ -17,12 +19,12 @@ const props = defineProps({
 
     <AppLayout v-if="props.load === 'admin'" title="Ask">
         <AskLayout :team="team">
-            <Ask :channel="channel" :team="team"/>
+            <Ask :channel="channel" :team="team" :instant_answers="instant_answers"/>
         </AskLayout>
     </AppLayout>
     <div v-if="props.load === 'public'">
         <AskLayout :team="team">
-            <Ask :channel="channel" :team="team"/>
+            <Ask :channel="channel" :team="team" :instant_answers="instant_answers" />
         </AskLayout>
     </div>
 </template>

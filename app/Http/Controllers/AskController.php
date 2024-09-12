@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\Ask;
 use App\Jobs\AskJob;
+use App\Models\Answer;
 use App\Models\Team;
 use App\Services\ChattingService;
 use App\Services\JobService;
@@ -29,10 +30,16 @@ class AskController extends Controller
     private function index(Request $request, Team $team, string $render)
     {
         $channel = $team->id . '-' . Str::random(24);
+        $instant_answers = Answer::where('team_id', $team->id)
+            //->where("votes", ">", 5)
+            //->orderBy('votes', 'desc')
+            ->take(5)->get();
         return Inertia::render("Ask", [
             'load' => $render,
             'channel' => $channel,
             'team' => $team->only(["id", "name", "parameters"]),
+
+            'instant_answers' => $instant_answers,
         ]);
     }
 

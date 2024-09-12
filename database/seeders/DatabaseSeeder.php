@@ -30,7 +30,9 @@ class DatabaseSeeder extends Seeder
             ], [
                 "team_id" => $team->id,
             ]);
-        }
 
+
+            AnswerSeeder::run();
+        }
     }
 }

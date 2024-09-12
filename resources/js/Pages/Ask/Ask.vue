@@ -1,14 +1,15 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import {useForm} from '@inertiajs/vue3';
-import TextInput from "@/Components/TextInput.vue";
-import ActionSection from "@/Components/ActionSection.vue";
 import MarkdownRenderer from "@/Components/Markdown.vue";
 import bodymovin from "lottie-web";
+import InstantAnswers from "@/Pages/Ask/InstantAnswers.vue";
 
 const props = defineProps({
     channel: String,
     team: Object,
+
+    instant_answers: Object,
 })
 
 const bg_color = ref(props.team.parameters.background_color);
@@ -24,7 +25,7 @@ let asked_question = ref("")
 onMounted(() => {
     asking.value = false
     loading_animation()
-    Echo.private(`ask.${props.channel}`)
+    Echo.channel(`ask.${props.channel}`)
         .listen('Ask', (event) => {
             asking.value = false
             if (answer.value === null) {
@@ -59,6 +60,11 @@ const loading_animation = () => {
     })
 }
 
+const onInstantQuestion = (question_answer) => {
+    asked_question.value = question_answer.question
+    answer.value = question_answer.answer
+}
+
 </script>
 
 <template>
@@ -90,8 +96,8 @@ const loading_animation = () => {
     </div>
 
     <div class="mt-12 w-3/4 mx-auto flex">
-        <div class="flex flex-col w-full">
-            <fieldset class="flex border border-black rounded min-h-max h-80 overflow-y-scroll">
+        <div class="grid grid-cols-3 gap-x-8 w-full h-96">
+            <fieldset class="col-span-2 flex border border-black rounded h-full overflow-y-scroll">
                 <legend class="px-2 flex text-xl" v-if="asked_question">{{ asked_question }} : </legend>
                 <legend class="px-2 flex text-xl" v-else>Reponse rapide : </legend>
                 <div class="p-4 flex w-full">
@@ -108,6 +114,9 @@ const loading_animation = () => {
                     </div>
                 </div>
             </fieldset>
+            <div class="h-full col-span-1 w-full p-3">
+                <InstantAnswers :instant_answers="instant_answers" @instantQuestion="onInstantQuestion" :color="txt_color"/>
+            </div>
         </div>
 
     </div>

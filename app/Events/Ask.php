@@ -34,7 +34,7 @@ class Ask implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel(name: "ask.".$this->channel),
+            new Channel(name: "ask.".$this->channel),
         ];
     }
 }

@@ -95,10 +95,10 @@ class ChatService
                 }
             }
             if ($iteration) {
+                $response_answer .= $tmp_response;
                 broadcast(new Ask(answer: [
                     'answer' => $tmp_response
                 ], channel: $channel));
-                $tmp_response = "";
             }
             return [
                 "response" => $stream,

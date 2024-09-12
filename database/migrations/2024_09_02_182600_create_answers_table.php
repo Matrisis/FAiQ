@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json("data");
             $table->text("answer");
             $table->enum("type", ["direct", "stream"])->default("direct");
+            $table->integer("votes")->default(0);
             $table->foreignId("team_id")->constrained("teams");
             $table->timestamps();
         });
