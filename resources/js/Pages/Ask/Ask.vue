@@ -20,14 +20,10 @@ let asking = ref(false);
 let question = ref("")
 
 const onQuestion = (params) => {
-    console.log(params)
     asking.value = params.asking
-    if(params.question) {
+    answer.value = params.answer
+    if(params.question)
         question.value = params.question
-    }
-    if(params.answer) {
-        answer.value = params.answer
-    }
 }
 
 const onInstantQuestion = (question_answer) => {

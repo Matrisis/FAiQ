@@ -56,7 +56,7 @@ onMounted(() => {
         ref="question"
         v-model="form.question"
         type="text"
-        class=" border-2 border-grey leading-10 text-xl  rounded-lg w-full focus:border-gray-50"
+        :class="'border-2 border-grey leading-10 text-xl  rounded-lg w-full focus:border-gray-50 ' + (asking ? 'bg-gray-200' : '')"
         placeholder="Posez votre question :"
         autofocus
         @keyup.enter="sendquestion"
