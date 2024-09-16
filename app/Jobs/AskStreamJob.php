@@ -57,7 +57,8 @@ class AskStreamJob implements ShouldQueue
                 'channel' => $this->channel,
                 'team_id' => $this->team->id
             ];
-            Answer::create($data);
+            $answer = Answer::create($data);
+            broadcast(new Ask(answer: $answer->only(['id']), channel: $this->channel));
         }
     }
 

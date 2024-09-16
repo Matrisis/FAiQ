@@ -17,6 +17,7 @@ const form = useForm({
 
 let answer = ref('');
 let asking = ref(false);
+let answer_id = ref(null);
 
 const sendquestion = () => {
     answer.value = ''
@@ -33,18 +34,25 @@ const sendquestion = () => {
 };
 
 const onQuestion = (asking, question, answer) => {
-   emit("question", {asking: asking, question: question, answer: answer})
+   emit("question", {asking: asking, question: question, answer: answer, answer_id: answer_id.value})
+}
+
+const cleanAnswer = (event) => {
+    asking.value = false
+    if (answer.value === null) {
+        answer.value = event.answer.answer
+    } else if (typeof event.answer.answer === 'string') {
+        answer.value = answer.value + event.answer.answer
+    }
+    if(answer_id.value !== event.answer.id) {
+        answer_id.value = event.answer.id
+    }
 }
 
 onMounted(() => {
     Echo.channel(`ask.${props.channel}`)
         .listen('Ask', (event) => {
-            asking.value = false
-            if (answer.value === null) {
-                answer.value = event.answer.answer
-            } else {
-                answer.value = answer.value + event.answer.answer
-            }
+            cleanAnswer(event)
             onQuestion(asking.value, null, answer.value)
         })
 })

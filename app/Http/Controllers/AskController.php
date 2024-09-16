@@ -47,37 +47,32 @@ class AskController extends Controller
         $question = $request->input('question');
         $channel = $request->input('channel');
 
-        /*
-        $job_service = new JobService();
-        $job_service->ask(
-            channel: $channel,
-            team: $team,
-            question: $question,
-            tries: 1, // Define must be settable per team by team manager
-            verification_prompt: 'Please just answer the question ' . $question
-        );
-        */
-
-        /*
-        $ask_service = new ChattingService();
-        $answer = $ask_service->ask($team, $question, 3, 'Please just answer the question ' . $question);
-        foreach (str_split($answer["answer"], 10) as $chunk) {
-            broadcast(new Ask(answer: [
-                'question' => $question,
-                'answer' => str_replace("??", "é", mb_convert_encoding($chunk, "UTF-8", 'UTF-8')),
-            ], channel: $channel));
+        try {
+            $job_service = new JobService();
+            $job_service->askStream(
+                channel: $channel,
+                team: $team,
+                question: $question
+            );
+        } catch (\Exception $exception) {
+            return response()->json(['status' => 'error', 'response' => $exception], 500);
         }
-        //broadcast(new Ask($answer, $channel));
-        */
-
-        $job_service = new JobService();
-        $job_service->askStream(
-            channel: $channel,
-            team: $team,
-            question: $question
-        );
-
         return response()->json(['status' => 'success', 'channel' => $channel]);
+    }
+
+    public function vote(Request $request, $answer) {
+        $answer = Answer::findOrFail($answer);
+        $vote = $request->input('vote') === "incr" ? 1 : -1;
+        try {
+            if ($vote == -1) {
+                Answer::where('id', $answer->id)->decrement('votes');
+            } else
+                Answer::where('id', $answer->id)->increment('votes');
+        } catch (\Exception $exception) {
+            return response()->json(['status' => 'error', 'response' => $exception], 500);
+        }
+        return response()->json(['status' => 'success', 'response' => []]);
+
     }
 
 }

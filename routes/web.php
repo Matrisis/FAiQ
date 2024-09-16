@@ -21,6 +21,7 @@ Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
     Route::prefix('/ask')->name('ask.')->group(function () {
         Route::get('/', [AskController::class, 'indexPublic'])->name('index');
         Route::post("/", [AskController::class, 'create'])->name('create');
+        Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
     });
 
 });

@@ -23,7 +23,6 @@ const loading_animation = () => {
         path: '/storage/lotties/loading.json',
     })
 }
-
 </script>
 
 <template>

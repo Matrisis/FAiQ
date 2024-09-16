@@ -4,6 +4,7 @@ import {useForm} from '@inertiajs/vue3';
 import InstantAnswers from "@/Pages/Ask/InstantAnswers.vue";
 import Answer from "@/Pages/Ask/Answer.vue";
 import Question from "@/Pages/Ask/Question.vue";
+import Vote from "@/Pages/Ask/Vote.vue";
 
 const props = defineProps({
     channel: String,
@@ -18,17 +19,21 @@ const txt_color = ref(props.team.parameters.background_color);
 let answer = ref('');
 let asking = ref(false);
 let question = ref("")
+let answer_id = ref(null);
 
 const onQuestion = (params) => {
     asking.value = params.asking
     answer.value = params.answer
+    if (params.answer_id)
+        answer_id.value = params.answer_id
     if(params.question)
         question.value = params.question
 }
 
 const onInstantQuestion = (question_answer) => {
     question.value = question_answer.question
-    answer.value = question_answer.answer
+    answer.value = question_answer.answer.answer
+    answer_id.value = question_answer.answer.id
 }
 
 </script>
@@ -51,6 +56,7 @@ const onInstantQuestion = (question_answer) => {
         <div class="grid grid-cols-3 gap-x-8 w-full h-96">
             <div class="h-full col-span-2 w-full p-3">
                 <Answer :answer="answer" :question="question" :asking="asking"/>
+                <Vote :team="props.team" :answer_id="answer_id" />
             </div>
             <div class="h-full col-span-1 w-full p-3">
                 <InstantAnswers :instant_answers="instant_answers" @instantQuestion="onInstantQuestion" :color="txt_color"/>

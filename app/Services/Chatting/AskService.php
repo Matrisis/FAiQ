@@ -22,7 +22,7 @@ class AskService
     public function ask(string $question, int $max_tokens = null): array
     {
         $custom_prompt = $this->retrieveCustomPrompt();
-        $embedding = $this->retrieveEmbedding($custom_prompt);
+        $embedding = $this->retrieveEmbedding($question);
         $clean_embedding = $embedding->pluck("content")->join(", ");
         $messages = [
             ['role' => 'system', 'content' =>
@@ -43,7 +43,7 @@ class AskService
     public function stream(string $channel, string $question, int $max_tokens = null) : array
     {
         $custom_prompt = $this->retrieveCustomPrompt();
-        $embedding = $this->retrieveEmbedding($custom_prompt);
+        $embedding = $this->retrieveEmbedding($question);
         $clean_embedding = $embedding->pluck("content")->join(", ");
         $messages = [
             ['role' => 'system', 'content' =>
