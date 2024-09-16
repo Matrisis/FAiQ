@@ -25,11 +25,11 @@ watch(() => props.answer_id, (newValue, oldValue) => {
 
 <template>
 
-<div v-if="answer_id" class="w-3/4 mt-6 mx-auto flex flex-row justify-center items-center">
+<div v-if="answer_id" class="lg:w-3/4 mt-6 mx-auto flex flex-col lg:flex-row justify-center items-center">
     <div class="flex">
         <p>Cette réponse était-elle utile ?</p>
     </div>
-    <div class="flex pl-3">
+    <div class="flex pl-3 mt-2 lg:mt-0">
         <div v-if="vote === null" class="flex flex-row">
             <div class="flex pr-4">
                 <button @click="sendVote('incr')" class="bg-white hover:bg-gray-500 text-gray-500 hover:text-white border border-gray-500 font-bold py-2 px-4 rounded">Oui</button>

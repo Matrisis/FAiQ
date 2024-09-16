@@ -17,7 +17,7 @@ const question = (question, answer) => {
 
 <template>
     <div class="h-full">
-        <h4 class="text-2xl font-bold">Réponses instantanées :</h4>
+        <h4 class="text-lg lg:text-2xl font-bold">Réponses instantanées :</h4>
         <div v-if="props.instant_answers.length === 0">Aucun instant answer</div>
         <div v-else class="flex flex-col justify-between px-4 border-b border-r border-gray-300 rounded-xl">
             <div v-for="instant_answer in props.instant_answers" class="flex py-4 flex-row items-center">
