@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from "vue";
+import {onUpdated, ref, watch} from "vue";
 
 const props = defineProps({
     team: Object,
@@ -11,7 +11,7 @@ const vote = ref(null)
 
 const sendVote = (type) => {
     if (!vote.value && props.answer_id) {
-        axios.post(route('public.ask.vote', {team: props.team.id, answer: props.answer_id}, {vote: type}))
+        axios.post(route('public.ask.vote', {team: props.team.id, answer: props.answer_id}), { vote: type})
             .then((response) => {
                 vote.value = type === 'incr' ? "Oui" : "Non"
             })

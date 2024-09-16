@@ -31,8 +31,8 @@ class AskController extends Controller
     {
         $channel = $team->id . '-' . Str::random(24);
         $instant_answers = Answer::where('team_id', $team->id)
-            //->where("votes", ">", 5)
-            //->orderBy('votes', 'desc')
+            ->where("votes", ">", 5)
+            ->orderBy('votes', 'desc')
             ->take(5)->get();
         return Inertia::render("Ask", [
             'load' => $render,
@@ -60,19 +60,17 @@ class AskController extends Controller
         return response()->json(['status' => 'success', 'channel' => $channel]);
     }
 
-    public function vote(Request $request, $answer) {
-        $answer = Answer::findOrFail($answer);
+    public function vote(Request $request, Team $team, Answer $answer) {
         $vote = $request->input('vote') === "incr" ? 1 : -1;
         try {
             if ($vote == -1) {
-                Answer::where('id', $answer->id)->decrement('votes');
+                Answer::where('id', $answer->id)->update(['votes' => $answer->votes - 1]);
             } else
-                Answer::where('id', $answer->id)->increment('votes');
+                Answer::where('id', $answer->id)->update(['votes' => $answer->votes + 1]);
+            return response()->json(['status' => 'success', 'response' => [Answer::find($answer->id)]]);
         } catch (\Exception $exception) {
             return response()->json(['status' => 'error', 'response' => $exception], 500);
         }
-        return response()->json(['status' => 'success', 'response' => []]);
-
     }
 
 }
