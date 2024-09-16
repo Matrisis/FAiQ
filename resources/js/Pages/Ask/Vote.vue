@@ -17,6 +17,10 @@ const sendVote = (type) => {
             })
     }
 }
+
+watch(() => props.answer_id, (newValue, oldValue) => {
+    vote.value = null
+})
 </script>
 
 <template>
