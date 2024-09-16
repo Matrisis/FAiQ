@@ -44,8 +44,13 @@ class AskController extends Controller
     }
 
     public function create(Request $request, Team $team) {
-        $question = $request->input('question');
-        $channel = $request->input('channel');
+        $validated = $request->validate([
+            'question' => ['required', 'max:100', 'trim', 'string', 'min:5'],
+            'channel' => ['required', 'string', 'min:24'],
+        ]);
+
+        $question = $validated['question'];
+        $channel = $validated['channel'];
 
         try {
             $job_service = new JobService();
@@ -61,7 +66,10 @@ class AskController extends Controller
     }
 
     public function vote(Request $request, Team $team, Answer $answer) {
-        $vote = $request->input('vote') === "incr" ? 1 : -1;
+        $validated = $request->validate([
+            'vote' => ['required', Rule::in(['incr', 'decr'])],
+        ]);
+        $vote =  $validated['vote'] === "incr" ? 1 : -1;
         try {
             if ($vote == -1) {
                 Answer::where('id', $answer->id)->update(['votes' => $answer->votes - 1]);
