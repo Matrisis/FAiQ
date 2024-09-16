@@ -10,6 +10,7 @@ use App\Services\ChattingService;
 use App\Services\JobService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Laravel\Prompts\Table;
 
@@ -45,7 +46,7 @@ class AskController extends Controller
 
     public function create(Request $request, Team $team) {
         $validated = $request->validate([
-            'question' => ['required', 'max:100', 'trim', 'string', 'min:5'],
+            'question' => ['required', 'max:100', 'string', 'min:5'],
             'channel' => ['required', 'string', 'min:24'],
         ]);
 
@@ -72,10 +73,10 @@ class AskController extends Controller
         $vote =  $validated['vote'] === "incr" ? 1 : -1;
         try {
             if ($vote == -1) {
-                Answer::where('id', $answer->id)->update(['votes' => $answer->votes - 1]);
+                $answer->decrement('votes');
             } else
-                Answer::where('id', $answer->id)->update(['votes' => $answer->votes + 1]);
-            return response()->json(['status' => 'success', 'response' => [Answer::find($answer->id)]]);
+                $answer->increment('votes');
+            return response()->json(['status' => 'success', 'response' => []]);
         } catch (\Exception $exception) {
             return response()->json(['status' => 'error', 'response' => $exception], 500);
         }

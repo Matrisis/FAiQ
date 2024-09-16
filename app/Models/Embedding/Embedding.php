@@ -27,6 +27,13 @@ class Embedding extends Pivot
         'team_id',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'content' => 'encrypted',
+        ];
+    }
+
 
     public function file()
     {

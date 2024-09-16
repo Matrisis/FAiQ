@@ -19,6 +19,13 @@ class Answer extends Model
         'team_id'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'data' => 'encrypted',
+        ];
+    }
+
     public function team()
     {
         return $this->belongsTo(Team::class);

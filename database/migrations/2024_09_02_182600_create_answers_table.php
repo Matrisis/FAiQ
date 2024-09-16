@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("channel");
             $table->string("question");
-            $table->json("data");
+            $table->text("data");
             $table->text("answer");
             $table->enum("type", ["direct", "stream"])->default("direct");
             $table->integer("votes")->default(0);
