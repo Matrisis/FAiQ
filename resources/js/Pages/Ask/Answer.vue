@@ -26,7 +26,7 @@ const loading_animation = () => {
 </script>
 
 <template>
-    <fieldset class="flex border border-black rounded h-full overflow-y-scroll">
+    <fieldset class="flex border border-black rounded h-64 lg:h-full overflow-y-scroll">
         <legend class="px-2 flex text-xl" v-if="question">{{ question }} : </legend>
         <legend class="px-2 flex text-xl" v-else>Reponse rapide : </legend>
         <div class="p-4 flex w-full">

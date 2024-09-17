@@ -41,7 +41,7 @@ class AskStreamJob implements ShouldQueue
     {
         $previous_question = Answer::where('question', $this->question)->first();
         if($previous_question) {
-            $this->splitBroadcast($previous_question->only(['question', 'answer']));
+            $this->splitBroadcast($previous_question->only(['id', 'question', 'answer']));
         } else {
             $response = $this->chatting_service->stream(
                 channel: $this->channel,
