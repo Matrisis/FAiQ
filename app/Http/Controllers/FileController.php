@@ -3,12 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Embedding\File;
+use App\Models\Team;
+use App\Models\User;
 use App\Services\JobService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class FileController extends Controller
 {
+
+    public function index(Request $request, Team $team)
+    {
+        if($request->user()->cannot('view', $team)) abort(403);
+        return Inertia::render('Files');
+    }
 
     public function store(Request $request)
     {

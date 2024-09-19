@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class TeamParameters extends Pivot
 {
 
-    public $fillable = ['background_color', 'text_color', 'logo_path', 'icon_path'];
+    public $fillable = [
+        'team_id',
+        'title',
+        'background_color',
+        'question_background_color',
+        'text_color',
+        'title_color',
+        'logo_path',
+        'icon_path',
+    ];
 
     public function team()
     {

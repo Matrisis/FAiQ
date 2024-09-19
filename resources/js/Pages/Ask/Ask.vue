@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {useForm} from '@inertiajs/vue3';
 import InstantAnswers from "@/Pages/Ask/InstantAnswers.vue";
 import Answer from "@/Pages/Ask/Answer.vue";
@@ -12,9 +12,6 @@ const props = defineProps({
 
     instant_answers: Object,
 })
-
-const bg_color = ref(props.team.parameters.background_color);
-const txt_color = ref(props.team.parameters.background_color);
 
 let answer = ref('');
 let asking = ref(false);
@@ -39,9 +36,10 @@ const onInstantQuestion = (question_answer) => {
 </script>
 
 <template>
-    <div class="custom-background-color flex flex-col">
+    <div class="all-bg-color custom-text-color h-fit w-full">
+    <div class="flex flex-col custom-background-color">
         <div class="py-16 lg:py-12">
-            <h2 class="text-3xl text-center lg:text-5xl font-semibold text-white justify-center flex ">{{ props.team.parameters.title }}</h2>
+            <h2 class="text-3xl text-center lg:text-5xl font-semibold title-color justify-center flex ">{{ props.team.parameters.title }}</h2>
             <div class="lg:w-3/4 mx-auto mt-6 ">
                 <label class="flex flex-col-reverse relative focus group lg:w-3/5 mx-auto">
                     <div class="relative flex px-3">
@@ -59,20 +57,30 @@ const onInstantQuestion = (question_answer) => {
                 <Vote :team="props.team" :answer_id="answer_id" />
             </div>
             <div class="flex lg:h-full lg:col-span-1 justify-center p-3">
-                <InstantAnswers :instant_answers="instant_answers" @instantQuestion="onInstantQuestion" :color="txt_color"/>
+                <InstantAnswers :instant_answers="instant_answers" @instantQuestion="onInstantQuestion" :parameters="props.team.parameters"/>
             </div>
         </div>
 
+    </div>
     </div>
 
 </template>
 
 <style scoped>
-    .custom-background-color {
-        background-color: v-bind(bg_color);
+
+    .title-color {
+        color: v-bind('props.team.parameters.title_color') !important;
     }
 
-    .text-color {
-        color: v-bind(txt_color);
+    .custom-text-color {
+        color: v-bind('props.team.parameters.text_color') !important;
+    }
+
+    .custom-background-color {
+        background-color: v-bind('props.team.parameters.question_background_color');
+    }
+
+    .all-bg-color {
+        background-color: v-bind('props.team.parameters.background_color');
     }
 </style>

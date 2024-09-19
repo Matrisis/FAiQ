@@ -28,7 +28,7 @@ class AskController extends Controller
         return $this->index($request, $team, 'public');
     }
 
-    private function index(Request $request, Team $team, string $render)
+    public function index(Request $request, Team $team)
     {
         $channel = $team->id . '-' . Str::random(24);
         $instant_answers = Answer::where('team_id', $team->id)
@@ -36,7 +36,7 @@ class AskController extends Controller
             ->orderBy('votes', 'desc')
             ->take(5)->get();
         return Inertia::render("Ask", [
-            'load' => $render,
+            'load' => "public",
             'channel' => $channel,
             'team' => $team->only(["id", "name", "parameters"]),
 

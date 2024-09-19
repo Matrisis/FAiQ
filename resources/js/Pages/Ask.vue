@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Ask from '@/Pages/Ask/Ask.vue';
 import AskLayout from "@/Layouts/AskLayout.vue";
+import {watch} from "vue";
 
 const props = defineProps({
     // Settings
@@ -11,20 +12,10 @@ const props = defineProps({
 
     instant_answers: Object,
 })
-
-
 </script>
 
 <template class="font-roboto">
-
-    <AppLayout v-if="props.load === 'admin'" title="Ask">
-        <AskLayout :team="team">
-            <Ask :channel="channel" :team="team" :instant_answers="instant_answers"/>
-        </AskLayout>
-    </AppLayout>
-    <div v-if="props.load === 'public'">
-        <AskLayout :team="team">
-            <Ask :channel="channel" :team="team" :instant_answers="instant_answers" />
-        </AskLayout>
-    </div>
+    <AskLayout :team="team">
+        <Ask :channel="channel" :team="team" :instant_answers="instant_answers" />
+    </AskLayout>
 </template>

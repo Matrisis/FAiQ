@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AskController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\Parameters;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,7 +21,7 @@ Route::middleware([
 Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
 
     Route::prefix('/ask')->name('ask.')->group(function () {
-        Route::get('/', [AskController::class, 'indexPublic'])->name('index');
+        Route::get('/', [AskController::class, 'index'])->name('index');
         Route::post("/", [AskController::class, 'create'])->name('create');
         Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
     });
@@ -32,8 +34,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     ->prefix("/{team}/admin")
     ->group(function () {
 
-    Route::prefix('/ask')->name('ask.')->group(function () {
-        Route::get('/', [AskController::class, 'indexAdmin'])->name('index');
+    Route::prefix('/files')->name('files.')->group(function () {
+        Route::get('/', [FileController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('/parameters')->name('parameters.')->group(function () {
+        Route::get('/', [Parameters::class, 'index'])->name('index');
+        Route::put('/update/{params}', [Parameters::class, 'update'])->where('params', '[0-9]+')->name('update');
     });
 
 });

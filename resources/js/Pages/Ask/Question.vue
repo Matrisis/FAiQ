@@ -68,7 +68,7 @@ onMounted(() => {
                 ref="question"
                 v-model="form.question"
                 type="text"
-                :class="'border-2 border-grey leading-10 text-xl  rounded-lg w-full focus:border-gray-50 ' + (asking ? 'bg-gray-200' : '')"
+                :class="'text-black border-2 border-grey leading-10 text-xl  rounded-lg w-full focus:border-gray-50 ' + (asking ? 'bg-gray-200' : '')"
                 placeholder="Posez votre question :"
                 autofocus
                 autocomplete="off"
@@ -76,6 +76,7 @@ onMounted(() => {
                 required
                 @keyup.enter="sendquestion"
                 :readonly="asking"
+                id="question"
             />
             <i @click="sendquestion" class="flex absolute inset-y-0 right-0 pr-7 items-center cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -90,5 +91,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+.custom-border {
+    border-color: v-bind('props.team.parameters.text_color') !important;
+}
 
 </style>

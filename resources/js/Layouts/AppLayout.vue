@@ -52,6 +52,16 @@ const logout = () => {
                                     Dashboard
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('admin.files.index', $page.props.auth.user.current_team)" :active="route().current('admin.files.index')">
+                                    Fichiers
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('admin.parameters.index', $page.props.auth.user.current_team)" :active="route().current('admin.parameters.index')">
+                                    Parametres
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -193,6 +203,16 @@ const logout = () => {
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('admin.files.index', $page.props.auth.user.current_team)" :active="route().current('admin.files.index')">
+                            Fichiers
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('admin.parameters.index', $page.props.auth.user.current_team)" :active="route().current('admin.parameters.index')">
+                            Parametres
                         </ResponsiveNavLink>
                     </div>
 

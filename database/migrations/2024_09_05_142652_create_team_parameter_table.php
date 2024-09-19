@@ -17,8 +17,10 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained();
 
             $table->string('title')->default("Trouvez la réponse qui vous correspond");
-            $table->string('background_color')->default("#e50914");
+            $table->string('background_color')->default("#ffffff");
+            $table->string('question_background_color')->default("#e50914");
             $table->string('text_color')->default("#000000");
+            $table->string('title_color')->default("#ffffff");
             $table->string('logo_path')->default(Storage::url("resources/default/logo.png"));
             $table->string('icon_path')->default(Storage::url("resources/default/icon.png"));
 
