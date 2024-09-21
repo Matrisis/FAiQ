@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Embedding\File;
 use App\Models\Team;
 use App\Models\User;
 
@@ -21,11 +22,17 @@ class FilePolicy
         return $user->belongsToTeam($team) || $user->ownsTeam($team) || $user->isAdmin();
     }
 
-    public function create(User $user, Team $team ) {
+    public function create(User $user) {
+        return true;
+    }
+
+    public function delete(User $user, File $file ) {
+        $team = File::find($file->id)->team;
         return $user->belongsToTeam($team) || $user->ownsTeam($team) || $user->isAdmin();
     }
 
-    public function delete(User $user, Team $team ) {
+    public function process(User $user, File $file ) {
+        $team = File::find($file->id)->team;
         return $user->belongsToTeam($team) || $user->ownsTeam($team) || $user->isAdmin();
     }
 }

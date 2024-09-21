@@ -53,7 +53,7 @@ const onInstantQuestion = (question_answer) => {
     <div class="mt-6 lg:mt-12 w-full xl:w-3/4 mx-auto flex">
         <div class="flex flex-col lg:grid grid-cols-3 gap-x-8 w-full lg:h-96">
             <div class="flex flex-col h-full lg:col-span-2 w-full p-3">
-                <Answer :answer="answer" :question="question" :asking="asking"/>
+                <Answer :answer="answer" :question="question" :asking="asking" :parameters="props.team.parameters"/>
                 <Vote :team="props.team" :answer_id="answer_id" />
             </div>
             <div class="flex lg:h-full lg:col-span-1 justify-center p-3">

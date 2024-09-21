@@ -7,7 +7,8 @@ import {onMounted} from "vue";
 const props = defineProps({
     answer: String,
     question : String,
-    asking: Boolean
+    asking: Boolean,
+    parameters: Object
 })
 
 onMounted(() => {
@@ -43,7 +44,7 @@ const loading_animation = () => {
 <style scoped>
 
 .custom-border {
-    border-color: v-bind('props.team.parameters.text_color') !important;
+    border-color: v-bind('props.parameters.text_color') !important;
 }
 
 </style>

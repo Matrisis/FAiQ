@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class File extends Pivot
 {
 
-    protected $table = "file";
+    protected $table = "files";
     protected $fillable = ["name", "path", "team_id", "imported"];
 
     protected $with = ["team"];

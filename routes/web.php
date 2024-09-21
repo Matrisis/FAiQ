@@ -36,6 +36,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::prefix('/files')->name('files.')->group(function () {
         Route::get('/', [FileController::class, 'index'])->name('index');
+        Route::get('/list', [FileController::class, 'list'])->name('list');
+        Route::post('/store', [FileController::class, 'store'])->name('store');
+        Route::delete('/delete/{file}', [FileController::class, 'delete'])->name('delete');
+        Route::put('/process/{file}', [FileController::class, 'process'])->name('process');
     });
 
     Route::prefix('/parameters')->name('parameters.')->group(function () {

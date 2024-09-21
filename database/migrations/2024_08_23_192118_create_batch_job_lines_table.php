@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text("original_text");
             $table->foreignId("batch_job_id")->constrained("batch_jobs")->cascadeOnDelete();
             $table->foreignId("file_id")->nullable()->default(null)
-                ->constrained("file")->cascadeOnDelete();
+                ->constrained()->cascadeOnDelete();
             $table->date("finished_at")->nullable();
             $table->date("batch_finished_at")->nullable();
             $table->timestamps();
