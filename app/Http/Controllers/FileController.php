@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewFileEvent;
+use App\Models\BatchJobLine;
 use App\Models\Embedding\Embedding;
 use App\Models\Embedding\File;
 use App\Models\Team;
@@ -90,8 +91,9 @@ class FileController extends Controller
         if($request->user()->cannot("delete", $file)) abort(403);
 
         Storage::delete($file->path);
-        $file->delete();
         Embedding::where("file_id", $file->id)->delete();
+        BatchJobLine::where("file_id", $file->id)->delete();
+        $file->delete();
 
         return response()->json(["success" => true]);
     }
@@ -108,7 +110,6 @@ class FileController extends Controller
                 response()->json(["success" => false, "errors" => [["File already processed or processing"]]], 422);
             }
         } catch (\Exception $e) {
-            dd($e);
             return response()->json(["success" => false, "errors" => [["Une erreur est survenue"]]], 500);
         }
         return response()->json(["success" => true]);

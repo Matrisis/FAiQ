@@ -16,7 +16,7 @@ const columns = [
         index: 0,
     },
     {
-        label: 'Importé',
+        label: 'Status',
         field: 'imported',
         type: 'boolean',
         formatFn: (value) => (value ? 'Oui' : 'Non'),
@@ -136,7 +136,9 @@ const deleteFile = (file) => {
 </script>
 
 <template>
-    <vue-good-table
+    <div class="max-w-full mx-auto p-4 font-sans">
+        <h2 class="text-black dark:text-white">Fichiers <span v-if="totalRecords > 0">({{ totalRecords }})</span></h2>
+        <vue-good-table
         :columns="columns"
         :rows="rows"
         :totalRows="totalRecords"
@@ -174,8 +176,8 @@ const deleteFile = (file) => {
             </span>
         </template>
     </vue-good-table>
+    </div>
 </template>
 
 <style scoped>
-/* Vous pouvez ajouter des styles personnalisés ici si nécessaire */
 </style>
