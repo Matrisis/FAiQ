@@ -30,10 +30,10 @@ const onParametersUpdated = (parameters) => {
         </template>
 
         <div class="border border-gray-500 h-full w-full flex flex-col lg:flex-row">
-            <div class="w-4/5">
+            <div class="w-full lg:w-4/5">
                 <Ask :channel="props.channel" :team="team" :instant_answers="props.instant_answers" :load="props.load" />
             </div>
-            <div class="w-1/5">
+            <div class="w-full lg:w-1/5">
                 <Editor :parameters="props.team.parameters" @parameters-updated="onParametersUpdated" />
             </div>
         </div>
