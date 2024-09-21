@@ -30,7 +30,7 @@ class Embedding extends Pivot
     protected function casts(): array
     {
         return [
-            'content' => 'encrypted',
+            // 'content' => 'encrypted',
         ];
     }
 

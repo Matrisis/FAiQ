@@ -22,7 +22,7 @@ class Answer extends Model
     protected function casts(): array
     {
         return [
-            'data' => 'encrypted',
+            // 'data' => 'encrypted',
         ];
     }
 

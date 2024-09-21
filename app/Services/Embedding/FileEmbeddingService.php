@@ -44,7 +44,8 @@ class FileEmbeddingService
                 ]);
             }
             $file->update([
-                "imported" => true
+                "imported" => true,
+                "importing" => false
             ]);
             return true;
         } catch (\Exception $e) {

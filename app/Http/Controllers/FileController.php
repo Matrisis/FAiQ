@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\BatchingService;
 use App\Services\JobService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -88,6 +89,7 @@ class FileController extends Controller
     public function delete(Request $request, Team $team, File $file) {
         if($request->user()->cannot("delete", $file)) abort(403);
 
+        Storage::delete($file->path);
         $file->delete();
         Embedding::where("file_id", $file->id)->delete();
 
