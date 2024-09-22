@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Free',
                 'email' => 'a@a.a',
                 'password' => bcrypt('password'),
+                'is_admin' => true
             ]);
             TeamParameters::firstOrCreate([
                 "team_id" => $team->id,

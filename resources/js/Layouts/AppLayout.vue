@@ -62,6 +62,11 @@ const logout = () => {
                                     Parametres
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" v-if="$page.props.auth.user.is_admin">
+                                <NavLink :href="route('admin.management.index', $page.props.auth.user.current_team)" :active="route().current('admin.management.index')">
+                                    Administration
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">

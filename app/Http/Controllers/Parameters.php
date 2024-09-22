@@ -8,14 +8,15 @@ use App\Models\TeamParameters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class Parameters extends Controller
 {
-
-    public function index(Request $request, Team $team) {
-
-        if($request->user()->cannot('view', $team))
+    public function index(Request $request, Team $team)
+    {
+        if ($request->user()->cannot('view', $team)) {
             abort(403);
+        }
         $channel = $team->id . '-' . Str::random(24);
         $instant_answers = Answer::where('team_id', $team->id)
             ->where("votes", ">", 5)
@@ -25,7 +26,6 @@ class Parameters extends Controller
             'load' => "admin",
             'channel' => $channel,
             'team' => $team->only(["id", "name", "parameters"]),
-
             'instant_answers' => $instant_answers,
         ]);
     }
@@ -43,8 +43,10 @@ class Parameters extends Controller
                 'background_color' => ['max:7', 'string', 'min:7'],
                 'question_background_color' => ['max:7', 'string', 'min:7'],
                 'text_color' => ['max:7', 'string', 'min:7'],
-                'title_color' => [ 'max:7', 'string', 'min:7'],
+                'title_color' => ['max:7', 'string', 'min:7'],
                 'accessible' => ['boolean'],
+                'icon' => ['nullable', 'image', 'max:2048'],
+                'logo' => ['nullable', 'image', 'max:2048'],
             ]);
 
             $params->title = $validated['title'] ?? $params->title;
@@ -53,6 +55,27 @@ class Parameters extends Controller
             $params->text_color = $validated['text_color'] ?? $params->text_color;
             $params->title_color = $validated['title_color'] ?? $params->title_color;
             $params->accessible = $validated['accessible'] ?? $params->accessible;
+
+            // Gestion du téléchargement de l'icône
+            if ($request->hasFile('icon')) {
+                // Supprimer l'ancienne icône si elle existe
+                if ($params->icon_path) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $params->icon_path));
+                }
+                $iconPath = $request->file('icon')->store('icons', 'public');
+                $params->icon_path = '/storage/' . $iconPath;
+            }
+
+            // Gestion du téléchargement du logo
+            if ($request->hasFile('logo')) {
+                // Supprimer l'ancien logo si il existe
+                if ($params->logo_path) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $params->logo_path));
+                }
+                $logoPath = $request->file('logo')->store('logos', 'public');
+                $params->logo_path = '/storage/' . $logoPath;
+            }
+
             $params->save();
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'errors' => [["Une erreur est survenue"]]], 500);
@@ -60,5 +83,4 @@ class Parameters extends Controller
 
         return response()->json(['success' => true, 'params' => $params]);
     }
-
 }

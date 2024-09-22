@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AskController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\Parameters;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -31,20 +32,31 @@ Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
     ->name("admin.")
-    ->prefix("/{team}/admin")
+    ->prefix("/admin")
     ->group(function () {
 
-    Route::prefix('/files')->name('files.')->group(function () {
-        Route::get('/', [FileController::class, 'index'])->name('index');
-        Route::get('/list', [FileController::class, 'list'])->name('list');
-        Route::post('/store', [FileController::class, 'store'])->name('store');
-        Route::delete('/delete/{file}', [FileController::class, 'delete'])->name('delete');
-        Route::put('/process/{file}', [FileController::class, 'process'])->name('process');
+
+    Route::prefix("/{team}/")->group(function () {
+        Route::prefix('/files')->name('files.')->group(function () {
+            Route::get('/', [FileController::class, 'index'])->name('index');
+            Route::get('/list', [FileController::class, 'list'])->name('list');
+            Route::post('/store', [FileController::class, 'store'])->name('store');
+            Route::delete('/delete/{file}', [FileController::class, 'delete'])->name('delete');
+            Route::put('/process/{file}', [FileController::class, 'process'])->name('process');
+        });
+
+        Route::prefix('/parameters')->name('parameters.')->group(function () {
+            Route::get('/', [Parameters::class, 'index'])->name('index');
+            Route::put('/update/{params}', [Parameters::class, 'update'])->where('params', '[0-9]+')->name('update');
+        });
+
     });
 
-    Route::prefix('/parameters')->name('parameters.')->group(function () {
-        Route::get('/', [Parameters::class, 'index'])->name('index');
-        Route::put('/update/{params}', [Parameters::class, 'update'])->where('params', '[0-9]+')->name('update');
+    Route::prefix('/management')->name('management.')->group(function () {
+        Route::get('/', [ManagementController::class, 'index'])->name('index');
+        Route::get('/list', [ManagementController::class, 'list'])->name('list');
+        Route::put('/unlock/{team}', [ManagementController::class, 'unlock'])->name('unlock');
+        Route::get('/view/{team}', [ManagementController::class, 'viewTeam'])->name('view');
     });
 
 });

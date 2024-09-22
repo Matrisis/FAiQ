@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class TeamParameters extends Pivot
 {
-
-    public $fillable = [
+    protected $fillable = [
         'team_id',
         'title',
         'background_color',
@@ -23,5 +22,15 @@ class TeamParameters extends Pivot
         return $this->hasOne(Team::class, 'id', 'team_id');
     }
 
+    // Accesseur pour icon_path
+    public function getIconPathAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
 
+    // Accesseur pour logo_path
+    public function getLogoPathAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
 }

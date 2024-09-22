@@ -66,6 +66,7 @@ class User extends Authenticatable
     }
 
     public function isAdmin() : bool {
-        return $this->id === 1;
+        if(ENV("APP_ENV") == "local") return true;
+        return $this->is_admin;
     }
 }
