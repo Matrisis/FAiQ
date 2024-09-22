@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('question_background_color')->default("#e50914");
             $table->string('text_color')->default("#000000");
             $table->string('title_color')->default("#ffffff");
+            $table->boolean('accessible')->default(false);
             $table->string('logo_path')->default(Storage::url("resources/default/logo.png"));
             $table->string('icon_path')->default(Storage::url("resources/default/icon.png"));
 

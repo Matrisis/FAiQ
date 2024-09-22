@@ -39,18 +39,20 @@ class Parameters extends Controller
             }
 
             $validated = $request->validate([
-                'title' => ['required', 'max:100', 'string', 'min:5'],
-                'background_color' => ['required', 'max:7', 'string', 'min:7'],
-                'question_background_color' => ['required', 'max:7', 'string', 'min:7'],
-                'text_color' => ['required', 'max:7', 'string', 'min:7'],
-                'title_color' => ['required', 'max:7', 'string', 'min:7'],
+                'title' => ['max:100', 'string', 'min:5'],
+                'background_color' => ['max:7', 'string', 'min:7'],
+                'question_background_color' => ['max:7', 'string', 'min:7'],
+                'text_color' => ['max:7', 'string', 'min:7'],
+                'title_color' => [ 'max:7', 'string', 'min:7'],
+                'accessible' => ['boolean'],
             ]);
 
-            $params->title = $validated['title'];
-            $params->background_color = $validated['background_color'];
-            $params->question_background_color = $validated['question_background_color'];
-            $params->text_color = $validated['text_color'];
-            $params->title_color = $validated['title_color'];
+            $params->title = $validated['title'] ?? $params->title;
+            $params->background_color = $validated['background_color'] ?? $params->background_color;
+            $params->question_background_color = $validated['question_background_color'] ?? $params->question_background_color;
+            $params->text_color = $validated['text_color'] ?? $params->text_color;
+            $params->title_color = $validated['title_color'] ?? $params->title_color;
+            $params->accessible = $validated['accessible'] ?? $params->accessible;
             $params->save();
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'errors' => [["Une erreur est survenue"]]], 500);
