@@ -13,7 +13,7 @@ class Team extends JetstreamTeam
     use HasFactory;
 
     protected $with = [
-        'parameters'
+        'parameters', 'prompts'
     ];
 
     /**
@@ -54,5 +54,10 @@ class Team extends JetstreamTeam
     public function parameters()
     {
         return $this->hasOne(TeamParameters::class, 'team_id', "id");
+    }
+
+    public function prompts()
+    {
+        return $this->hasOne(TeamPrompt::class, 'team_id', "id");
     }
 }

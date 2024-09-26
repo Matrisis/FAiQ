@@ -4,6 +4,7 @@ use App\Http\Controllers\AskController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\Parameters;
+use App\Http\Controllers\TeamPromptController;
 use App\Http\Middleware\Maintenance;
 use App\Models\Team;
 use Illuminate\Foundation\Application;
@@ -60,6 +61,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::prefix('/parameters')->name('parameters.')->group(function () {
             Route::get('/', [Parameters::class, 'index'])->name('index');
             Route::put('/update/{params}', [Parameters::class, 'update'])->where('params', '[0-9]+')->name('update');
+        });
+
+        Route::prefix('/prompt')->name('prompt.')->group(function () {
+            Route::get('/', [TeamPromptController::class, 'index'])->name('index');
+            Route::put('/update', [TeamPromptController::class, 'update'])->name('update');
         });
 
     });
