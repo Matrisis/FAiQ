@@ -4,6 +4,8 @@ use App\Http\Controllers\AskController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\Parameters;
+use App\Http\Middleware\Maintenance;
+use App\Models\Team;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,10 +23,20 @@ Route::middleware([
 
 Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
 
-    Route::prefix('/ask')->name('ask.')->group(function () {
+    Route::middleware([Maintenance::class])->prefix('/ask')->name('ask.')->group(function () {
         Route::get('/', [AskController::class, 'index'])->name('index');
         Route::post("/", [AskController::class, 'create'])->name('create');
         Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
+        Route::get("/maintenance", function () {
+            return Inertia::render("Maintenance");
+        })->name('maintenance');
+    });
+    Route::prefix('/ask')->name('ask.')->group(function () {
+        Route::get("/maintenance", function (Team $team) {
+            if($team->parameters->accessible)
+                return redirect()->route('public.ask.index', ['team' => $team->id]);
+            return Inertia::render("Maintenance");
+        })->name('maintenance');
     });
 
 });

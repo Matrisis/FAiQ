@@ -12,6 +12,10 @@ class Team extends JetstreamTeam
 {
     use HasFactory;
 
+    protected $with = [
+        'parameters'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

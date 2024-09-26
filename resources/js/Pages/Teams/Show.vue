@@ -4,6 +4,7 @@ import DeleteTeamForm from '@/Pages/Teams/Partials/DeleteTeamForm.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import TeamMemberManager from '@/Pages/Teams/Partials/TeamMemberManager.vue';
 import UpdateTeamNameForm from '@/Pages/Teams/Partials/UpdateTeamNameForm.vue';
+import SettingsEditor from "@/Pages/Parameters/SettingsEditor.vue";
 
 defineProps({
     team: Object,
@@ -30,6 +31,8 @@ defineProps({
                     :available-roles="availableRoles"
                     :user-permissions="permissions"
                 />
+
+                <SettingsEditor :parameters="team.parameters" />
 
                 <template v-if="permissions.canDeleteTeam && ! team.personal_team">
                     <SectionBorder />

@@ -89,7 +89,6 @@ const onSortChange = (params) => {
 };
 
 const viewTeam = (team) => {
-    alert(team.id)
     axios.get(route('admin.management.view', { team: team.id })).then((response) => {
         window.location.href = response.data.route
     })

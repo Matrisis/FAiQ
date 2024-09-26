@@ -29,6 +29,7 @@ const logout = () => {
 
 <template>
     <div>
+
         <Head :title="title" />
 
         <Banner />
@@ -299,11 +300,13 @@ const logout = () => {
             </nav>
 
             <!-- Page Heading -->
+            <!--
             <header v-if="$slots.header" class="bg-white dark:bg-gray-800 shadow">
                 <div class=" mx-auto pt-4">
                     <slot name="header" />
                 </div>
             </header>
+            -->
 
             <!-- Page Content -->
             <main>

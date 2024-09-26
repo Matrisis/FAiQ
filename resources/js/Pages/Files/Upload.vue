@@ -101,7 +101,7 @@ const uploadFiles = () => {
 <template>
     <div class="max-w-full mx-auto p-4 font-sans">
         <div class="">
-            <h3>Ajouter de nouveaux fichiers : </h3>
+            <h3>Ajouter de nouveaux fichiers (pdf) (max. 50Mo) : </h3>
             <!-- Zone de dépôt -->
             <div
                 @dragover.prevent="dragOver"
