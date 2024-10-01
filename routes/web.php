@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AskController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\Parameters;
@@ -10,16 +11,6 @@ use App\Models\Team;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-});
 
 
 Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
@@ -42,12 +33,14 @@ Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
 
 });
 
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
     ->name("admin.")
     ->prefix("/admin")
     ->group(function () {
-
 
     Route::prefix("/{team}/")->group(function () {
         Route::prefix('/files')->name('files.')->group(function () {
