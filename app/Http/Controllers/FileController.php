@@ -102,10 +102,10 @@ class FileController extends Controller
         try {
             if ($request->user()->cannot("process", $file)) abort(403);
             if (!$file->importing && !$file->imported) {
-                $batching_service = new BatchingService($team);
-                $batching_service->createFile($file);
-                $file->importing = true;
-                $file->save();
+                $jobService = new JobService();
+                $jobService->importFIle($team, $file);
+                //$file->importing = true;
+                //$file->save();
             } else {
                 response()->json(["success" => false, "errors" => [["File already processed or processing"]]], 422);
             }

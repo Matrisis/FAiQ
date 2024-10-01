@@ -19,16 +19,18 @@ class QuestionVerifyService
     {
         try {
             $chat_service = new ChatService($this->model);
+            $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
             $messages = [
                 [
                     "role" => "system",
                     "content" => $custom_prompt ? : "
-                    Your goal is to generate questions based on a text.
-                    The questions must check knowledge about the text content and information.
+                    Your goal is to generate simple questions based on a text.
+                    The questions must be answerable using a cleaned version of the text.
+                    The questions must be answerable using a different version of the text.
                     The user will provide the text to generate questions from.
                  " . "Please provide" . 10 . "questions.
                  Each question should be at least 5 words.
-                 Provide high confidence should be returned.
+                 Only the high confidence questions should be returned.
                  Separate each question with a comma.
                  "
                 ],
@@ -38,7 +40,7 @@ class QuestionVerifyService
                 ]
             ];
             $response = $chat_service->chat(messages: $messages, max_tokens: $max_tokens);
-
+            print("Questions : " . $response["answer"] . "\n");
             return FileQuestions::create([
                 "file_id" => $file->id,
                 "questions" => $response["answer"]
@@ -59,7 +61,7 @@ class QuestionVerifyService
                     [
                         "role" => "system",
                         "content" => "
-                            You goal is to check if all the QUESTIONS given per the user can be answered with data from the TEXT.
+                            You goal is to check if the CONTEXT has data to answer the QUESTIONS.
                             Only answer with YES or NO.
                         "
                     ],

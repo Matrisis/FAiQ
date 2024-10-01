@@ -46,7 +46,7 @@ class AskController extends Controller
 
     public function create(Request $request, Team $team) {
         $validated = $request->validate([
-            'question' => ['required', 'max:100', 'string', 'min:5'],
+            'question' => ['required', 'max:255', 'string', 'min:5'],
             'channel' => ['required', 'string', 'min:24'],
         ]);
 

@@ -7,7 +7,9 @@ use App\Jobs\AskStreamJob;
 use App\Jobs\Batch\BatchEmbedFile;
 use App\Jobs\Batch\BatchPublish;
 use App\Jobs\Batch\BatchRetrieve;
+use App\Jobs\ProcessFile;
 use App\Models\Embedding\File;
+use App\Models\FileQuestions;
 use App\Models\Team;
 use Illuminate\Support\Facades\Bus;
 
@@ -60,6 +62,17 @@ class JobService
         Bus::chain([
             new BatchEmbedFile(file: $file)
         ])->onConnection('redis')->onQueue('batch')->dispatch();
+    }
+
+    public function importFIle(Team $team, File $file) {
+        print("Processing file : " . $file->path . "\n");
+        Bus::batch([
+            new ProcessFile(team: $team, file: $file)
+        ])->catch(function (Batch $batch, Throwable $e) use ($file) {
+            $file->importing = false;
+            $file->save();
+            FileQuestions::where('file_id', $file->id)->delete();
+        })->onConnection('redis')->onQueue('batch')->dispatch();
     }
 
 }

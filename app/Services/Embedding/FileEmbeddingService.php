@@ -11,6 +11,7 @@ use App\Services\Chatting\ChatService;
 use App\Services\VerifyingService;
 use http\Encoding\Stream\Inflate;
 use Illuminate\Support\Facades\Storage;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class FileEmbeddingService
 {
@@ -54,6 +55,14 @@ class FileEmbeddingService
     }
 
 
+    private function fileUpload(File $file, int $tries) : array {
+        $response = OpenAI::files()->upload([
+            'purpose' => 'search',
+            'file' =>  fopen('$file->pathmy-file.jsonl', 'r'),
+        ]);
+
+    }
+
     /**
      * @throws \Exception
      */
@@ -61,18 +70,24 @@ class FileEmbeddingService
     {
         $parser = new \Smalot\PdfParser\Parser();
         $pdf = $parser->parseFile(Storage::path($file->path));
-        $text = $pdf->getText();
+        $text = mb_convert_encoding($pdf->getText(), 'UTF-8', 'UTF-8');
         $split_text = str_split($text, 50000);
         $cleaned_text = [];
         $verify_service = new VerifyingService();
         foreach ($split_text as $sp) {
             $file_question = $verify_service->questionsCreate(text: $sp, file: $file);
+            $cleaned_text[] = [
+                "cleaned" => $this->cleanText($file_question, $sp, $tries),
+                "file_id" => $file->id
+            ];
+            /*
             foreach (str_split($this->cleanText($file_question, $sp, $tries), 2000) as $scp) {
                 $cleaned_text[] = [
                     "cleaned" => $scp,
                     "file_id" => $file->id
                 ];
             }
+            */
         }
         return $cleaned_text;
     }
@@ -93,8 +108,8 @@ class FileEmbeddingService
             if ($this->verification(file_question: $file_question, original: $text, result: $result, context: $prompt, prompt: $custom_prompt))
                 return $result;
             $messages[1]["content"] = $messages[1]["content"]
-                . "You must return a cleaned version of the original text.";
-            $result = $chat_service->chat($messages, 1536)["answer"];
+                . "Dont remove any information.";
+            $result = $chat_service->chat($messages)["answer"];
         }
         return $result;
     }

@@ -29,7 +29,7 @@ class ChatService
     {
         $data = [
             'model' => $this->model,
-            'messages' => $messages
+            'messages' => mb_convert_encoding($messages, 'UTF-8', 'UTF-8')
         ];
         if ($max_tokens) $data['max_tokens'] = $max_tokens;
         try {
@@ -39,7 +39,6 @@ class ChatService
                 "answer" => $response['choices'][0]['message']['content']
             ];
         } catch (\Exception $e) {
-            print($this->model);
             print($e->getMessage());
             return null;
         }
