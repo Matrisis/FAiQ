@@ -17,8 +17,8 @@ class AnswerSeeder extends Seeder
     public static function run(): void
     {
         $embedding_service = new EmbeddingService(Team::find(1));
-        foreach (range(1, 100) as $index) {
-            $question =str_replace(".", "?", fake()->text(50));
+        foreach (range(1, 5) as $index) {
+            $question = str_replace(".", "?", fake()->text(50));
             $answer = fake()->text(800);
             Answer::create([
                 'team_id' => 1,

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -24,6 +25,10 @@ return new class extends Migration
             $table->foreignId("team_id")->constrained("teams");
             $table->timestamps();
         });
+
+        DB::statement('CREATE INDEX question_vector_index ON answers USING hnsw (question_vector vector_cosine_ops)');
+        DB::statement('CREATE INDEX answer_vector_index ON answers USING hnsw (answer_vector vector_cosine_ops)');
+
     }
 
     /**

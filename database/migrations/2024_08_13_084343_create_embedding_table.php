@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        DB::statement('CREATE INDEX embedding_index ON embedding USING ivfflat (embedding vector_cosine_ops)');
+        DB::statement('CREATE INDEX embedding_index ON embedding USING hnsw (embedding vector_cosine_ops)');
     }
 
     /**
