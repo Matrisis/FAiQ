@@ -20,6 +20,8 @@ class AnswerSeeder extends Seeder
         foreach (range(1, 5) as $index) {
             $question = str_replace(".", "?", fake()->text(50));
             $answer = fake()->text(800);
+            $question_vector = $embedding_service->embed($question);
+            $answer_vector = $embedding_service->embed($answer);
             Answer::create([
                 'team_id' => 1,
                 'question' => $question,
@@ -27,10 +29,11 @@ class AnswerSeeder extends Seeder
                 'votes' => rand(1, 25),
                 'channel' => Str::uuid(),
                 'data' => json_encode([]),
-                'question_vector' => $embedding_service->embed($question),
-                'answer_vector' => $embedding_service->embed($answer),
+                'question_vector' => $question_vector,
+                'answer_vector' => $answer_vector,
             ]);
         }
+
 
     }
 }

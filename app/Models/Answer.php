@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Pgvector\Laravel\HasNeighbors;
+use Pgvector\Laravel\Vector;
 
 class Answer extends Model
 {
-    use HasFactory;
+    use HasNeighbors;
 
     protected $fillable = [
         'channel',
@@ -16,15 +18,17 @@ class Answer extends Model
         'data',
         'type',
         'votes',
-        'team_id'
+        'team_id',
+        'question_vector',
+        'answer_vector',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            // 'data' => 'encrypted',
-        ];
-    }
+    protected $casts = [
+        'question_vector' => Vector::class,
+        'answer_vector' => Vector::class,
+    ];
+
+    // Removed the casts() method to prevent conflicts
 
     public function team()
     {

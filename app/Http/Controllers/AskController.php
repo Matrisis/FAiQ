@@ -6,6 +6,7 @@ use App\Events\Ask;
 use App\Jobs\AskJob;
 use App\Models\Answer;
 use App\Models\Team;
+use App\Services\AnswerService;
 use App\Services\ChattingService;
 use App\Services\JobService;
 use Illuminate\Http\Request;
@@ -49,17 +50,11 @@ class AskController extends Controller
             'question' => ['required', 'max:255', 'string', 'min:5'],
             'channel' => ['required', 'string', 'min:24'],
         ]);
-
         $question = $validated['question'];
         $channel = $validated['channel'];
-
         try {
-            $job_service = new JobService();
-            $job_service->askStream(
-                channel: $channel,
-                team: $team,
-                question: $question
-            );
+            $ask_service = new AnswerService($team);
+            $ask_service->ask($channel, $question);
         } catch (\Exception $exception) {
             return response()->json(['status' => 'error', 'response' => $exception], 500);
         }
