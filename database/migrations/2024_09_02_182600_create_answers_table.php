@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string("channel");
             $table->string("question");
+            $table->vector("question_vector", 1536);
             $table->text("data");
             $table->text("answer");
+            $table->vector("answer_vector", 1536);
             $table->enum("type", ["direct", "stream"])->default("direct");
             $table->integer("votes")->default(0);
             $table->foreignId("team_id")->constrained("teams");

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Embedding\Embedding;
 use App\Models\Team;
 use App\Services\Embedding\BackendEmbeddingService;
 
@@ -26,9 +27,9 @@ class EmbeddingService
     }
 
 
-    public function retrieve(string $text, int $limit = 2)
+    public function retrieve(string $text, int $limit = 2, string $model = Embedding::class, string $column = "embedding")
     {
-        return $this->embedding->retrieve(text: $text, limit: $limit);
+        return $this->embedding->retrieve(text: $text, limit: $limit, model: $model, column: $column);
     }
 
 }

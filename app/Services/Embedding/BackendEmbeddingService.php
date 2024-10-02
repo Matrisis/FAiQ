@@ -5,6 +5,7 @@ namespace App\Services\Embedding;
 use App\Models\Embedding\Embedding;
 use App\Models\Embedding\File;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Model;
 use OpenAI\Laravel\Facades\OpenAI;
 use Pgvector\Laravel\Distance;
 
@@ -34,10 +35,10 @@ class BackendEmbeddingService
         ])->toArray()['data'][0]['embedding']);
     }
 
-    public function retrieve(string $text, int $limit = 2)
+    public function retrieve(string $text, int $limit = 2, string $model = Embedding::class, string $column = "embedding")
     {
-        return Embedding::query()
-            ->nearestNeighbors('embedding', $this->embed($text), Distance::Cosine)->take($limit)->get();
+        return $model::query()
+            ->nearestNeighbors($column, $this->embed($text), Distance::Cosine)->take($limit)->get();
     }
 
     private function fileStore(string $action, array $content) : bool {

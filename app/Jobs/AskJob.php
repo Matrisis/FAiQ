@@ -6,6 +6,7 @@ use App\Events\Ask;
 use App\Models\Answer;
 use App\Models\Team;
 use App\Services\ChattingService;
+use App\Services\EmbeddingService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -63,6 +64,10 @@ class AskJob implements ShouldQueue
         $data["data"] = json_encode($response);
         $data["channel"] = $this->channel;
         $data["team_id"] = $this->team->id;
+
+        $embedding_service = new EmbeddingService($this->team);
+        $data["question_vector"] = $embedding_service->embed($this->question);
+        $data["answer_vector"] = $embedding_service->embed($response["answer"]);
         Answer::create($data);
     }
 
