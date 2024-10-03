@@ -33,6 +33,8 @@ class ProcessFile implements ShouldQueue
     public function handle(): void
     {
         $batching_service = new BatchingService($this->team);
+        $this->file->importing = true;
+        $this->file->save();
         $batching_service->createFile($this->file);
     }
 }

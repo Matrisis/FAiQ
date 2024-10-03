@@ -24,7 +24,7 @@ class FileEmbeddingService
         $this->model = $model;
     }
 
-    public function getLines(File $file, int $tries = 2, string $file_type = null) : array
+    public function getLines(File $file, int $tries = 5, string $file_type = null) : array
     {
         $file_path = Storage::path($file->path);
         $file_type = FileTypeEnum::from($file_type ?: mime_content_type($file_path))->name;
@@ -87,6 +87,7 @@ class FileEmbeddingService
 
     private function cleanText(FileQuestions $file_question, string $text, int $tries)
     {
+        print("Cleaning text..." . PHP_EOL);
         $chat_service = new ChatService();
         $prompt = "You are a text cleaner assistant.
         You must remove from the text useless characters and duplicates.
@@ -98,22 +99,18 @@ class FileEmbeddingService
         $result = $chat_service->chat($messages)["answer"];
         $custom_prompt = "Check if the RESULT matches the goal of prompt CONTEXT for the ORIGINAL text.";
         foreach (range(1, $tries) as $try ) {
-            if ($this->verification(file_question: $file_question, original: $text, result: $result, context: $prompt, prompt: $custom_prompt))
+            $verify_service = new VerifyingService($this->model);
+            $text_verify = $verify_service->verify(original: $text, result: $result, context: $prompt, prompt: $custom_prompt);
+            $question_verification = $verify_service->questionsCheck($file_question, $result);
+            if ($text_verify && $question_verification === "YES")
                 return $result;
             $messages[1]["content"] = $messages[1]["content"]
                 . "Please provide a better cleaned version of the text. It must contain data to
-                answer those questions : " . $file_question->questions. ". Use only data form original text.";
+                answer those questions : " . $file_question->questions. ". Use only data form original text.
+                The question could not be answered beacause :" . $question_verification;
             $result = $chat_service->chat($messages)["answer"];
         }
         return $result;
-    }
-
-    private function verification(FileQuestions $file_question, string $original, string $result, string $context, string $prompt = null) : bool
-    {
-        $verify_service = new VerifyingService($this->model);
-        return ($verify_service->verify(original: $original, result: $result, context: $context, prompt: $prompt)
-            && $verify_service->questionsCheck($file_question, $result)
-        );
     }
 
 }

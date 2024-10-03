@@ -2,6 +2,7 @@
 
 namespace App\Services\Embedding;
 
+use App\Models\Answer;
 use App\Models\Embedding\Embedding;
 use App\Models\Embedding\File;
 use App\Models\Team;

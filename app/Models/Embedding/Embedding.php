@@ -12,7 +12,9 @@ class Embedding extends Pivot
 
     use HasNeighbors;
 
-    protected $casts = ['embedding' => Vector::class];
+    protected $casts = [
+        'embedding' => Vector::class
+    ];
 
     /**
      * The attributes that are mass assignable.

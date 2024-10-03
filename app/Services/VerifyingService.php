@@ -17,6 +17,7 @@ class VerifyingService
     }
 
     public function verify(string $original, string $result, string $context, string $prompt = null) : bool {
+        print("Checking text...\n");
         $verify_service = new VerifyService($this->model);
         return $verify_service->verify($original, $result, $context, $prompt);
     }
@@ -27,8 +28,9 @@ class VerifyingService
         return $question_service->create($text, $file, $custom_prompt, $nb_questions, $max_tokens);
     }
 
-    public function questionsCheck(FileQuestions $file_question, string $text) : bool
+    public function questionsCheck(FileQuestions $file_question, string $text) : string
     {
+        print("Checking question...\n");
         $question_service = new QuestionVerifyService($this->model);
         return $question_service->check($file_question, $text);
     }

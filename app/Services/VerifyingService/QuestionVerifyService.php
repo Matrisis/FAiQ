@@ -49,7 +49,7 @@ class QuestionVerifyService
         }
     }
 
-    public function check(FileQuestions $file_question, string $text) : bool
+    public function check(FileQuestions $file_question, string $text) : string
     {
         $questions = $file_question->questions;
         $chat_service = new ChatService($this->model);
@@ -70,7 +70,7 @@ class QuestionVerifyService
 
                 $response = $chat_service->chat(messages: $messages);
                 print("QUESTIONS VERIFICATION : " . $response["answer"] . "\n");
-                return $response["answer"] === "YES";
+                return $response["answer"];
         } catch (\Exception $e) {
             print($e->getMessage() . "\n");
             return false;

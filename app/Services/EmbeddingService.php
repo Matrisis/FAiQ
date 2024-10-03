@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Embedding\Embedding;
 use App\Models\Team;
 use App\Services\Embedding\BackendEmbeddingService;
+use Pgvector\Laravel\Distance;
 
 class EmbeddingService
 {

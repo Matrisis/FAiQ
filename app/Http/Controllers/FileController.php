@@ -104,8 +104,6 @@ class FileController extends Controller
             if (!$file->importing && !$file->imported) {
                 $jobService = new JobService();
                 $jobService->importFIle($team, $file);
-                $file->importing = true;
-                $file->save();
             } else {
                 response()->json(["success" => false, "errors" => [["File already processed or processing"]]], 422);
             }

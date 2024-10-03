@@ -15,7 +15,7 @@ class AnswerService
         $this->team = $team;
     }
 
-    private function retrievePreviousAnswers(string $question) {
+    private function retrievePreviousAnswer(string $question) {
         $embedding_service = new EmbeddingService($this->team);
         return $embedding_service->retrieve(
             text: $question, limit: 1, model: Answer::class, column: "question", neighbor_distance: "0.98");
@@ -37,7 +37,7 @@ class AnswerService
 
     public function ask(string $channel, string $question) {
         $job_service = new JobService();
-        $previous_answers = $this->retrievePreviousAnswers($question);
+        $previous_answers = $this->retrievePreviousAnswer($question);
         if($previous_answers->first()) {
             $this->splitBroadcast([
                 'question' => $question, 'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),

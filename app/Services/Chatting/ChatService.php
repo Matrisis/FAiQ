@@ -39,6 +39,7 @@ class ChatService
                 "answer" => $response['choices'][0]['message']['content']
             ];
         } catch (\Exception $e) {
+            print("ERROR CHAT". PHP_EOL);
             print($e->getMessage());
             return null;
         }
