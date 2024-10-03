@@ -65,9 +65,8 @@ class AskController extends Controller
         $validated = $request->validate([
             'vote' => ['required', Rule::in(['incr', 'decr'])],
         ]);
-        $vote =  $validated['vote'] === "incr" ? 1 : -1;
         try {
-            if ($vote == -1) {
+            if ($validated['vote'] == "decr") {
                 $answer->decrement('votes');
             } else
                 $answer->increment('votes');

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Pgvector\Laravel\HasNeighbors;
 use Pgvector\Laravel\Vector;
@@ -23,12 +22,7 @@ class Answer extends Model
         'answer_vector',
     ];
 
-    protected $casts = [
-        'question_vector' => Vector::class,
-        'answer_vector' => Vector::class,
-    ];
-
-    // Removed the casts() method to prevent conflicts
+    protected $casts = ['question_vector' => Vector::class, 'answer_vector' => Vector::class];
 
     public function team()
     {

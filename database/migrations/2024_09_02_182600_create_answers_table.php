@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text("answer");
             $table->vector("answer_vector", 1536);
             $table->enum("type", ["direct", "stream"])->default("direct");
-            $table->integer("votes")->default(0);
+            $table->integer("votes")->default(1);
             $table->foreignId("team_id")->constrained("teams");
             $table->timestamps();
         });

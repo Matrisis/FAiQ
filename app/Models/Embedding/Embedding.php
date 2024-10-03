@@ -9,7 +9,6 @@ use Pgvector\Laravel\Vector;
 
 class Embedding extends Pivot
 {
-
     use HasNeighbors;
 
     protected $casts = [
