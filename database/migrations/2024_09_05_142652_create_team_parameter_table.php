@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('accessible')->default(false);
             $table->string('logo_path')->default(Storage::url("resources/default/logo.png"));
             $table->string('icon_path')->default(Storage::url("resources/default/icon.png"));
-            $table->string('neighbor_distance')->default("0.95");
+            $table->string('neighbor_distance')->default("0.25");
 
             $table->timestamps();
         });

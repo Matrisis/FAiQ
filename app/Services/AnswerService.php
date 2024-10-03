@@ -18,7 +18,7 @@ class AnswerService
     private function retrievePreviousAnswer(string $question) {
         $embedding_service = new EmbeddingService($this->team);
         return $embedding_service->retrieve(
-            text: $question, limit: 1, model: Answer::class, column: "question", neighbor_distance: "0.98");
+            text: $question, limit: 1, model: Answer::class, column: "question_vector", neighbor_distance: "0.15");
     }
 
     private function splitBroadcast(array $data, string $channel)
@@ -27,12 +27,12 @@ class AnswerService
             foreach (str_split($data["answer"], 100) as $chunk) {
                 print "Chunk : " . $chunk . "\n";
                 broadcast(new Ask(answer: [
-                    'question' => $this->question,
+                    'question' => $data["question"],
                     'answer' => mb_convert_encoding($chunk, "UTF-8", 'UTF-8'),
-                ], channel: $this->channel));
+                ], channel: $channel));
             }
         } else
-            broadcast(new Ask(answer: $data, channel: $this->channel));
+            broadcast(new Ask(answer: $data, channel: $channel));
     }
 
     public function ask(string $channel, string $question) {

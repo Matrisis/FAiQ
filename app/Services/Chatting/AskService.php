@@ -2,6 +2,8 @@
 
 namespace App\Services\Chatting;
 
+use App\Models\Answer;
+use App\Models\Embedding\Embedding;
 use App\Models\Team;
 use App\Models\TeamPrompt;
 use App\Services\EmbeddingService;
@@ -23,10 +25,14 @@ class AskService
     {
         $custom_prompt = $this->retrieveCustomPrompt();
         $embedding = $this->retrieveEmbedding($question);
+        $previous_answers = $this->retrievePreviousAnswers(question: $custom_prompt)->map(function ($answer) {
+            return "Question : " . $answer->question . "\n" . "Answer : " . $answer->answer . "\n";
+        });
+        $previous_answers = $previous_answers->implode("; ");
         $clean_embedding = $embedding->pluck("content")->join(", ");
         $messages = [
             ['role' => 'system', 'content' =>
-                $this->createSystemPrompt(custom_prompt: $custom_prompt, embedding: $clean_embedding)],
+                $this->createSystemPrompt(custom_prompt: $custom_prompt, embedding: $clean_embedding, previous_answers: $previous_answers)],
             ['role' => 'user', 'content' => $question],
         ];
         $chat_service = new ChatService();
@@ -45,9 +51,13 @@ class AskService
         $custom_prompt = $this->retrieveCustomPrompt();
         $embedding = $this->retrieveEmbedding($question);
         $clean_embedding = $embedding->pluck("content")->join(", ");
+        $previous_answers = $this->retrievePreviousAnswers(question: $custom_prompt)->map(function ($answer) {
+            return "Question : " . $answer->question . "\n" . "Answer : " . $answer->answer . "\n";
+        });
+        $previous_answers = $previous_answers->implode("; ");
         $messages = [
             ['role' => 'system', 'content' =>
-                $this->createSystemPrompt(custom_prompt: $custom_prompt, embedding: $clean_embedding)],
+                $this->createSystemPrompt(custom_prompt: $custom_prompt, embedding: $clean_embedding, previous_answers: $previous_answers)],
             ['role' => 'user', 'content' => $question],
         ];
         $chat_service = new ChatService();
@@ -61,17 +71,23 @@ class AskService
         ];
     }
 
-    private function createSystemPrompt(string $custom_prompt, string $embedding) : ?string
+    private function createSystemPrompt(string $custom_prompt, string $embedding, string $previous_answers) : ?string
     {
         return $custom_prompt
             . "Context : \"\"\""
-            . $embedding . "\"\"\"";
+            . $embedding . "\"\"\""
+            . "Previous answers as more context to help you answer : " . $previous_answers;
     }
 
     private function retrieveEmbedding(string $text)
     {
         $embedding_service = new EmbeddingService(team: $this->team);
-        return $embedding_service->retrieve(text: $text, limit: 5);
+        return $embedding_service->retrieve(text: $text, limit: 5, model: Embedding::class, column: "embedding", neighbor_distance: "0.8");
+    }
+
+    private function retrievePreviousAnswers(string $question) : \Illuminate\Support\Collection {
+        $embedding_service = new EmbeddingService(team: $this->team);
+        return $embedding_service->retrieve(text: $question, limit: 3, model: Answer::class, column: "question_vector");
     }
 
     private function retrieveCustomPrompt() : string

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AskController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
@@ -68,6 +69,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/list', [ManagementController::class, 'list'])->name('list');
         Route::put('/unlock/{team}', [ManagementController::class, 'unlock'])->name('unlock');
         Route::get('/view/{team}', [ManagementController::class, 'viewTeam'])->name('view');
+    });
+
+    Route::prefix("/answers")->name("answers.")->group(function () {
+        Route::get("/", [AnswerController::class, 'index'])->name("index");
+        Route::put("/{answer}", [AnswerController::class, 'update'])->name("update");
+        Route::delete("/{answer}", [AnswerController::class, 'delete'])->name("delete");
     });
 
 });

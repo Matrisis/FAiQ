@@ -22,7 +22,10 @@ class Answer extends Model
         'answer_vector',
     ];
 
-    protected $casts = ['question_vector' => Vector::class, 'answer_vector' => Vector::class];
+    protected $casts = [
+        'question_vector' => Vector::class,
+        'answer_vector' => Vector::class
+    ];
 
     public function team()
     {

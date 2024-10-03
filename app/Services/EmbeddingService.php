@@ -35,7 +35,7 @@ class EmbeddingService
     {
         return $this->embedding
             ->retrieve(text: $text, limit: $limit, model: $model, column: $column)
-            ->where('neighbor_distance', '>=', $neighbor_distance ?: $this->team->parameters->neighbor_distance);
+            ->where('neighbor_distance', '<=', $neighbor_distance ?: $this->team->parameters->neighbor_distance);
     }
 
 }
