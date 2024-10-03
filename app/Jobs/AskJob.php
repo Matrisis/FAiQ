@@ -67,7 +67,7 @@ class AskJob implements ShouldQueue
 
         $embedding_service = new EmbeddingService($this->team);
         $data["question_vector"] = $embedding_service->embed($this->question);
-        $data["answer_vector"] = $embedding_service->embed($response["answer"]);
+        $data["answer_vector"] = $embedding_service->embed($data["answer"]);
         Answer::create($data);
     }
 

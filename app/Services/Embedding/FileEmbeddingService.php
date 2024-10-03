@@ -80,14 +80,7 @@ class FileEmbeddingService
                 "cleaned" => $this->cleanText($file_question, $sp, $tries),
                 "file_id" => $file->id
             ];
-            /*
-            foreach (str_split($this->cleanText($file_question, $sp, $tries), 2000) as $scp) {
-                $cleaned_text[] = [
-                    "cleaned" => $scp,
-                    "file_id" => $file->id
-                ];
-            }
-            */
+            sleep(30);
         }
         return $cleaned_text;
     }
@@ -95,8 +88,8 @@ class FileEmbeddingService
     private function cleanText(FileQuestions $file_question, string $text, int $tries)
     {
         $chat_service = new ChatService();
-        $prompt = "You are a text cleaner assistant. You must remove from the text useless or incomprehensible data.
-        Remove useless characters.
+        $prompt = "You are a text cleaner assistant.
+        You must remove from the text useless characters and duplicates.
         You will return the text cleaned, concisely without removing any details or information.";
         $messages = [
             ['role' => 'system', 'content' => $prompt],
@@ -108,7 +101,8 @@ class FileEmbeddingService
             if ($this->verification(file_question: $file_question, original: $text, result: $result, context: $prompt, prompt: $custom_prompt))
                 return $result;
             $messages[1]["content"] = $messages[1]["content"]
-                . "Dont remove any information.";
+                . "Please provide a better cleaned version of the text. It must contain data to
+                answer those questions : " . $file_question->questions. ". Use only data form original text.";
             $result = $chat_service->chat($messages)["answer"];
         }
         return $result;

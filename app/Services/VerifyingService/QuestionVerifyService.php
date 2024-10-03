@@ -15,7 +15,7 @@ class QuestionVerifyService
         $this->model = $model;
     }
 
-    public function create(string $text, File $file, string $custom_prompt = null, int $nb_questions = 10, int $max_tokens = null) : ?FileQuestions
+    public function create(string $text, File $file, string $custom_prompt = null, int $nb_questions = 3, int $max_tokens = null) : ?FileQuestions
     {
         try {
             $chat_service = new ChatService($this->model);
@@ -24,15 +24,12 @@ class QuestionVerifyService
                 [
                     "role" => "system",
                     "content" => $custom_prompt ? : "
-                    Your goal is to generate simple questions based on a text.
-                    The questions must be answerable using a cleaned version of the text.
-                    The questions must be answerable using a different version of the text.
-                    The user will provide the text to generate questions from.
-                 " . "Please provide" . 10 . "questions.
-                 Each question should be at least 5 words.
-                 Only the high confidence questions should be returned.
-                 Separate each question with a comma.
-                 "
+                        Your goal is to generate " . $nb_questions . " simple questions based on the text.
+                        All the questions must be easily answerable with data from the text only.
+                        Each question should be at least 5 words.
+                        Separate each question with a line break.
+                        The user will provide the text to generate questions from.
+                    "
                 ],
                 [
                     "role" => "user",
@@ -54,15 +51,15 @@ class QuestionVerifyService
 
     public function check(FileQuestions $file_question, string $text) : bool
     {
-        $questions = json_decode($file_question->questions);
+        $questions = $file_question->questions;
         $chat_service = new ChatService($this->model);
         try {
                 $messages = [
                     [
                         "role" => "system",
                         "content" => "
-                            You goal is to check if the CONTEXT has data to answer the QUESTIONS.
-                            Only answer with YES or NO.
+                            You goal is to check if the QUESTIONS can be answered using data in CONTEXT.
+                            Only answer with YES if the questions can be answered, otherwise answer with the reason why.
                         "
                     ],
                     [

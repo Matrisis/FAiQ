@@ -21,7 +21,7 @@ class VerifyingService
         return $verify_service->verify($original, $result, $context, $prompt);
     }
 
-    public function questionsCreate(string $text, File $file, string $custom_prompt = null, int $nb_questions = 10, int $max_tokens = null) : ?FileQuestions
+    public function questionsCreate(string $text, File $file, string $custom_prompt = null, int $nb_questions = 3, int $max_tokens = null) : ?FileQuestions
     {
         $question_service = new QuestionVerifyService($this->model);
         return $question_service->create($text, $file, $custom_prompt, $nb_questions, $max_tokens);

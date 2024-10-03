@@ -11,7 +11,9 @@ use App\Jobs\ProcessFile;
 use App\Models\Embedding\File;
 use App\Models\FileQuestions;
 use App\Models\Team;
+use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
+use Throwable;
 
 class JobService
 {
@@ -69,9 +71,11 @@ class JobService
         Bus::batch([
             new ProcessFile(team: $team, file: $file)
         ])->catch(function (Batch $batch, Throwable $e) use ($file) {
+            print("Error processing file : " . $file->path . "\n");
+            print($e->getMessage() . "\n");
             $file->importing = false;
-            $file->save();
             FileQuestions::where('file_id', $file->id)->delete();
+            $file->save();
         })->onConnection('redis')->onQueue('batch')->dispatch();
     }
 

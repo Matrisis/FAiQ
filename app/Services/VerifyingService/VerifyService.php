@@ -26,6 +26,7 @@ class VerifyService
             ],
         ];
         $chat_service = new ChatService($this->model);
+        print("ORIGINAL VERIFICATION : " . $chat_service->chat($messages)["answer"] . "\n");
         return $chat_service->chat($messages)["answer"] === "\"\"\"YES\"\"\"";
     }
 
