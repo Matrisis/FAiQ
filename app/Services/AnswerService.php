@@ -40,8 +40,9 @@ class AnswerService
         $previous_answers = $this->retrievePreviousAnswer($question);
         if($previous_answers->first()) {
             $this->splitBroadcast([
-                'question' => $question, 'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),
-            ], $previous_answers->first()->channel ?? $previous_answers->first(), $channel);
+                'question' =>  mb_convert_encoding($question,  "UTF-8", 'UTF-8'),
+                'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),
+            ], $channel);
         } else {
             $job_service->askStream(
                 channel: $channel,

@@ -105,9 +105,8 @@ class FileEmbeddingService
             if ($text_verify && $question_verification === "YES")
                 return $result;
             $messages[1]["content"] = $messages[1]["content"]
-                . "Please provide a better cleaned version of the text. It must contain data to
-                answer those questions : " . $file_question->questions. ". Use only data form original text.
-                The question could not be answered beacause :" . $question_verification;
+                . "Please provide a better cleaned version of the text. Use only data form original text.
+                This new version must fix this issues :" . $question_verification;
             $result = $chat_service->chat($messages)["answer"];
         }
         return $result;

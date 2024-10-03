@@ -36,5 +36,6 @@ class ProcessFile implements ShouldQueue
         $this->file->importing = true;
         $this->file->save();
         $batching_service->createFile($this->file);
+        $batching_service->publish("embedding");
     }
 }
