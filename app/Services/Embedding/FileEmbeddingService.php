@@ -9,6 +9,7 @@ use App\Models\FileQuestions;
 use App\Models\Team;
 use App\Services\Chatting\ChatService;
 use App\Services\VerifyingService;
+use App\Services\Vision\VisionService;
 use http\Encoding\Stream\Inflate;
 use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -66,11 +67,29 @@ class FileEmbeddingService
     /**
      * @throws \Exception
      */
-    private function getPDF(File $file, int $tries) : array
+    private function getPDFOld(File $file, int $tries) : array
     {
         $parser = new \Smalot\PdfParser\Parser();
         $pdf = $parser->parseFile(Storage::path($file->path));
         $text = mb_convert_encoding($pdf->getText(), 'UTF-8', 'UTF-8');
+        $split_text = str_split($text, 50000);
+        $cleaned_text = [];
+        $verify_service = new VerifyingService();
+        foreach ($split_text as $sp) {
+            $file_question = $verify_service->questionsCreate(text: $sp, file: $file);
+            $cleaned_text[] = [
+                "cleaned" => $this->cleanText($file_question, $sp, $tries),
+                "file_id" => $file->id
+            ];
+            sleep(30);
+        }
+        return $cleaned_text;
+    }
+
+    private function getPDF(File $file, int $tries): array
+    {
+        $vision_service = new VisionService($file);
+        $text = $vision_service->create();
         $split_text = str_split($text, 50000);
         $cleaned_text = [];
         $verify_service = new VerifyingService();
