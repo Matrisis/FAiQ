@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import vClickOutside from 'v-click-outside'
 
 const props = defineProps({
     show: {
@@ -13,6 +14,10 @@ const props = defineProps({
     closeable: {
         type: Boolean,
         default: true,
+    },
+    title: {
+        type: String,
+        default: "Title",
     },
 });
 

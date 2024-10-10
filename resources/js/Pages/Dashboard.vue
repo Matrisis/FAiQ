@@ -2,6 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
 import Stats from "@/Pages/Dashboard/Stats.vue";
+import Modal from "@/Components/Modal.vue";
 </script>
 
 <template>
