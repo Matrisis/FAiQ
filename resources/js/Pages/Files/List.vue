@@ -3,6 +3,8 @@ import { ref, onMounted, reactive } from 'vue';
 import axios from 'axios';
 import { VueGoodTable } from 'vue-good-table-next';
 import 'vue-good-table-next/dist/vue-good-table-next.css';
+import Modal from "@/Components/Modal.vue";
+import Upload from "@/Pages/Files/Upload.vue";
 
 const props = defineProps({
     team: Object
@@ -108,34 +110,60 @@ const onSortChange = (params) => {
 };
 
 const processFile = (file) => {
-    try {
-        if (confirm("Êtes-vous sûr de vouloir d'importer ce fichier ?")) {
-            axios.put(route('admin.files.process', { team: props.team.id, file: file.id })).then($response =>{
-                fetchData();
-            })
-        }
-    } catch (error) {
-        console.error(error);
-    }
+    showModal.value = true;
+    modalText.value = "Importer \"" + file.name + "\" ?";
+    clickedFile.value = file;
+    action.value = "processFileReq";
+};
+
+const processFileReq = (file) => {
+    axios.put(route('admin.files.process', { team: props.team.id, file: file.id })).then($response =>{
+        fetchData();
+    }).then(() => {
+        showModal.value = false
+    })
+};
+
+const deleteFileReq = (file) => {
+    axios.delete(route('admin.files.delete', { team: props.team.id, file: file.id })).then($response =>{
+        fetchData();
+    }).then(() => {
+        showModal.value = false
+    })
 };
 
 const deleteFile = (file) => {
-    try {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
-            axios.delete(route('admin.files.delete', { team: props.team.id, file: file.id })).then($response =>{
-                fetchData();
-            })
-        }
-    } catch (error) {
-        console.error(error);
+    showModal.value = true;
+    modalText.value = "Supprimer \"" + file.name + "\" ?";
+    clickedFile.value = file;
+    action.value = "deleteFileReq";
+};
+
+const clickAction = (file) => {
+    if (action.value === 'processFileReq') {
+        processFileReq(file);
+    } else if (action.value === 'deleteFileReq') {
+        deleteFileReq(file);
     }
 };
 
-
+const showModal = ref(false);
+const modalText = ref('');
+const clickedFile = ref(null);
+const action  = ref('');
 
 </script>
 
 <template>
+    <Modal :show="showModal" :closeable="true" @keydown.esc="showModal = false">
+        <div class="w-full flex flex-row mt-4">
+            <h1 class="flex justify-center text-center w-full text-xl">{{ modalText }}</h1>
+        </div>
+        <div class="flex flex-row w-full items-center justify-center py-6">
+            <button class="flex mr-2 py-4 px-8 rounded border border-red-600 hover:bg-red-600 hover:text-white" @click="clickAction(clickedFile)">Oui</button>
+            <button class="flex py-4 px-8 rounded border border-blue-600 hover:bg-blue-600 hover:text-white" @click="showModal = false">Non</button>
+        </div>
+    </Modal>
     <div class="max-w-full mx-auto p-4 font-sans">
         <h2 class="text-black dark:text-white">Fichiers <span v-if="totalRecords > 0">({{ totalRecords }})</span></h2>
         <vue-good-table
