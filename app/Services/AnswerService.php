@@ -15,6 +15,20 @@ class AnswerService
         $this->team = $team;
     }
 
+    public function create(string $question, string $answer, string $channel, array $data, int $votes = 0) {
+        $embedding_service = new EmbeddingService($this->team);
+        return Answer::create([
+            'team_id' => $this->team->id,
+            'question' => $question,
+            'answer' => $answer,
+            'votes' => $votes,
+            'channel' => $channel,
+            'data' => json_encode($data),
+            'question_vector' => $embedding_service->embed($question),
+            'answer_vector' => $embedding_service->embed($answer),
+        ]);
+    }
+
     private function retrievePreviousAnswer(string $question) {
         $embedding_service = new EmbeddingService($this->team);
         return $embedding_service->retrieve(

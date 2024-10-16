@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Team;
+use App\Services\AnswerService;
 use App\Services\EmbeddingService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,6 +15,26 @@ class AnswerController extends Controller
     public function index(Request $request, Team $team){
         if($request->user()->cannot('view', $team)) abort(403);
         return Inertia::render("Answers", ["team" => $team]);
+    }
+
+    public function create(Request $request, Team $team){
+        if($request->user()->cannot('create', $team)) abort(403);
+        $validated = $request->validate([
+            'question' => ['required', 'string', 'min:5'],
+            'answer' => ['required', 'string', 'min:5'],
+            'votes' => ['integer', 'min:0'],
+        ]);
+       try {
+           $validated_question = $validated['question'];
+           $validated_answer = $validated['answer'];
+           $validated_votes = $validated['votes'] ?? 0;
+           $answer_service = new AnswerService($team);
+           $answer = $answer_service->create(question: $validated_question, answer:$validated_answer,
+               channel:"", data: [], votes: $validated_votes);
+            return response()->json(['status' => 'success', 'response' => $answer]);
+        } catch (\Exception $exception) {
+            return response()->json(['status' => 'error', 'response' => $exception], 500);
+        }
     }
 
     public function get(Request $request, Team $team){

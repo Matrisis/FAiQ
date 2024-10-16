@@ -5,6 +5,7 @@ import axios from "axios";
 import Markdown from "@/Components/Markdown.vue";
 import Modal from "@/Components/Modal.vue";
 import ModalChoice from "@/Components/ModalChoice.vue";
+import CreateAnswer from "@/Pages/Answer/CreateAnswer.vue";
 
 const props = defineProps({
     team: Object
@@ -80,7 +81,10 @@ const deleteAnswer = (answer) => {
     })
 }
 
-// initial load
+const onCreatedAnswer = () => {
+    loadFromServer();
+}
+
 loadFromServer();
 
 watch(serverOptions, (value) => { loadFromServer(); }, { deep: true });
@@ -108,16 +112,21 @@ watch(serverOptions, (value) => { loadFromServer(); }, { deep: true });
             </div>
             <div v-if="modalType === 'update'" class="flex flex-row w-full items-center justify-center py-6">
                 <button class="flex mr-2 py-4 px-8 rounded border border-blue-600 hover:bg-blue-600 hover:text-white" @click="clickAction(modalItem)">
-                    Oui
+                    Valider
                 </button>
                 <button class="flex py-4 px-8 rounded border border-red-600 hover:bg-red-600 hover:text-white" @click="showModal = false">
-                    Non
+                    Annuler
                 </button>
             </div>
         </Modal>
-        <div class="p-3">
-            <span>Rechercher : </span>
-            <input class="p" type="text" v-model="serverOptions.search">
+        <div class="flex flex-row p-3 justify-between">
+            <div class="flex justify-center items-center">
+                <label class="pr-2 ">Recherche : </label>
+                <input class="rounded border border-gray-500" type="text" v-model="serverOptions.search">
+            </div>
+            <div>
+                <CreateAnswer :team="props.team" @createdAnswer="onCreatedAnswer" />
+            </div>
         </div>
         <EasyDataTable
             table-class-name="customize-table"

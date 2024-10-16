@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::prefix("/answers")->name("answers.")->group(function () {
             Route::get("/", [AnswerController::class, 'index'])->name("index");
             Route::get("/list", [AnswerController::class, 'get'])->name("get");
+            Route::post("/", [AnswerController::class, 'create'])->name("create");
             Route::put("/{answer}", [AnswerController::class, 'update'])->name("update");
             Route::delete("/{answer}", [AnswerController::class, 'delete'])->name("delete");
         });
