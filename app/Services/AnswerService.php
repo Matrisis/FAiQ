@@ -16,7 +16,6 @@ class AnswerService
     }
 
     public function create(string $question, string $answer, string $channel, array $data, int $votes = 0) {
-        $embedding_service = new EmbeddingService($this->team);
         return Answer::create([
             'team_id' => $this->team->id,
             'question' => $question,

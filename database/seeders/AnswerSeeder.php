@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Answer;
 use App\Models\Team;
+use App\Services\AnswerService;
 use App\Services\EmbeddingService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,18 +21,8 @@ class AnswerSeeder extends Seeder
         foreach (range(1, 5) as $index) {
             $question = str_replace(".", "?", fake()->text(50));
             $answer = fake()->text(800);
-            $question_vector = $embedding_service->embed($question);
-            $answer_vector = $embedding_service->embed($answer);
-            Answer::create([
-                'team_id' => 1,
-                'question' => $question,
-                'answer' => $answer,
-                'votes' => rand(1, 25),
-                'channel' => Str::uuid(),
-                'data' => json_encode([]),
-                'question_vector' => $question_vector,
-                'answer_vector' => $answer_vector,
-            ]);
+            $answer_service = new AnswerService(Team::find(1));
+            $answer_service->create($question, $answer, Str::uuid(), [], rand(1, 25));
         }
 
 

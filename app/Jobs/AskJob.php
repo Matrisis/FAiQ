@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Events\Ask;
 use App\Models\Answer;
 use App\Models\Team;
+use App\Services\AnswerService;
 use App\Services\ChattingService;
 use App\Services\EmbeddingService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -60,15 +61,12 @@ class AskJob implements ShouldQueue
         print("Broadcasting ask event...\n");
 
         $this->splitBroadcast($data);
-
-        $data["data"] = json_encode($response);
-        $data["channel"] = $this->channel;
-        $data["team_id"] = $this->team->id;
-
-        $embedding_service = new EmbeddingService($this->team);
-        $data["question_vector"] = $embedding_service->embed($this->question);
-        $data["answer_vector"] = $embedding_service->embed($data["answer"]);
-        Answer::create($data);
+        $answer_service = new AnswerService($this->team);
+        $answer_service->create(
+            question: $this->question,
+            answer: $data["answer"],
+            channel: $this->channel,
+            data: $response);
     }
 
     private function splitBroadcast(array $data)

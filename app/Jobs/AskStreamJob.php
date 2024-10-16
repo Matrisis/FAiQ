@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Events\Ask;
 use App\Models\Answer;
 use App\Models\Team;
+use App\Services\AnswerService;
 use App\Services\ChattingService;
 use App\Services\EmbeddingService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -50,19 +51,13 @@ class AskStreamJob implements ShouldQueue
                 question: $this->question,
                 max_tokens: $this->max_tokens
             );
-
-            $embedding_service = new EmbeddingService($this->team);
-
-            $data = [
-                'question' => $this->question,
-                'answer' => mb_convert_encoding($response["answer"], "UTF-8", 'UTF-8'),
-                'data' => json_encode($response),
-                'channel' => $this->channel,
-                'team_id' => $this->team->id,
-                'question_vector' =>  $embedding_service->embed( $this->question),
-                'answer_vector' =>  $embedding_service->embed(mb_convert_encoding($response["answer"], "UTF-8", 'UTF-8')),
-            ];
-            $answer = Answer::create($data);
+            $answer_service = new AnswerService($this->team);
+            $answer = $answer_service->create(
+                question: $this->question,
+                answer: mb_convert_encoding($response["answer"], "UTF-8", 'UTF-8'),
+                channel: $this->channel,
+                data: $response,
+            );
             broadcast(new Ask(answer: $answer->only(['id']), channel: $this->channel));
         }
     }
