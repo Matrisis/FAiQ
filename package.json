@@ -23,6 +23,7 @@
     "dependencies": {
         "lottie-web": "^5.12.2",
         "marked": "^14.1.2",
-        "vue-good-table-next": "^0.2.2"
+        "vue-good-table-next": "^0.2.2",
+        "vue3-easy-data-table": "^1.5.47"
     }
 }

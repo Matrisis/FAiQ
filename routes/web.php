@@ -62,6 +62,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::put('/update', [TeamPromptController::class, 'update'])->name('update');
         });
 
+        Route::prefix("/answers")->name("answers.")->group(function () {
+            Route::get("/", [AnswerController::class, 'index'])->name("index");
+            Route::get("/list", [AnswerController::class, 'get'])->name("get");
+            Route::put("/{answer}", [AnswerController::class, 'update'])->name("update");
+            Route::delete("/{answer}", [AnswerController::class, 'delete'])->name("delete");
+        });
+
     });
 
     Route::prefix('/management')->name('management.')->group(function () {
@@ -69,12 +76,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/list', [ManagementController::class, 'list'])->name('list');
         Route::put('/unlock/{team}', [ManagementController::class, 'unlock'])->name('unlock');
         Route::get('/view/{team}', [ManagementController::class, 'viewTeam'])->name('view');
-    });
-
-    Route::prefix("/answers")->name("answers.")->group(function () {
-        Route::get("/", [AnswerController::class, 'index'])->name("index");
-        Route::put("/{answer}", [AnswerController::class, 'update'])->name("update");
-        Route::delete("/{answer}", [AnswerController::class, 'delete'])->name("delete");
     });
 
 });
