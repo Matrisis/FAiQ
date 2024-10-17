@@ -16,6 +16,7 @@ class AnswerService
     }
 
     public function create(string $question, string $answer, string $channel, array $data, int $votes = 0) {
+        $embedding_service = new EmbeddingService($this->team);
         return Answer::create([
             'team_id' => $this->team->id,
             'question' => $question,
@@ -51,6 +52,9 @@ class AnswerService
     public function ask(string $channel, string $question) {
         $job_service = new JobService();
         $previous_answers = $this->retrievePreviousAnswer($question);
+        $previous_answers = $previous_answers->where("answer", "!=",  "I don't know");
+        $previous_answers = $previous_answers->where("answer", "!=", "'I don't know'");
+        dd($previous_answers);
         if($previous_answers->first()) {
             $this->splitBroadcast([
                 'question' =>  mb_convert_encoding($question,  "UTF-8", 'UTF-8'),
