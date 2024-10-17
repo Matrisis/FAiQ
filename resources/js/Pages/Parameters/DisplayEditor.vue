@@ -19,6 +19,47 @@ const paramsForm = useForm({
     title : props.parameters.title,
 })
 
+const iconFile = ref(null);
+const logoFile = ref(null);
+const iconPreview = ref(props.parameters.icon_path || null);
+const logoPreview = ref(props.parameters.logo_path || null);
+
+const onIconSelected = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        iconFile.value = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            iconPreview.value = e.target.result;
+            // Update parameters for live preview
+            emitParametersUpdated();
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+const onLogoSelected = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        logoFile.value = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            logoPreview.value = e.target.result;
+            // Update parameters for live preview
+            emitParametersUpdated();
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+const emitParametersUpdated = () => {
+    emit("parametersUpdated", {
+        ...props.parameters,
+        icon_path: iconPreview.value,
+        logo_path: logoPreview.value,
+    });
+};
+
 const onParametersUpdated = () => {
     emit("parametersUpdated", props.parameters)
 }
@@ -53,19 +94,49 @@ const resetParameters = () => {
 const success = ref(false);
 const errors = ref(null);
 const updateParameters = () => {
-    success.value = false
-    errors.value = null
-    axios.put(route('admin.parameters.update', {
-        team: props.parameters.team_id,
-        params: props.parameters.id
-    }), paramsForm)
-    .then((response) => {
-        success.value = true
-    })
-    .catch((error) => {
-        errors.value = error.response.data.errors
-    });
-}
+    success.value = false;
+    errors.value = null;
+
+    // Create a FormData object to handle file uploads
+    const formData = new FormData();
+
+    // Append form fields
+    formData.append("title", paramsForm.title);
+    formData.append("background_color", paramsForm.background_color);
+    formData.append("question_background_color", paramsForm.question_background_color);
+    formData.append("text_color", paramsForm.text_color);
+    formData.append("title_color", paramsForm.title_color);
+
+    // Append files if they are selected
+    if (iconFile.value) {
+        formData.append("icon", iconFile.value);
+    }
+    if (logoFile.value) {
+        formData.append("logo", logoFile.value);
+    }
+
+    axios
+        .post(
+            route("admin.parameters.update", {
+                team: props.parameters.team_id,
+                params: props.parameters.id,
+            }),
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        )
+        .then((response) => {
+            success.value = true;
+        })
+        .catch((error) => {
+            errors.value = error.response.data.errors;
+        });
+};
+
+
 
 </script>
 
@@ -120,7 +191,33 @@ const updateParameters = () => {
                        class="flex w-full mt-3 rounded"
                        v-model="paramsForm.question_background_color" required />
             </div>
+            <div class="mt-6">
+                <label for="icon" class="uppercase">Icône</label>
+                <input
+                    type="file"
+                    id="icon"
+                    class="flex w-full mt-3 rounded"
+                    @change="onIconSelected"
+                    accept="image/*"
+                />
+                <div v-if="iconPreview" class="mt-2">
+                    <img :src="iconPreview" alt="Icon Preview" class="w-16 h-16" />
+                </div>
+            </div>
 
+            <div class="mt-6">
+                <label for="logo" class="uppercase">Logo</label>
+                <input
+                    type="file"
+                    id="logo"
+                    class="flex w-full mt-3 rounded"
+                    @change="onLogoSelected"
+                    accept="image/*"
+                />
+                <div v-if="logoPreview" class="mt-2">
+                    <img :src="logoPreview" alt="Logo Preview" class="w-32 h-32" />
+                </div>
+            </div>
         </div>
         <div class="flex flex-row mt-12 items-center justify-center">
             <button @click="updateParameters" type="submit" class="flex py-3 px-1 text-gray-600 bg-white border border-gray-600 hover:bg-gray-600 hover:text-white rounded">Enregistrer</button>
