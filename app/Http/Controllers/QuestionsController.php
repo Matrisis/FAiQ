@@ -14,9 +14,12 @@ class QuestionsController extends Controller
         $ask_service = new AnswerService($team);
         if ($question){
             $follow_up = $ask_service->retrieve($question, 5, 'question_vector', '0.25')
-            ->map(function ($fup) {
-                return $fup->only(['id', 'question', 'answer', 'votes']);
-            });
+                ->filter(function ($answer) {
+                    return $answer->answer != "I don't know" && $answer->answer != "'I don't know'";
+                })
+                ->map(function ($fup) {
+                    return $fup->only(['id', 'question', 'answer', 'votes']);
+                });
             return response()->json(["status" => "success", "response" => $follow_up], 200);
         } else {
             return response()->json(["status" => "error", "response" => "No question provided"], 500);

@@ -49,7 +49,7 @@ class AnswerService
             }
         } else
             broadcast(new Ask(answer: $data, channel: $channel));
-        broadcast(new Ask(answer: [$data["answer_id"]], channel: $channel));
+        broadcast(new Ask(answer: ["id" => $data["answer_id"]], channel: $channel));
     }
 
     public function retrieve(string $question, int $limit = 1,
@@ -61,9 +61,9 @@ class AnswerService
 
     public function ask(string $channel, string $question) {
         $job_service = new JobService();
-        $previous_answers = $this->retrievePreviousAnswer($question);
-        $previous_answers = $previous_answers->where("answer", "!=",  "I don't know");
-        $previous_answers = $previous_answers->where("answer", "!=", "'I don't know'");
+        $previous_answers = $this->retrievePreviousAnswer($question)->filter(function ($answer) {
+            return $answer->answer != "I don't know" && $answer->answer != "'I don't know'";
+        });
         if($previous_answers->first()) {
             $this->splitBroadcast([
                 'question' =>  mb_convert_encoding($question,  "UTF-8", 'UTF-8'),

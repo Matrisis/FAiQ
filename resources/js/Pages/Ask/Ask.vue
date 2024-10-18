@@ -10,7 +10,6 @@ import FollowupQuestions from "@/Pages/Ask/FollowupQuestions.vue";
 const props = defineProps({
     channel: String,
     team: Object,
-
     instant_answers: Object,
 })
 
@@ -64,11 +63,11 @@ const onFollowupQuestion = (fuq) => {
         <div class="flex flex-col lg:grid grid-cols-3 gap-x-8 w-full lg:h-96">
             <div class="flex flex-col h-full lg:col-span-2 w-full p-3">
                 <Answer :answer="answer" :question="question" :asking="asking" :parameters="props.team.parameters"/>
-                <Vote :team="props.team" :answer_id="answer_id" />
+                <Vote v-if="!asking" :team="props.team" :answer_id="answer_id" />
             </div>
             <div class="flex flex-col lg:h-full lg:col-span-1 justify-center p-3">
                 <InstantAnswers :instant_answers="instant_answers" @instantQuestion="onInstantQuestion" :parameters="props.team.parameters"/>
-                <FollowupQuestions :question="question"  :answer="answer" :team="props.team" class="mt-5" @followupQuestion="onFollowupQuestion" />
+                <FollowupQuestions  :question="question"  :answer="answer" :team="props.team" class="mt-5" @followupQuestion="onFollowupQuestion" />
             </div>
         </div>
 

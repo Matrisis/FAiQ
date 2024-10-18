@@ -54,6 +54,7 @@ const cleanAnswer = (event) => {
 onMounted(() => {
     Echo.channel(`ask.${props.channel}`)
         .listen('Ask', (event) => {
+            console.log(event)
             cleanAnswer(event)
             onQuestion(asking.value, null, answer.value)
         })
