@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, Team $team)
     {
+        if($request->user()->cannot('view', $team)) abort(403);
         $query = Answer::query();
 
         // Date range filtering

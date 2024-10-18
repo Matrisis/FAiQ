@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\Parameters;
+use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\TeamPromptController;
 use App\Http\Middleware\Maintenance;
@@ -73,6 +74,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::prefix("/stats")->name("stats.")->group(function () {
             Route::get('/', [StatsController::class, 'index'])->name('index');
+        });
+
+        Route::prefix("questions")->name("questions.")->group(function () {
+            Route::get("/", [QuestionsController::class, 'get'])->name("get");
         });
 
     });

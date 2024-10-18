@@ -5,6 +5,7 @@ import InstantAnswers from "@/Pages/Ask/InstantAnswers.vue";
 import Answer from "@/Pages/Ask/Answer.vue";
 import Question from "@/Pages/Ask/Question.vue";
 import Vote from "@/Pages/Ask/Vote.vue";
+import FollowupQuestions from "@/Pages/Ask/FollowupQuestions.vue";
 
 const props = defineProps({
     channel: String,
@@ -31,6 +32,14 @@ const onInstantQuestion = (question_answer) => {
     question.value = question_answer.question
     answer.value = question_answer.answer.answer
     answer_id.value = question_answer.answer.id
+    asking.value = false
+}
+
+const onFollowupQuestion = (fu_question, fu_answer) => {
+    console.log(fu_question)
+    question.value = fu_question.fu_question
+    answer.value = fu_question.fu_answer
+    asking.value = false
 }
 
 </script>
@@ -56,8 +65,9 @@ const onInstantQuestion = (question_answer) => {
                 <Answer :answer="answer" :question="question" :asking="asking" :parameters="props.team.parameters"/>
                 <Vote :team="props.team" :answer_id="answer_id" />
             </div>
-            <div class="flex lg:h-full lg:col-span-1 justify-center p-3">
+            <div class="flex flex-col lg:h-full lg:col-span-1 justify-center p-3">
                 <InstantAnswers :instant_answers="instant_answers" @instantQuestion="onInstantQuestion" :parameters="props.team.parameters"/>
+                <FollowupQuestions :question="question"  :answer="answer" :team="props.team" class="mt-5" @followupQuestion="onFollowupQuestion" />
             </div>
         </div>
 

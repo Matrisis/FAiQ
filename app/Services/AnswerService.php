@@ -29,10 +29,12 @@ class AnswerService
         ]);
     }
 
-    private function retrievePreviousAnswer(string $question) {
+    private function retrievePreviousAnswer(string $question, int $limit = 1,
+                                            string $column = "question_vector", string $neighbor_distance = "0.15") {
         $embedding_service = new EmbeddingService($this->team);
         return $embedding_service->retrieve(
-            text: $question, limit: 1, model: Answer::class, column: "question_vector", neighbor_distance: "0.15");
+            text: $question, limit: $limit, model:
+            Answer::class, column: $column, neighbor_distance: $neighbor_distance);
     }
 
     private function splitBroadcast(array $data, string $channel)
@@ -47,6 +49,13 @@ class AnswerService
             }
         } else
             broadcast(new Ask(answer: $data, channel: $channel));
+    }
+
+    public function retrieve(string $question, int $limit = 1,
+                             string $column = "question_vector", string $neighbor_distance = "0.15")
+    {
+        return $this->retrievePreviousAnswer(question: $question, limit: $limit,
+            column: $column, neighbor_distance: $neighbor_distance);
     }
 
     public function ask(string $channel, string $question) {
