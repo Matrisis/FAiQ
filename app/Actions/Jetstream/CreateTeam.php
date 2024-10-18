@@ -36,6 +36,11 @@ class CreateTeam implements CreatesTeams
 
         $user->update(["current_team_id" => $team->id]);
 
+        TeamParameters::create([
+           "team_id" => $team->id,
+            "team_name" => $input['name'],
+        ]);
+
         TeamParameters::firstOrCreate([
             "team_id" => $team->id,
         ], [

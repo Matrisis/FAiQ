@@ -51,8 +51,12 @@ class Parameters extends Controller
                 'logo' => ['nullable', 'image', 'max:2048'],
             ]);
 
-            // Update parameters
-            $params->fill($validated);
+            $params->title = $validated['title'] ?? $params->title;
+            $params->background_color = $validated['background_color'] ?? $params->background_color;
+            $params->question_background_color = $validated['question_background_color'] ?? $params->question_background_color;
+            $params->text_color = $validated['text_color'] ?? $params->text_color;
+            $params->title_color = $validated['title_color'] ?? $params->title_color;
+            $params->accessible = $validated['accessible'] ?? $params->accessible;
 
             // Handle icon upload
             if ($request->hasFile('icon')) {

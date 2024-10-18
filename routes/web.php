@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::prefix('/parameters')->name('parameters.')->group(function () {
             Route::get('/', [Parameters::class, 'index'])->name('index');
-            Route::post('/update/{params}', [Parameters::class, 'update'])->where('params', '[0-9]+')->name('update');
+            Route::put('/update/{params}', [Parameters::class, 'update'])->where('params', '[0-9]+')->name('update');
         });
 
         Route::prefix('/prompt')->name('prompt.')->group(function () {
