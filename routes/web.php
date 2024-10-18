@@ -16,27 +16,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
-
-    Route::middleware([Maintenance::class])->prefix('/')->name('ask.')->group(function () {
-        Route::get('/', [AskController::class, 'index'])->name('index');
-        Route::post("/", [AskController::class, 'create'])->name('create');
-        Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
-        Route::get("/maintenance", function () {
-            return Inertia::render("Maintenance");
-        })->name('maintenance');
-    });
-    Route::prefix('/')->name('ask.')->group(function () {
-        Route::get("/maintenance", function (string $team) {
-            $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
-            if($team && $team->parameters->accessible)
-                return redirect()->route('public.ask.index', ['team' => $team->slug]);
-            return Inertia::render("Maintenance");
-        })->name('maintenance');
-    });
-
-});
-
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
@@ -88,6 +67,27 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/list', [ManagementController::class, 'list'])->name('list');
         Route::put('/unlock/{team}', [ManagementController::class, 'unlock'])->name('unlock');
         Route::get('/view/{team}', [ManagementController::class, 'viewTeam'])->name('view');
+    });
+
+});
+
+Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
+
+    Route::middleware([Maintenance::class])->prefix('/')->name('ask.')->group(function () {
+        Route::get('/', [AskController::class, 'index'])->name('index');
+        Route::post("/", [AskController::class, 'create'])->name('create');
+        Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
+        Route::get("/maintenance", function () {
+            return Inertia::render("Maintenance");
+        })->name('maintenance');
+    });
+    Route::prefix('/')->name('ask.')->group(function () {
+        Route::get("/maintenance", function (string $team) {
+            $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
+            if($team && $team->parameters->accessible)
+                return redirect()->route('public.ask.index', ['team' => $team->slug]);
+            return Inertia::render("Maintenance");
+        })->name('maintenance');
     });
 
 });
