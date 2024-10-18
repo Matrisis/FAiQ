@@ -19,7 +19,7 @@ const success = ref(null)
 const updateConfig = () => {
     errors.value = null
     success.value = null
-    axios.put(route('admin.parameters.update', {
+    axios.post(route('admin.parameters.update', {
         team: props.parameters.team_id,
         params: props.parameters.id
     }), {accessible: checked.value})
