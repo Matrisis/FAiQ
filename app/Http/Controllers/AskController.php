@@ -18,19 +18,20 @@ use Laravel\Prompts\Table;
 class AskController extends Controller
 {
 
-    public function indexAdmin(Request $request, Team $team) {
-        $team = Team::with('parameters')->find($team->id);
+    public function indexAdmin(Request $request, string $team) {
+        $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
        return $this->index($request, $team, 'admin');
     }
 
-    public function indexPublic(Request $request, Team $team)
+    public function indexPublic(Request $request, string $team)
     {
-        $team = Team::with('parameters')->find($team->id);
+        $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
         return $this->index($request, $team, 'public');
     }
 
-    public function index(Request $request, Team $team)
+    public function index(Request $request, string $team)
     {
+        $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
         $channel = $team->id . '-' . Str::random(24);
         $instant_answers = Answer::where('team_id', $team->id)
             ->where("votes", ">", 5)

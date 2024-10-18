@@ -18,7 +18,7 @@ use Inertia\Inertia;
 
 Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
 
-    Route::middleware([Maintenance::class])->prefix('/ask')->name('ask.')->group(function () {
+    Route::middleware([Maintenance::class])->prefix('/')->name('ask.')->group(function () {
         Route::get('/', [AskController::class, 'index'])->name('index');
         Route::post("/", [AskController::class, 'create'])->name('create');
         Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
@@ -26,10 +26,11 @@ Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
             return Inertia::render("Maintenance");
         })->name('maintenance');
     });
-    Route::prefix('/ask')->name('ask.')->group(function () {
-        Route::get("/maintenance", function (Team $team) {
-            if($team->parameters->accessible)
-                return redirect()->route('public.ask.index', ['team' => $team->id]);
+    Route::prefix('/')->name('ask.')->group(function () {
+        Route::get("/maintenance", function (string $team) {
+            $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
+            if($team && $team->parameters->accessible)
+                return redirect()->route('public.ask.index', ['team' => $team->slug]);
             return Inertia::render("Maintenance");
         })->name('maintenance');
     });
