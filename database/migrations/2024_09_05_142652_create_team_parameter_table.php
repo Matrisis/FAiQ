@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('title')->default("Trouvez la réponse qui vous correspond");
             $table->string('background_color')->default("#ffffff");
-            $table->string('question_background_color')->default("#e50914");
+            $table->string('question_background_color')->default("#3e28ad");
             $table->string('text_color')->default("#000000");
             $table->string('title_color')->default("#ffffff");
             $table->boolean('accessible')->default(false);
