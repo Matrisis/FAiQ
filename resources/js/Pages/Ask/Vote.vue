@@ -27,7 +27,7 @@ watch(() => props.answer_id, (newValue, oldValue) => {
 
 <div v-if="answer_id" class="lg:w-3/4 mt-6 mx-auto flex flex-col lg:flex-row justify-center items-center">
     <div class="flex">
-        <p>Cette réponse était-elle utile ({{ props.answer_id }})?</p>
+        <p>Cette réponse était-elle utile ?</p>
     </div>
     <div class="flex pl-3 mt-2 lg:mt-0">
         <div v-if="vote === null" class="flex flex-row">
