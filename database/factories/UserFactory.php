@@ -62,6 +62,7 @@ class UserFactory extends Factory
             Team::factory()
                 ->state(fn (array $attributes, User $user) => [
                     'name' => $user->name,
+                    'slug' => $user->name,
                     'user_id' => $user->id,
                     'personal_team' => true,
                 ])

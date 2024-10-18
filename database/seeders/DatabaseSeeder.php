@@ -26,13 +26,6 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'is_admin' => true
             ]);
-            TeamParameters::firstOrCreate([
-                "team_id" => $team->id,
-            ], [
-                "team_id" => $team->id,
-            ]);
-
-
             AnswerSeeder::run();
         }
     }

@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Models\Team;
+use App\Models\TeamParameters;
 use App\Models\User;
 use App\Services\Old\Assistant\TeamGenesisService;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,8 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'company_name' => ['required', 'string', 'max:255', 'unique:teams,name'],
+            'company_slug' => ['required', 'string', 'max:255', 'unique:teams,name'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
@@ -34,8 +37,8 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
-            ]), function (User $user) {
-                $this->createTeam($user);
+            ]), function (User $user) use ($input) {
+                $this->createTeam($user, $input['company_name'], $input['company_slug']);
             });
         });
     }
@@ -43,15 +46,23 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Create a personal team for the user.
      */
-    protected function createTeam(User $user): void
+    protected function createTeam(User $user, string $name, string $slug): void
     {
         $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
+            'name' => $name,
+            'slug' => $slug,
             'personal_team' => true,
         ]));
 
+
         $user->current_team_id = $user->ownedTeams()->first()->id;
+
+        TeamParameters::create([
+            "team_id" => $user->ownedTeams()->first()->id,
+            "team_name" => $name,
+        ]);
+
         $user->save();
 
     }

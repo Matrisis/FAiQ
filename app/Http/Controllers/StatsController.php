@@ -12,7 +12,7 @@ class StatsController extends Controller
     public function index(Request $request, Team $team)
     {
         if($request->user()->cannot('view', $team)) abort(403);
-        $query = Answer::query();
+        $query = Answer::query()->where("team_id", $team->id);
 
         // Date range filtering
         if ($request->start_date) {
