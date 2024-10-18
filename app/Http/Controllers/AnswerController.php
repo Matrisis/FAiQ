@@ -18,7 +18,7 @@ class AnswerController extends Controller
     }
 
     public function create(Request $request, Team $team){
-        if($request->user()->cannot('create', $team)) abort(403);
+        if($request->user()->cannot('view', $team)) abort(403);
         $validated = $request->validate([
             'question' => ['required', 'string', 'min:5'],
             'answer' => ['required', 'string', 'min:5'],
