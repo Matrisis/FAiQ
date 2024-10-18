@@ -8,8 +8,10 @@ use Inertia\Inertia;
 class DashboardController extends Controller
 {
 
-    public function index() {
-        return Inertia::render("Dashboard");
+    public function index(Request $request) {
+        return Inertia::render("Dashboard", [
+            "team" => $request->user()->currentTeam
+        ]);
     }
 
 }
