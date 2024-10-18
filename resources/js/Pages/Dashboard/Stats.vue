@@ -1,61 +1,45 @@
 <template>
     <div>
-        <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Dashboard Statistics</h1>
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Statistiques du tableau de bord</h1>
 
-        <!-- Date Filters -->
+        <!-- Filtres de date -->
         <div class="flex flex-col md:flex-row md:items-center md:space-x-4 mb-6">
             <div class="flex flex-col mb-4 md:mb-0">
-                <label for="startDate" class="mb-1 text-gray-600 dark:text-gray-400">Start Date</label>
+                <label for="startDate" class="mb-1 text-gray-600 dark:text-gray-400">Date de début</label>
                 <input type="date" v-model="startDate" id="startDate" class="input" />
             </div>
             <div class="flex flex-col mb-4 md:mb-0">
-                <label for="endDate" class="mb-1 text-gray-600 dark:text-gray-400">End Date</label>
+                <label for="endDate" class="mb-1 text-gray-600 dark:text-gray-400">Date de fin</label>
                 <input type="date" v-model="endDate" id="endDate" class="input" />
             </div>
             <button @click="fetchData" class="mt-2 md:mt-6 btn">
-                Filter
+                Filtrer
             </button>
         </div>
 
-        <!-- Loading State -->
+        <!-- État de chargement -->
         <div v-if="loading" class="text-center py-10">
-            <span class="text-gray-500 dark:text-gray-400">Loading...</span>
+            <span class="text-gray-500 dark:text-gray-400">Chargement...</span>
         </div>
 
-        <!-- Error State -->
+        <!-- État d'erreur -->
         <div v-if="error" class="text-center py-10 text-red-500">
             <span>{{ error }}</span>
         </div>
 
-        <!-- Statistics Content -->
+        <!-- Contenu des statistiques -->
         <div v-if="!loading && !error">
-            <!-- Statistics Cards -->
+            <!-- Cartes des statistiques -->
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                <!-- Total Answers -->
+                <!-- Nombre total de réponses -->
                 <div class="card">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Total Answers</h2>
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Nombre total de réponses</h2>
                     <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">{{ stats.totalAnswers }}</p>
                 </div>
 
-                <!-- Answers by Type -->
-                <!--
-                <div class="card">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Answers by Type</h2>
-                    <canvas ref="answersByTypeChart"></canvas>
-                </div>
-                -->
-
-                <!-- Answers by Channel -->
-                <!--
-                <div class="card col-span-1 md:col-span-2">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Answers by Channel</h2>
-                    <canvas ref="answersByChannelChart"></canvas>
-                </div>
-                -->
-
-                <!-- Top Voted Answers -->
+                <!-- Top des réponses les mieux notées -->
                 <div class="card col-span-1 md:col-span-2 xl:col-span-4">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Top Voted Answers</h2>
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Top des réponses les mieux notées</h2>
                     <table class="min-w-full bg-white dark:bg-gray-800">
                         <thead>
                         <tr>
@@ -86,7 +70,6 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import Chart from 'chart.js/auto';
 import axios from 'axios';
 import { router } from '@inertiajs/vue3';
 
@@ -100,15 +83,7 @@ const endDate = ref('');
 const loading = ref(true);
 const error = ref(null);
 
-// Refs for canvas elements
-const answersByTypeChartRef = ref(null);
-const answersByChannelChartRef = ref(null);
-
-// Chart instances
-let answersByTypeChartInstance = null;
-let answersByChannelChartInstance = null;
-
-// Function to fetch data from API
+// Fonction pour récupérer les données de l'API
 const fetchData = async () => {
     loading.value = true;
     error.value = null;
@@ -120,94 +95,19 @@ const fetchData = async () => {
             },
         });
         stats.value = response.data;
-        createCharts(stats.value);
+        // Aucune création de graphique nécessaire
     } catch (err) {
-        console.error('Error fetching stats:', err);
-        error.value = 'Failed to load statistics. Please try again later.';
+        console.error('Erreur lors de la récupération des statistiques :', err);
+        error.value = 'Impossible de charger les statistiques. Veuillez réessayer plus tard.';
     } finally {
         loading.value = false;
     }
 };
 
-// Function to create charts
-const createCharts = (data) => {
-    // Destroy existing charts to prevent duplication
-    if (answersByTypeChartInstance) answersByTypeChartInstance.destroy();
-    if (answersByChannelChartInstance) answersByChannelChartInstance.destroy();
-
-    // Answers by Type Chart
-    if (answersByTypeChartRef.value) {
-        const typeCtx = answersByTypeChartRef.value.getContext('2d');
-        answersByTypeChartInstance = new Chart(typeCtx, {
-            type: 'doughnut',
-            data: {
-                labels: data.answersByType.map((item) => item.type),
-                datasets: [
-                    {
-                        data: data.answersByType.map((item) => item.count),
-                        backgroundColor: ['#4CAF50', '#FFC107'],
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#4B5563', // Text color
-                        },
-                    },
-                },
-            },
-        });
-    }
-
-    // Answers by Channel Chart
-    if (answersByChannelChartRef.value) {
-        const channelCtx = answersByChannelChartRef.value.getContext('2d');
-        answersByChannelChartInstance = new Chart(channelCtx, {
-            type: 'bar',
-            data: {
-                labels: data.answersByChannel.map((item) => item.channel),
-                datasets: [
-                    {
-                        label: 'Answers per Channel',
-                        data: data.answersByChannel.map((item) => item.count),
-                        backgroundColor: '#3B82F6',
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#4B5563', // Text color
-                        },
-                    },
-                    y: {
-                        ticks: {
-                            color: '#4B5563', // Text color
-                        },
-                    },
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#4B5563', // Text color
-                        },
-                    },
-                },
-            },
-        });
-    }
-};
-
-// Fetch data on component mount
+// Récupérer les données au montage du composant
 onMounted(fetchData);
 
-// Re-fetch data when date filters change
+// Récupérer les données à nouveau lorsque les filtres changent
 watch([startDate, endDate], () => {
     fetchData();
 });
