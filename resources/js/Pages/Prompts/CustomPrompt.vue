@@ -28,10 +28,8 @@ const updatePrompt = () => {
         prompt: form.prompt
     })
     .then((response) => {
-        console.log(response)
         success.value = response.data.success
     }).catch((error) => {
-        console.log(error)
         errors.value = error.response.data.errors
     })
 };

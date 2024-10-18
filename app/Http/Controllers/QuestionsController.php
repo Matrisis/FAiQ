@@ -15,7 +15,7 @@ class QuestionsController extends Controller
         if ($question){
             $follow_up = $ask_service->retrieve($question, 5, 'question_vector', '0.25')
             ->map(function ($fup) {
-                return $fup->only(['question', 'answer', 'votes']);
+                return $fup->only(['id', 'question', 'answer', 'votes']);
             });
             return response()->json(["status" => "success", "response" => $follow_up], 200);
         } else {

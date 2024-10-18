@@ -74,7 +74,6 @@ const updateAnswer = (answer, newAnswer) => {
 }
 
 const deleteAnswer = (answer) => {
-    console.log(answer)
     axios.delete(route('admin.answers.delete', { team: props.team.id, answer: answer })).then($response =>{
         showModal.value = false;
         loadFromServer();

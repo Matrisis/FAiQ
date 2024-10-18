@@ -35,11 +35,12 @@ const onInstantQuestion = (question_answer) => {
     asking.value = false
 }
 
-const onFollowupQuestion = (fu_question, fu_answer) => {
-    console.log(fu_question)
-    question.value = fu_question.fu_question
-    answer.value = fu_question.fu_answer
+const onFollowupQuestion = (fuq) => {
+    fuq = fuq.fuq
+    question.value = fuq.question
+    answer.value = fuq.answer
     asking.value = false
+    answer_id.value = fuq.id
 }
 
 </script>

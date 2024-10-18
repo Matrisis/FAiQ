@@ -49,6 +49,7 @@ class AnswerService
             }
         } else
             broadcast(new Ask(answer: $data, channel: $channel));
+        broadcast(new Ask(answer: [$data["answer_id"]], channel: $channel));
     }
 
     public function retrieve(string $question, int $limit = 1,
@@ -67,6 +68,7 @@ class AnswerService
             $this->splitBroadcast([
                 'question' =>  mb_convert_encoding($question,  "UTF-8", 'UTF-8'),
                 'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),
+                'answer_id' => $previous_answers->first()->id
             ], $channel);
         } else {
             $job_service->askStream(
