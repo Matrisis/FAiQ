@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Cashier\Billable;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
@@ -11,21 +12,32 @@ use Laravel\Jetstream\Team as JetstreamTeam;
 class Team extends JetstreamTeam
 {
     use HasFactory;
+    use Billable;
 
     protected $with = [
         'parameters', 'prompts'
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'personal_team',
-        'locked'
+        'locked',
+        'initial_invoice_id',
+        'stripe_id',
+        'pm_type',
+        'pm_last_four',
+        'trial_ends_at',
+        'has_paid',
     ];
+
+
+    protected function casts(): array
+    {
+        return [
+            'personal_team' => 'boolean',
+            'locked' => 'boolean'
+        ];
+    }
 
     /**
      * The event map for the model.
@@ -38,17 +50,9 @@ class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function hasPaid(): bool
     {
-        return [
-            'personal_team' => 'boolean',
-            'locked' => 'boolean'
-        ];
+        return $this->has_paid || $this->id === -1;
     }
 
     public function parameters()

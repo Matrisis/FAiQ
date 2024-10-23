@@ -60,7 +60,6 @@ class CreateNewUser implements CreatesNewUsers
 
         TeamParameters::create([
             "team_id" => $user->ownedTeams()->first()->id,
-            "team_name" => $name,
         ]);
 
         $user->save();

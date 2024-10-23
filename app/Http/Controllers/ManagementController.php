@@ -48,7 +48,7 @@ class ManagementController extends Controller
             $user = $request->user();
             $user->current_team_id = $team->id;
             $user->save();
-            return response()->json(["success" => true, "route" => route('dashboard')]);
+            return response()->json(["success" => true, "route" => route('admin.dashboard')]);
         } catch (\Exception $e) {
             return response()->json(["success" => false, "errors" => [["Une erreur est survenue"]]], 500);
         }

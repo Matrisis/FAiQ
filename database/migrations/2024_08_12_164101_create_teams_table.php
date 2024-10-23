@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('personal_team');
             $table->string('slug');
             $table->boolean('locked')->default(true);
+            $table->boolean('has_paid')->default(false);
             $table->timestamps();
         });
     }
