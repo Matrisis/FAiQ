@@ -48,6 +48,7 @@ const logout = () => {
                             </div>
 
                             <!-- Navigation Links -->
+                            <div v-if="$page.props.auth.user.current_team.has_paid">
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
@@ -78,10 +79,11 @@ const logout = () => {
                                     Administration
                                 </NavLink>
                             </div>
+                            </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <div class="ms-3 relative">
+                        <div class="hidden sm:flex sm:items-center sm:ms-6" >
+                            <div v-if="$page.props.auth.user.current_team.has_paid" class="ms-3 relative">
                                 <!-- Teams Dropdown -->
                                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
                                     <template #trigger>
@@ -97,7 +99,7 @@ const logout = () => {
                                     </template>
 
                                     <template #content>
-                                        <div class="w-60">
+                                        <div class="w-60" >
                                             <!-- Team Management -->
                                             <div class="block px-4 py-2 text-xs text-gray-400">
                                                 Manage Team
@@ -216,6 +218,7 @@ const logout = () => {
 
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
+                    <div v-if="$page.props.auth.user.current_team.has_paid">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
@@ -245,6 +248,7 @@ const logout = () => {
                         <ResponsiveNavLink :href="route('admin.prompt.index', $page.props.auth.user.current_team)" :active="route().current('admin.prompt.index')">
                             Prompt
                         </ResponsiveNavLink>
+                    </div>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -281,7 +285,8 @@ const logout = () => {
                             </form>
 
                             <!-- Team Management -->
-                            <template v-if="$page.props.jetstream.hasTeamFeatures">
+                            <template v-if="$page.props.jetstream.hasTeamFeatures" >
+                                <div  v-if="$page.props.auth.user.current_team.has_paid">
                                 <div class="border-t border-gray-200 dark:border-gray-600" />
 
                                 <div class="block px-4 py-2 text-xs text-gray-400">
@@ -318,6 +323,7 @@ const logout = () => {
                                         </form>
                                     </template>
                                 </template>
+                                </div>
                             </template>
                         </div>
                     </div>
