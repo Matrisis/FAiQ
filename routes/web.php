@@ -10,6 +10,7 @@ use App\Http\Controllers\Parameters;
 use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\TeamPromptController;
+use App\Http\Middleware\LockedMiddleware;
 use App\Http\Middleware\Maintenance;
 use App\Http\Middleware\Subscribed;
 use App\Models\Team;
@@ -17,7 +18,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', Subscribed::class])->group(function () {
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', Subscribed::class, LockedMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
@@ -26,7 +27,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     ->prefix("/admin")
     ->group(function () {
 
-    Route::middleware([Subscribed::class])->group(function () {
+    Route::middleware([Subscribed::class, LockedMiddleware::class])->group(function () {
         Route::prefix("/{team}/")->group(function () {
             Route::prefix('/files')->name('files.')->group(function () {
                 Route::get('/', [FileController::class, 'index'])->name('index');

@@ -3,8 +3,10 @@
 namespace App\Actions\Jetstream;
 
 use App\Models\Team;
+use App\Models\TeamParameters;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Laravel\Jetstream\Contracts\DeletesTeams;
 use Laravel\Jetstream\Contracts\DeletesUsers;
 
@@ -23,6 +25,9 @@ class DeleteUser implements DeletesUsers
     public function delete(User $user): void
     {
         DB::transaction(function () use ($user) {
+            $user->name = "Deleted User" . Str::random(10);
+            $user->email = "Deleted Email - ". Str::random(10);
+            $user->save();
             $this->deleteTeams($user);
             $user->deleteProfilePhoto();
             $user->tokens->each->delete();
@@ -35,10 +40,16 @@ class DeleteUser implements DeletesUsers
      */
     protected function deleteTeams(User $user): void
     {
-        $user->teams()->detach();
+        // $user->teams()->detach();
 
         $user->ownedTeams->each(function (Team $team) {
-            $this->deletesTeams->delete($team);
+            $team->name = $team->name ." - Deleted - ". Str::random(10);
+            $team_parameters = TeamParameters::where("team_id", $team->id)->first();
+            if ($team_parameters) {
+                $team_parameters->accessible = false;
+                $team_parameters->save();
+            }
+            $team->delete();
         });
     }
 }

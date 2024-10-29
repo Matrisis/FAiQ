@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teams', function (Blueprint $table) {
+        Schema::create('request_loggers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->index();
-            $table->string('name');
-            $table->boolean('personal_team');
-            $table->string('slug');
-            $table->boolean('locked')->default(true);
-            $table->boolean('has_paid')->default(false);
-            $table->softDeletes();
+            $table->string('ip');
+            $table->string('question');
+            $table->boolean('new')->default(true);
+            $table->foreignId("team_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teams');
+        Schema::dropIfExists('request_loggers');
     }
 };

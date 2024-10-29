@@ -59,7 +59,7 @@ class AnswerService
             column: $column, neighbor_distance: $neighbor_distance);
     }
 
-    public function ask(string $channel, string $question) {
+    public function ask(string $channel, string $question, $request) {
         $job_service = new JobService();
         $previous_answers = $this->retrievePreviousAnswer($question)->filter(function ($answer) {
             return $answer->answer != "I don't know" && $answer->answer != "'I don't know'";
@@ -70,12 +70,14 @@ class AnswerService
                 'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),
                 'answer_id' => $previous_answers->first()->id
             ], $channel);
+            RequestLoggerService::create($this->team, $question, $request->ip, false);
         } else {
             $job_service->askStream(
                 channel: $channel,
                 team: $this->team,
                 question: $question
             );
+            RequestLoggerService::create($this->team, $question, $request->ip, true);
         }
     }
 

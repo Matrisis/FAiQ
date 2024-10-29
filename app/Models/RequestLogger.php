@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class RequestLogger extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'ip',
+        'question',
+        'new',
+        'team_id',
+    ];
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 }

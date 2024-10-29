@@ -55,7 +55,7 @@ class AskController extends Controller
         $channel = $validated['channel'];
         try {
             $ask_service = new AnswerService($team);
-            $ask_service->ask($channel, $question);
+            $ask_service->ask($channel, $question, $request);
         } catch (\Exception $exception) {
             return response()->json(['status' => 'error', 'response' => $exception], 500);
         }

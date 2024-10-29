@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Cashier\Billable;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
@@ -13,6 +14,7 @@ class Team extends JetstreamTeam
 {
     use HasFactory;
     use Billable;
+    use SoftDeletes;
 
     protected $with = [
         'parameters', 'prompts'
@@ -35,6 +37,7 @@ class Team extends JetstreamTeam
     {
         return [
             'personal_team' => 'boolean',
+            'has_paid' => 'boolean',
             'locked' => 'boolean'
         ];
     }
@@ -52,7 +55,17 @@ class Team extends JetstreamTeam
 
     public function hasPaid(): bool
     {
-        return $this->has_paid || $this->id === -1;
+        return $this->has_paid;
+    }
+
+    public function isLocked() : bool
+    {
+        return $this->locked;
+    }
+
+    public function isAccessible(): bool
+    {
+        return !$this->isLocked() && $this->hasPaid();
     }
 
     public function parameters()
