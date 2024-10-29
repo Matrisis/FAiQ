@@ -25,7 +25,7 @@ class Parameters extends Controller
         return Inertia::render("Parameters", [
             'load' => "admin",
             'channel' => $channel,
-            'team' => $team->only(["id", "name", "parameters"]),
+            'team' => $team->only(["id", "name", "parameters", "slug"]),
             'instant_answers' => $instant_answers,
         ]);
     }

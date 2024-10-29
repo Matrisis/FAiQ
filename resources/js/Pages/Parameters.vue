@@ -38,6 +38,11 @@ const type = ref('display')
             </div>
         </template>
 
+        <div class="flex justify-center items-center py-4 bg-white text-xl border-b">
+            Lien vers la version live : <a target="_blank" :href="route('public.ask.index', {team: props.team.slug})" class="ml-2 text-blue-500">
+            {{ route('public.ask.index', {team: props.team.slug}) }}
+        </a>
+        </div>
         <div v-if="type === 'display'" class="h-full w-full flex flex-col lg:flex-row">
             <div class="w-full lg:w-4/5">
                 <Ask :channel="props.channel" :team="team" :instant_answers="props.instant_answers" :load="props.load" />

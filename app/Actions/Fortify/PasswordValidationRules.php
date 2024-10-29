@@ -13,6 +13,8 @@ trait PasswordValidationRules
      */
     protected function passwordRules(): array
     {
+        if(ENV('APP_ENV') === 'local')
+            return ['required', 'string', Password::default(), 'confirmed'];
         return ['required', 'string',
             Password::default()
                 ->symbols()

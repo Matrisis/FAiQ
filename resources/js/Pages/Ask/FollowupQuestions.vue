@@ -33,7 +33,7 @@ watch(() => props.question, (value) => {
 <template>
     <div class="h-full">
         <h4 class="text-lg lg:text-2xl font-bold">Questions similaires :</h4>
-        <div v-if="followupQuestions.length === 0">Aucune question similaires</div>
+        <div v-if="followupQuestions.length === 0">Aucune question similaire</div>
         <div v-else class="flex flex-col justify-between px-4 border-b border-r custom-border rounded-xl">
             <div  v-for="fuq in followupQuestions" class="flex py-4 flex-row items-center">
                 <div class="pr-2">
