@@ -45,6 +45,8 @@ class DeleteUser implements DeletesUsers
 
         $user->ownedTeams->each(function (Team $team) {
             $team->name = $team->name ." - Deleted - ". Str::random(10);
+            $team->slug = Str::random(12);
+            $team->save();
             $team_parameters = TeamParameters::where("team_id", $team->id)->first();
             if ($team_parameters) {
                 $team_parameters->accessible = false;
