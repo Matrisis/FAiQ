@@ -27,6 +27,7 @@ class DeleteUser implements DeletesUsers
         DB::transaction(function () use ($user) {
             $user->name = "Deleted User" . Str::random(10);
             $user->email = "Deleted Email - ". Str::random(10);
+            $user->password = bcrypt(Str::random(30));
             $user->save();
             $this->deleteTeams($user);
             $user->deleteProfilePhoto();
