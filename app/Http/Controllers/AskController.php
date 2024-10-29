@@ -31,7 +31,7 @@ class AskController extends Controller
 
     public function index(Request $request, string $team)
     {
-        $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
+        $team = Team::where('slug', mb_strtolower($team))->with('parameters')->firstOrFail();
         $channel = $team->id . '-' . Str::random(24);
         $instant_answers = Answer::where('team_id', $team->id)
             ->where("votes", ">", 5)
