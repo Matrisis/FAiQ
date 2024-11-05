@@ -12,7 +12,8 @@ class Embedding extends Pivot
     use HasNeighbors;
 
     protected $casts = [
-        'embedding' => Vector::class
+        'embedding' => Vector::class,
+        'content' => 'encrypted',
     ];
 
     /**
