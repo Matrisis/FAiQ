@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\Pricing;
+use App\Models\RequestLogger;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,52 +14,48 @@ class StatsController extends Controller
     public function index(Request $request, Team $team)
     {
         if($request->user()->cannot('view', $team)) abort(403);
-        $query = Answer::query()->where("team_id", $team->id);
+
+        $answersQuery = Answer::query()->where("team_id", $team->id);
+        $loggerQuery = RequestLogger::query()->where('team_id', $team->id);
 
         // Date range filtering
         if ($request->start_date) {
-            $query->whereDate('created_at', '>=', $request->start_date);
+            $answersQuery->whereDate('created_at', '>=', $request->start_date);
+            $loggerQuery->whereDate('created_at', '>=', $request->start_date);
         }
 
         if ($request->end_date) {
-            $query->whereDate('created_at', '<=', $request->end_date);
+            $answersQuery->whereDate('created_at', '<=', $request->end_date);
+            $loggerQuery->whereDate('created_at', '<=', $request->end_date);
         }
 
         // Total number of answers
-        $totalAnswers = $query->count();
+        $totalAnswers = $answersQuery->count();
 
         // Clone the query builder to prevent modifying the original query
-        $answersByTypeQuery = clone $query;
-        $answersByChannelQuery = clone $query;
-        $topVotedAnswersQuery = clone $query;
+        $topVotedAnswersQuery = clone $answersQuery;
 
-        // Answers by Type with Sum of Votes
-        $answersByType = $answersByTypeQuery->select(
-            'type',
-            DB::raw('count(*) as count'),
-            DB::raw('SUM(votes) as total_votes')
-        )
-            ->groupBy('type')
-            ->orderBy('total_votes', 'desc')
-            ->get();
+        // Total new answers
+        $newAnswers = $loggerQuery->where("new", true)->count();
 
-        // Answers by Channel
-        $answersByChannel = $answersByChannelQuery->select(
-            'channel',
-            DB::raw('count(*) as count')
-        )
-            ->groupBy('channel')
-            ->orderBy('count', 'desc')
-            ->get();
+        // Total old answers
+        $oldAnswers = $loggerQuery->where("new", false)->count();
 
-        // Top Voted Answers
         $topVotedAnswers = $topVotedAnswersQuery->orderBy('votes', 'desc')->take(5)->get();
+
+        $priceOld = Pricing::where("name", "old")->first()->price;
+        $priceNew = Pricing::where("name", "new")->first()->price;
+
+        $newAnswersPrice = $newAnswers * $priceNew;
+        $oldAnswersPrice = $oldAnswers * $priceOld;
 
         return response()->json([
             'totalAnswers'      => $totalAnswers,
-            'answersByType'     => $answersByType,
             'topVotedAnswers'   => $topVotedAnswers,
-            'answersByChannel'  => $answersByChannel,
+            'newAnswers'        => $newAnswers,
+            'oldAnswers'        => $oldAnswers,
+            'newAnswersPrice'   => $newAnswersPrice,
+            'oldAnswersPrice'   => $oldAnswersPrice
         ]);
     }
 }

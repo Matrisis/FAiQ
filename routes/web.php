@@ -82,13 +82,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 });
 
 
-
-
 Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
 
     Route::middleware([Maintenance::class])->prefix('/')->name('ask.')->group(function () {
         Route::get('/', [AskController::class, 'index'])->name('index');
-        Route::post("/", [AskController::class, 'create'])->name('create');
+        Route::post("/ask", [AskController::class, 'create'])->name('create');
         Route::post("/vote/{answer}", [AskController::class, 'vote'])->name('vote');
         Route::get("/maintenance", function () {
             return Inertia::render("Maintenance");

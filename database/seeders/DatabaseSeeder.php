@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Models\Pricing;
 use App\Models\Team;
 use App\Models\TeamParameters;
 use App\Models\User;
@@ -19,6 +20,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->withPersonalTeam()->create();
+
+        Pricing::insert(["name" => "new", "price" => 0.03]);
+        Pricing::insert(["name" => "old", "price" => 0.01]);
 
         if(app()->environment('local')) {
             (new CreateNewUser())->create([

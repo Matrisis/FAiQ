@@ -30,13 +30,32 @@
         <!-- Contenu des statistiques -->
         <div v-if="!loading && !error">
             <!-- Cartes des statistiques -->
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-6">
                 <!-- Nombre total de réponses -->
                 <div class="card">
-                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Nombre total de réponses</h2>
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Nombre total de réponses disponibles</h2>
                     <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">{{ stats.totalAnswers }}</p>
                 </div>
+                <div class="card">
+                    <h2 class="text-lg font-semiboll d text-gray-700 dark:text-gray-300 mb-2">Nombre de nouvelles réponses</h2>
+                    <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">{{ stats.newAnswers }}</p>
+                </div>
+                <div class="card">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Nombre d'anciennes réponses</h2>
+                    <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">{{ stats.oldAnswers }}</p>
+                </div>
 
+                <div class="card">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Prix des nouvelles réponses</h2>
+                    <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">{{ stats.newAnswersPrice }} €</p>
+                </div>
+                <div class="card">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Prix des d'anciennes réponses</h2>
+                    <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">{{ stats.oldAnswersPrice }} €</p>
+                </div>
+
+            </div>
+            <div class="mt-6">
                 <!-- Top des réponses les mieux notées -->
                 <div class="card col-span-1 md:col-span-2 xl:col-span-4">
                     <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Top des réponses les mieux notées</h2>

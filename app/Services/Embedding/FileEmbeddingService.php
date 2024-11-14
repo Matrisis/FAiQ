@@ -67,7 +67,7 @@ class FileEmbeddingService
     /**
      * @throws \Exception
      */
-    private function getPDFOld(File $file, int $tries) : array
+    private function getPDF(File $file, int $tries) : array
     {
         $parser = new \Smalot\PdfParser\Parser();
         $pdf = $parser->parseFile(Storage::path($file->path));
@@ -86,7 +86,7 @@ class FileEmbeddingService
         return $cleaned_text;
     }
 
-    private function getPDF(File $file, int $tries): array
+    private function getPDFOld(File $file, int $tries): array
     {
         $vision_service = new VisionService($file);
         $text = $vision_service->create();

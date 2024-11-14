@@ -19,9 +19,18 @@ class Maintenance
         $team = $request->route()->parameters()['team'] ?? null;
         if(!$team)
             abort(404);
-        $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
-        if(!$team->parameters->accessible)
-            return redirect()->route('public.ask.maintenance', ['team' => $team->slug]);
+        if(is_string($team)) {
+            $team = Team::where('slug', $team)->with('parameters')->first();
+        } else if (is_int($team)) {
+            $team = Team::where('id', $team)->with('parameters')->first();
+        }
+        if (!$team)
+            abort(404);
+        if(($request->user() && $request->user()->cannot('view', $team))) {
+            if (!$team->parameters->accessible) {
+                return redirect()->route('public.ask.maintenance', ['team' => $team->slug]);
+            }
+        }
         return $next($request);
     }
 }

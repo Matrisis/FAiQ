@@ -101,7 +101,8 @@ class FileController extends Controller
     public function process(Request $request, Team $team, File $file) {
         try {
             if ($request->user()->cannot("process", $file)) abort(403);
-            if (!$file->importing && !$file->imported) {
+            //if (!$file->importing && !$file->imported) {
+           if(true){
                 $jobService = new JobService();
                 $jobService->importFIle($team, $file);
             } else {
