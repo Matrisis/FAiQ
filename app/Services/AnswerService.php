@@ -70,7 +70,7 @@ class AnswerService
                 'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),
                 'answer_id' => $previous_answers->first()->id
             ], $channel);
-            RequestLoggerService::create($this->team, $question, $request->ip, false);
+            RequestLoggerService::create($this->team, $question, $request->ip(), false);
         } else {
             $job_service->askStream(
                 channel: $channel,

@@ -11,11 +11,6 @@ class Embedding extends Pivot
 {
     use HasNeighbors;
 
-    protected $casts = [
-        'embedding' => Vector::class,
-        'content' => 'encrypted',
-    ];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -32,7 +27,8 @@ class Embedding extends Pivot
     protected function casts(): array
     {
         return [
-            // 'content' => 'encrypted',
+            'embedding' => Vector::class,
+            //'content' => 'encrypted',
         ];
     }
 
