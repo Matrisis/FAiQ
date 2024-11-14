@@ -77,7 +77,7 @@ class AnswerService
                 team: $this->team,
                 question: $question
             );
-            RequestLoggerService::create($this->team, $question, $request->ip, true);
+            RequestLoggerService::create($this->team, $question, $request->ip(), true);
         }
     }
 
