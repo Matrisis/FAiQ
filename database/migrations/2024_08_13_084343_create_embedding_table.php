@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum("type", ["text", "file", "url"])->default("text");
             $table->text("content")->nullable()->default(null);
             $table->vector("embedding", 1536)->nullable()->default(null);
-            $table->string("file_id")->nullable()->default(null);
+            $table->foreignId("file_id")->nullable()->default(null);
             $table->string("url")->nullable()->default(null);
             $table->foreignId("team_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();

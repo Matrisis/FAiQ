@@ -17,4 +17,10 @@ class File extends Pivot
     {
         return $this->hasOne(Team::class, 'id', 'team_id');
     }
+
+    public function embeddings()
+    {
+        return $this->hasMany(Embedding::class, 'file_id', 'id');
+    }
+
 }
