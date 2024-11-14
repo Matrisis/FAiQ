@@ -27,8 +27,8 @@ class Embedding extends Pivot
     protected function casts(): array
     {
         return [
+            'content' => 'encrypted',
             'embedding' => Vector::class,
-            //'content' => 'encrypted',
         ];
     }
 

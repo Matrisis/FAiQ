@@ -19,7 +19,7 @@ class UrlEmbeddingService
 
     public function import(string $original, string $embedded) : bool
     {
-        $embedding = Embedding::insertGetId([
+        $embedding = Embedding::create([
             'type' => 'url',
             'content' => $original,
             'embedding' => $embedded,

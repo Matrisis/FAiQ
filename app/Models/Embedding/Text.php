@@ -4,6 +4,7 @@ namespace App\Models\Embedding;
 
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Pgvector\Laravel\Vector;
 
 class Text extends Pivot
 {
@@ -14,6 +15,13 @@ class Text extends Pivot
         'embedding_id',
         'team_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'content' => 'encrypted',
+        ];
+    }
 
     public function embedding()
     {

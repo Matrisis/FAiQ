@@ -37,7 +37,7 @@ class FileEmbeddingService
     {
         try {
             foreach ($content as $part) {
-                Embedding::insertGetId([
+                Embedding::create([
                     'type' => 'file',
                     'content' => $part["original"],
                     'embedding' => $part["embedded"],

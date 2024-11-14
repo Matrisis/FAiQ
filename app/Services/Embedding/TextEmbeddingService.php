@@ -19,7 +19,7 @@ class TextEmbeddingService
 
     public function import(string $original, string $embedded) : bool
     {
-        $embedding = Embedding::insertGetId([
+        $embedding = Embedding::create([
             'type' => 'text',
             'content' => $original,
             'embedding' => $embedded,
