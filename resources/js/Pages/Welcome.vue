@@ -1,7 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import LottieAnimation from '@/Pages/Welcome/LottieAnimation.vue'; // Composant Lottie personnalisé
+import LottieAnimation from '@/Components/LottieAnimation.vue'; // Composant Lottie personnalisé
 import Rellax from 'rellax'; // Pour l'effet de parallaxe sur l'animation Lottie
+
+import hero from '@/Lotties/hero.json';
+import ai from '@/Lotties/ai.json';
 
 const rellaxAnimation = ref(null);
 
@@ -47,68 +50,84 @@ onMounted(() => {
                 <!-- Animation Lottie avec Effet Parallaxe -->
                 <div class="w-full md:w-1/2 py-6 text-center">
                     <div ref="rellaxAnimation" class="parallax-lottie  w-3/4 mx-auto animate-fade-in-down">
-                        <LottieAnimation />
+                        <LottieAnimation
+                            :animation-data="hero"
+                        />
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Section Fonctionnalités -->
-        <section id="features" class="bg-white dark:bg-gray-800 py-12">
+        <section class="bg-blue-50 py-12" id="features">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100">Fonctionnalités principales</h2>
-                <div class="flex flex-wrap mt-8">
+                <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de FAiQ</h2>
+                <div class="flex mt-8">
                     <!-- Fonctionnalité 1 -->
-                    <div class="w-full md:w-1/3 p-4">
-                        <div class="bg-blue-50 dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
-                            <div class="mb-4">
-                                <!-- Icône avec animation -->
-                                <svg class="w-12 h-12 text-blue-600 mx-auto animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                                    <!-- Icône SVG -->
-                                    <path d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm8-3a1 1 0 100 2 1 1 0 000-2zm1 4H9v5h2v-5z" />
-                                </svg>
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
+                        <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                            <!-- Animation Lottie -->
+                            <div class="flex">
+                                <LottieAnimation
+                            :animation-data="ai"
+                        />
                             </div>
-                            <h3 class="text-xl font-semibold mb-2 text-center text-gray-800 dark:text-gray-100">Réponses instantanées</h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-center">
-                                Fournissez des réponses immédiates à vos clients grâce à l'IA.
+                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Réponses basées sur l'IA</h3>
+                            <p class="text-gray-600 text-center">
+                                Fournit des réponses précises et contextuelles grâce à l'intelligence artificielle.
                             </p>
                         </div>
                     </div>
                     <!-- Fonctionnalité 2 -->
-                    <div class="w-full md:w-1/3 p-4">
-                        <div class="bg-green-50 dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+                        <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                            <!-- Animation Lottie -->
                             <div class="mb-4">
-                                <!-- Icône avec animation -->
-                                <svg class="w-12 h-12 text-green-600 mx-auto animate-spin-slow" fill="currentColor" viewBox="0 0 20 20">
-                                    <!-- Icône SVG -->
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12H9v5h2V6zM9 13h2v2H9v-2z" clip-rule="evenodd" />
-                                </svg>
+                                <LottieAnimation
+                                    :path="'/storage/lotties/hero.json'"
+                                />
                             </div>
-                            <h3 class="text-xl font-semibold mb-2 text-center text-gray-800 dark:text-gray-100">Personnalisation complète</h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-center">
-                                Adaptez la FAQ à l'image de votre marque avec des options de personnalisation avancées.
+                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Intégration facile</h3>
+                            <p class="text-gray-600 text-center">
+                                S'intègre facilement à votre site web ou application sans nécessiter de compétences en programmation.
                             </p>
                         </div>
                     </div>
                     <!-- Fonctionnalité 3 -->
-                    <div class="w-full md:w-1/3 p-4">
-                        <div class="bg-red-50 dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+                        <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                            <!-- Animation Lottie -->
                             <div class="mb-4">
-                                <!-- Icône avec animation -->
-                                <svg class="w-12 h-12 text-red-600 mx-auto animate-bounce" fill="currentColor" viewBox="0 0 20 20">
-                                    <!-- Icône SVG -->
-                                    <path d="M13 7H7v6h6V7z" />
-                                </svg>
+                                <LottieAnimation
+                                    :path="'/storage/lotties/hero.json'"
+                                />
+                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Personnalisation avancée</h3>
+                            <p class="text-gray-600 text-center">
+                                Personnalisez l'apparence et le comportement de la FAQ pour correspondre à votre marque.
+                            </p>
                             </div>
-                            <h3 class="text-xl font-semibold mb-2 text-center text-gray-800 dark:text-gray-100">Analyses détaillées</h3>
-                            <p class="text-gray-600 dark:text-gray-300 text-center">
-                                Suivez les performances et les interactions avec vos clients grâce au tableau de bord.
+                        </div>
+                    </div>
+                    <!-- Fonctionnalité 4 -->
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+                        <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                            <!-- Animation Lottie -->
+                            <div class="mb-4">
+                                <LottieAnimation
+                                    :path="'/storage/lotties/hero.json'"
+                                />
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Support multilingue</h3>
+                            <p class="text-gray-600 text-center">
+                                Prend en charge plusieurs langues pour servir une clientèle internationale.
                             </p>
                         </div>
                     </div>
+                    <!-- Ajoutez d'autres fonctionnalités de la même manière -->
                 </div>
             </div>
         </section>
+
 
         <!-- Section Avantages -->
         <section class="bg-gradient-to-br from-green-200 to-blue-200 py-12">

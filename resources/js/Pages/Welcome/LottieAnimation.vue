@@ -8,13 +8,17 @@
 import bodymovin from "lottie-web";
 import { onMounted, ref } from 'vue';
 
+const props = defineProps({
+    path: String,
+});
+
 onMounted(() => {
     bodymovin.loadAnimation({
         container: document.getElementById('loading-animation'),
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: '/storage/lotties/hero.json',
+        path: props.path,
     })
 });
 </script>
