@@ -5,6 +5,10 @@ import Rellax from 'rellax'; // Pour l'effet de parallaxe sur l'animation Lottie
 
 import hero from '@/Lotties/hero.json';
 import ai from '@/Lotties/ai.json';
+import integration from '@/Lotties/integration.json';
+import hero2 from '@/Lotties/hero2.json';
+import configuration from '@/Lotties/configuration.json';
+import time from '@/Lotties/time.json';
 
 const rellaxAnimation = ref(null);
 
@@ -30,7 +34,7 @@ onMounted(() => {
                 <div class="parallax-bg"></div>
             </div>
             <!-- Contenu -->
-            <div class="container mx-auto flex px-6 md:flex-row flex-col items-center h-full  ">
+            <div ref="rellaxAnimation" class="container mx-auto flex px-6 md:flex-row flex-col items-center h-full  ">
                 <!-- Contenu Texte -->
                 <div class="flex mt-6 md:mt-0 flex-col w-full md:w-1/2 justify-center items-start text-center md:text-left text-white z-10">
                     <h1 class="text-5xl font-bold leading-tight animate-fade-in-down">
@@ -49,9 +53,9 @@ onMounted(() => {
                 </div>
                 <!-- Animation Lottie avec Effet Parallaxe -->
                 <div class="w-full md:w-1/2 py-6 text-center">
-                    <div ref="rellaxAnimation" class="parallax-lottie  w-3/4 mx-auto animate-fade-in-down">
+                    <div  class="parallax-lottie  w-3/4 mx-auto animate-fade-in-down">
                         <LottieAnimation
-                            :animation-data="hero"
+                            :animation-data="hero2"
                         />
                     </div>
                 </div>
@@ -62,65 +66,73 @@ onMounted(() => {
         <section class="bg-blue-50 py-12" id="features">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de FAiQ</h2>
-                <div class="flex mt-8">
+                <div class="flex flex-col md:flex-row mt-8">
                     <!-- Fonctionnalité 1 -->
                     <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
-                            <div class="flex">
+                            <div class="flex w-full mx-auto h-1/2">
                                 <LottieAnimation
-                            :animation-data="ai"
-                        />
+                                    :animation-data="ai"
+                                />
                             </div>
-                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Réponses basées sur l'IA</h3>
-                            <p class="text-gray-600 text-center">
-                                Fournit des réponses précises et contextuelles grâce à l'intelligence artificielle.
-                            </p>
+                            <div class="h-1/2 flex flex-col items-center justify-center">
+                                <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Réponses basées sur l'IA</h3>
+                                <p class="text-gray-600 text-center">
+                                    Fournit des réponses précises et contextuelles grâce à l'intelligence artificielle.
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <!-- Fonctionnalité 2 -->
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
-                            <div class="mb-4">
+                            <div class="flex w-full mx-auto h-1/2">
                                 <LottieAnimation
-                                    :path="'/storage/lotties/hero.json'"
+                                    :animation-data="integration"
                                 />
                             </div>
-                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Intégration facile</h3>
-                            <p class="text-gray-600 text-center">
-                                S'intègre facilement à votre site web ou application sans nécessiter de compétences en programmation.
-                            </p>
+                            <div class="h-1/2 flex flex-col items-center justify-center">
+                                <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Intégration facile</h3>
+                                <p class="text-gray-600 text-center">
+                                    S'intègre facilement à votre site web ou application sans nécessiter de compétences en programmation.
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <!-- Fonctionnalité 3 -->
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
-                            <div class="mb-4">
+                            <div class="flex w-full mx-auto h-1/2">
                                 <LottieAnimation
-                                    :path="'/storage/lotties/hero.json'"
+                                    :animation-data="configuration"
                                 />
-                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Personnalisation avancée</h3>
-                            <p class="text-gray-600 text-center">
-                                Personnalisez l'apparence et le comportement de la FAQ pour correspondre à votre marque.
-                            </p>
+                            </div>
+                            <div class="h-1/2 flex flex-col items-center justify-center">
+                                <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Personnalisation avancée</h3>
+                                <p class="text-gray-600 text-center">
+                                    Personnalisez l'apparence et le comportement de la FAQ pour correspondre à votre marque.
+                                </p>
                             </div>
                         </div>
                     </div>
                     <!-- Fonctionnalité 4 -->
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4">
+                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
-                            <div class="mb-4">
+                            <div class="flex w-full mx-auto h-1/2">
                                 <LottieAnimation
-                                    :path="'/storage/lotties/hero.json'"
+                                    :animation-data="time"
                                 />
                             </div>
-                            <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Support multilingue</h3>
-                            <p class="text-gray-600 text-center">
-                                Prend en charge plusieurs langues pour servir une clientèle internationale.
-                            </p>
+                            <div class="h-1/2 flex flex-col items-center justify-center">
+                                <h3 class="text-xl font-semibold mb-2 text-center text-blue-800">Simple d'utilisation</h3>
+                                <p class="text-gray-600 text-center">
+                                    Mettez en place votre FAQ en quelques minutes sans connaissances techniques.
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <!-- Ajoutez d'autres fonctionnalités de la même manière -->
