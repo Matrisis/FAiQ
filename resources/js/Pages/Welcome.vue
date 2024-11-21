@@ -142,7 +142,7 @@ onMounted(() => {
 
 
         <!-- Section Avantages -->
-        <section class="bg-gradient-to-br from-green-200 to-blue-200 py-12">
+        <section class="bg-blue-200 py-12">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-gray-800">Les avantages pour votre entreprise</h2>
                 <div class="mt-8 flex flex-wrap">
