@@ -9,6 +9,9 @@ import integration from '@/Lotties/integration.json';
 import hero2 from '@/Lotties/hero2.json';
 import configuration from '@/Lotties/configuration.json';
 import time from '@/Lotties/time.json';
+import register from '@/Lotties/register.json';
+import engineering from '@/Lotties/engineering.json';
+import upload from '@/Lotties/upload.json';
 
 const rellaxAnimation = ref(null);
 
@@ -140,6 +143,106 @@ onMounted(() => {
             </div>
         </section>
 
+        <!-- Nouvelle Section : Comment ça marche -->
+        <section class="bg-white py-12">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-blue-800">Comment ça marche</h2>
+                <p class="mt-4 text-center text-gray-600">
+                    Suivez ces étapes simples pour commencer à utiliser FAiQ et améliorer votre support client.
+                </p>
+                 <div class="flex flex-wrap mt-12">
+                     <div class="w-full md:w-1/5 p-4">
+                         <div class="flex flex-col items-center">
+                             <!-- Animation Lottie -->
+                             <div class="w-48 h-48 mb-4">
+                                 <LottieAnimation
+                                     :animationData="register"
+                                     :loop="true"
+                                     :autoplay="true"
+                                 />
+                             </div>
+                             <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">1. Inscrivez-vous.</h3>
+                             <p class="text-gray-600 text-center">
+                                 Inscrivez-vous sur FAiQ en quelques clics pour accéder à toutes les fonctionnalités.
+                             </p>
+                         </div>
+                     </div>
+                    <div class="w-full md:w-1/5 p-4">
+                        <div class="flex flex-col items-center">
+                            <!-- Animation Lottie -->
+                            <div class="w-48 h-48 mb-4">
+                                <LottieAnimation
+                                    :animationData="engineering"
+                                    :loop="true"
+                                    :autoplay="true"
+                                />
+                            </div>
+                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">2. Nous mettons en place la solution la plus adaptée pour vous.</h3>
+                            <p class="text-gray-600 text-center">
+                                Nous vous contactons rapidement pour paramétrer votre interface selon vos besoins.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/5 p-4">
+                        <div class="flex flex-col items-center">
+                            <!-- Animation Lottie -->
+                            <div class="w-48 h-48 mb-4">
+                                <LottieAnimation
+                                    :animationData="upload"
+                                    :loop="true"
+                                    :autoplay="true"
+                                />
+                            </div>
+                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">3. Personnalisez votre FAQ</h3>
+                            <p class="text-gray-600 text-center">
+                                Ajoutez des fichiers a votre base de connaissance pour alimenter votre FAQ.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/5 p-4">
+                        <div class="flex flex-col items-center">
+                            <!-- Animation Lottie -->
+                            <div class="w-48 h-48 mb-4">
+                                <LottieAnimation
+                                    :animationData="configuration"
+                                    :loop="true"
+                                    :autoplay="true"
+                                />
+                            </div>
+                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">4. Choisissez a quoi ressemblera votre FAQ.</h3>
+                            <p class="text-gray-600 text-center">
+                                Utiliser notre interface pour personnaliser votre FAQ à vos codes de couleur et images.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/5 p-4">
+                        <div class="flex flex-col items-center">
+                            <!-- Animation Lottie -->
+                            <div class="w-48 h-48 mb-4">
+                                <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                                <svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                     viewBox="0 0 512 512" xml:space="preserve">
+                                    <polygon style="fill:#0BA4E0;" points="202.624,478.016 0,291.36 70.512,214.8 191.968,326.656 431.44,33.984 512,99.904 "/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">5. Ça fonctionne !</h3>
+                            <p class="text-gray-600 text-center">
+                                Mettez à disposition le lien de votre FAQ à vos clients ou prospects.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bouton d'appel à l'action -->
+                <div class="mt-8 text-center">
+                    <button @click="$inertia.visit(route('register'))"
+                            class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500  focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
+                        Démarrez dès maintenant
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
 
         <!-- Section Avantages -->
         <section class="bg-blue-200 py-12">
@@ -193,7 +296,7 @@ onMounted(() => {
                 <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100">Ce que disent nos clients</h2>
                 <div class="mt-8 flex flex-wrap">
                     <!-- Témoignage 1 -->
-                    <div class="w-full md:w-1/3 p-4">
+                    <div class="w-full md:w-1/5 p-4">
                         <div class="bg-blue-50 dark:bg-gray-700 p-6 rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
                             <p class="text-gray-600 dark:text-gray-300 italic">
                                 "FAiQ a révolutionné notre support client ! Nos clients obtiennent des réponses instantanément."
