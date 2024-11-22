@@ -27,6 +27,7 @@
         "marked": "^14.1.2",
         "rellax": "^1.12.1",
         "vue-good-table-next": "^0.2.2",
+        "vue-router": "^4.4.5",
         "vue3-easy-data-table": "^1.5.47"
     }
 }

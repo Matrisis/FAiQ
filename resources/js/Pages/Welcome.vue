@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'; // Importation pour la navigation
 import LottieAnimation from '@/Components/LottieAnimation.vue'; // Composant Lottie personnalisé
 import Rellax from 'rellax'; // Pour l'effet de parallaxe sur l'animation Lottie
 
@@ -15,11 +16,16 @@ import upload from '@/Lotties/upload.json';
 import thinking from '@/Lotties/thinking.json';
 
 const rellaxAnimation = ref(null);
+const isMenuOpen = ref(false); // État pour le menu mobile
+const router = useRouter(); // Utilisation du router pour la navigation
+
 
 const scrollTo = (id) => {
-    const featuresSection = document.getElementById(id);
-    featuresSection.scrollIntoView({ behavior: 'smooth' });
-}
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+};
 
 onMounted(() => {
     new Rellax(rellaxAnimation.value, {
@@ -31,33 +37,86 @@ onMounted(() => {
 
 <template>
     <div id="main-content">
+        <!-- Header -->
+        <header class="bg-white shadow-md fixed w-full z-50">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <!-- Logo -->
+                <div class="text-2xl font-bold text-blue-700 cursor-pointer" @click="scrollTo('hero')">
+                    FAiQ
+                </div>
+                <!-- Navigation pour écrans larges -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" @click.prevent="scrollTo('discover')" class="text-gray-700 hover:text-blue-700">Qu'est-ce que c'est ?</a>
+                    <a href="#" @click.prevent="scrollTo('features')" class="text-gray-700 hover:text-blue-700">Fonctionnalités</a>
+                    <a href="#" @click.prevent="scrollTo('how-it-works')" class="text-gray-700 hover:text-blue-700">Comment ça marche</a>
+                    <a href="#" @click.prevent="scrollTo('advantages')" class="text-gray-700 hover:text-blue-700">Avantages</a>
+                    <a href="#" @click.prevent="scrollTo('try')" class="text-gray-700 hover:text-blue-700">Essayer</a>
+                </nav>
+                <!-- Bouton Inscription pour écrans larges -->
+                <div class="hidden md:block">
+                    <button @click="$inertia.visit(route('register'))"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                        S'inscrire
+                    </button>
+                </div>
+                <!-- Menu Mobile -->
+                <div class="md:hidden">
+                    <button @click="isMenuOpen = !isMenuOpen" class="text-gray-700 focus:outline-none focus:text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path v-if="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 6h16M4 12h16M4 18h16"/>
+                            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Menu déroulant pour mobiles -->
+            <div v-if="isMenuOpen" class="md:hidden bg-white shadow-md">
+                <nav class="px-6 pt-4 pb-4 space-y-6" >
+                    <a href="#" @click.prevent="scrollTo('discover'); isMenuOpen = false" class="block text-gray-700 hover:text-blue-700">Qu'est-ce que c'est ?</a>
+                    <a href="#" @click.prevent="scrollTo('features'); isMenuOpen = false" class="block text-gray-700 hover:text-blue-700">Fonctionnalités</a>
+                    <a href="#" @click.prevent="scrollTo('how-it-works'); isMenuOpen = false" class="block text-gray-700 hover:text-blue-700">Comment ça marche</a>
+                    <a href="#" @click.prevent="scrollTo('advantages'); isMenuOpen = false" class="block text-gray-700 hover:text-blue-700">Avantages</a>
+                    <a href="#" @click.prevent="scrollTo('try'); isMenuOpen = false" class="block text-gray-700 hover:text-blue-700">Essayer</a>
+                    <button @click="$inertia.visit(route('register')); isMenuOpen = false"
+                            class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                        S'inscrire
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Espace pour compenser le header fixe -->
+        <div class="pt-18"></div>
+
         <!-- Section Héroïque en Plein Écran avec Effet Parallaxe -->
-        <section class=" overflow-hidden h-screen bg-gradient-to-b from-blue-600 to-blue-300" id="hero">
+        <section class="overflow-hidden h-screen bg-gradient-to-b from-blue-600 to-blue-300" id="hero">
             <!-- Arrière-plan Parallaxe -->
             <div class="absolute inset-0">
                 <div class="parallax-bg"></div>
             </div>
             <!-- Contenu -->
-            <div ref="rellaxAnimation" class="container mx-auto flex px-6 md:flex-row flex-col items-center h-full  ">
+            <div ref="rellaxAnimation" class="container mx-auto flex px-6 md:flex-row flex-col items-center h-full">
                 <!-- Contenu Texte -->
                 <div class="flex mt-6 md:mt-0 flex-col w-full md:w-1/2 justify-center items-start text-center md:text-left text-white z-10">
                     <h1 class="text-5xl font-bold leading-tight animate-fade-in-down">
                         Bienvenue sur <span class="text-blue-700">FAiQ</span>
                     </h1>
                     <p class="leading-normal text-2xl mt-4 animate-fade-in-up">
-                        Augmentez votre satisfaction client grace a notre service IA de support client, satisfait ou remboursé.
+                        Augmentez votre satisfaction client grâce à notre service IA de support client, satisfait ou remboursé.
                     </p>
                     <button @click="$inertia.visit(route('register'))"
-                        class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500  focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
+                            class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
                         Commencez maintenant
                     </button>
-                    <div class="mx-auto md:mx-0 mt-6 flex justify-center md:justify-start">
-                        <a @click="scrollTo('discover')" class="text-white hover:underline hover:cursor-pointer">En savoir plus</a>
+                    <div class="mx-auto md:mx-0 mt-6 flex justify-center md:justify-start animate-fade-in-down">
+                        <div @click="scrollTo('discover')" class="text-white hover:underline cursor-pointer">En savoir plus</div>
                     </div>
                 </div>
                 <!-- Animation Lottie avec Effet Parallaxe -->
                 <div class="w-full md:w-1/2 py-6 text-center">
-                    <div  class="parallax-lottie  w-3/4 mx-auto animate-fade-in-down">
+                    <div class="parallax-lottie w-3/4 mx-auto animate-fade-in-down">
                         <LottieAnimation
                             :animation-data="hero2"
                         />
@@ -66,18 +125,20 @@ onMounted(() => {
             </div>
         </section>
 
-        <section class="bg-white py-16" id="discover">
+        <!-- Section "Qu'est-ce que c'est ?" -->
+        <section class="bg-white py-20" id="discover">
             <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
-                <!-- Contenu Texte -->
+                <!-- Animation -->
                 <div class="w-full md:w-1/2 mt-8 md:mt-0 flex justify-center">
                     <div class="w-1/2">
-                <LottieAnimation
-                    :animationData="thinking"
-                    :loop="true"
-                    :autoplay="true"
-                />
+                        <LottieAnimation
+                            :animationData="thinking"
+                            :loop="true"
+                            :autoplay="true"
+                        />
                     </div>
                 </div>
+                <!-- Contenu Texte -->
                 <div class="w-full md:w-1/2">
                     <h2 class="text-4xl font-bold text-blue-800 mb-6">Qu'est-ce que <span class="text-blue-200">FAiQ</span> ?</h2>
                     <p class="text-gray-700 mb-4">
@@ -90,12 +151,11 @@ onMounted(() => {
                         Découvrir les fonctionnalités
                     </button>
                 </div>
-                <!-- Animation ou Image -->
             </div>
         </section>
 
         <!-- Section Fonctionnalités -->
-        <section class="bg-blue-50 py-12" id="features">
+        <section class="bg-blue-50 py-20" id="features">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de FAiQ</h2>
                 <div class="flex flex-col md:flex-row mt-8">
@@ -117,7 +177,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Fonctionnalité 2 -->
-                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
                             <div class="flex w-full mx-auto h-1/2">
@@ -134,7 +194,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Fonctionnalité 3 -->
-                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
                             <div class="flex w-full mx-auto h-1/2">
@@ -151,7 +211,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Fonctionnalité 4 -->
-                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
+                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
                             <div class="flex w-full mx-auto h-1/2">
@@ -172,30 +232,32 @@ onMounted(() => {
             </div>
         </section>
 
-        <!-- Nouvelle Section : Comment ça marche -->
-        <section class="bg-white py-12">
+        <!-- Section Comment ça marche -->
+        <section class="bg-white py-20" id="how-it-works">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-blue-800">Comment ça marche</h2>
                 <p class="mt-4 text-center text-gray-600">
                     Suivez ces étapes simples pour commencer à utiliser FAiQ et améliorer votre support client.
                 </p>
-                 <div class="flex flex-wrap mt-12">
-                     <div class="w-full md:w-1/5 p-4">
-                         <div class="flex flex-col items-center">
-                             <!-- Animation Lottie -->
-                             <div class="w-48 h-48 mb-4">
-                                 <LottieAnimation
-                                     :animationData="register"
-                                     :loop="true"
-                                     :autoplay="true"
-                                 />
-                             </div>
-                             <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">1. Inscrivez-vous.</h3>
-                             <p class="text-gray-600 text-center">
-                                 Inscrivez-vous sur FAiQ en quelques clics pour accéder à toutes les fonctionnalités.
-                             </p>
-                         </div>
-                     </div>
+                <div class="flex flex-wrap mt-12">
+                    <!-- Étape 1 -->
+                    <div class="w-full md:w-1/5 p-4">
+                        <div class="flex flex-col items-center">
+                            <!-- Animation Lottie -->
+                            <div class="w-48 h-48 mb-4">
+                                <LottieAnimation
+                                    :animationData="register"
+                                    :loop="true"
+                                    :autoplay="true"
+                                />
+                            </div>
+                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">1. Inscrivez-vous.</h3>
+                            <p class="text-gray-600 text-center">
+                                Inscrivez-vous sur FAiQ en quelques clics pour accéder à toutes les fonctionnalités.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Étape 2 -->
                     <div class="w-full md:w-1/5 p-4">
                         <div class="flex flex-col items-center">
                             <!-- Animation Lottie -->
@@ -212,6 +274,7 @@ onMounted(() => {
                             </p>
                         </div>
                     </div>
+                    <!-- Étape 3 -->
                     <div class="w-full md:w-1/5 p-4">
                         <div class="flex flex-col items-center">
                             <!-- Animation Lottie -->
@@ -224,10 +287,11 @@ onMounted(() => {
                             </div>
                             <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">3. Personnalisez votre FAQ</h3>
                             <p class="text-gray-600 text-center">
-                                Ajoutez des fichiers a votre base de connaissance pour alimenter votre FAQ.
+                                Ajoutez des fichiers à votre base de connaissances pour alimenter votre FAQ.
                             </p>
                         </div>
                     </div>
+                    <!-- Étape 4 -->
                     <div class="w-full md:w-1/5 p-4">
                         <div class="flex flex-col items-center">
                             <!-- Animation Lottie -->
@@ -238,19 +302,19 @@ onMounted(() => {
                                     :autoplay="true"
                                 />
                             </div>
-                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">4. Choisissez a quoi ressemblera votre FAQ.</h3>
+                            <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">4. Choisissez à quoi ressemblera votre FAQ.</h3>
                             <p class="text-gray-600 text-center">
-                                Utiliser notre interface pour personnaliser votre FAQ à vos codes de couleur et images.
+                                Utilisez notre interface pour personnaliser votre FAQ selon vos codes de couleur et images.
                             </p>
                         </div>
                     </div>
+                    <!-- Étape 5 -->
                     <div class="w-full md:w-1/5 p-4">
                         <div class="flex flex-col items-center">
-                            <!-- Animation Lottie -->
+                            <!-- Icône SVG -->
                             <div class="w-48 h-48 mb-4">
-                                <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-                                <svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                     viewBox="0 0 512 512" xml:space="preserve">
+                                <!-- Vous pouvez remplacer ce SVG par une animation Lottie si vous le souhaitez -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <polygon style="fill:#0BA4E0;" points="202.624,478.016 0,291.36 70.512,214.8 191.968,326.656 431.44,33.984 512,99.904 "/>
                                 </svg>
                             </div>
@@ -264,7 +328,7 @@ onMounted(() => {
                 <!-- Bouton d'appel à l'action -->
                 <div class="mt-8 text-center">
                     <button @click="$inertia.visit(route('register'))"
-                            class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500  focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
+                            class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
                         Démarrez dès maintenant
                     </button>
                 </div>
@@ -272,7 +336,7 @@ onMounted(() => {
         </section>
 
         <!-- Section Avantages -->
-        <section class="bg-blue-50 py-16">
+        <section class="bg-blue-50 py-20">
             <div class="container mx-auto px-6">
                 <h2 class="text-4xl font-bold text-center text-blue-700 mb-12">Les avantages de <span class="text-blue-400">FAiQ</span> pour votre entreprise</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -349,159 +413,72 @@ onMounted(() => {
             </div>
         </section>
 
-        <!-- Section TEST -->
-
-        <!-- Section CTA Finale -->
-        <section class="bg-gradient-to-r from-purple-600 to-indigo-600 py-16 overflow-hidden">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl font-bold text-white animate-fade-in-down">Prêt à transformer votre support client avec FAiQ ?</h2>
-                <button class="mt-6 px-8 py-3 bg-white text-purple-600 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 animate-bounce-in">
-                    Inscrivez-vous dès maintenant
-                </button>
-            </div>
-            <!-- Particules animées -->
-            <div class="absolute inset-0 pointer-events-none">
+        <!-- Section Essayez FAiQ dès maintenant -->
+        <section class="bg-white py-20" id="try">
+            <div class="flex">
+                <!-- Contenu Texte -->
+                <div class="w-full flex flex-col items-center">
+                    <h2 class="text-4xl font-bold text-blue-600 mb-6 text-center">Essayez <span class="text-blue-300">FAiQ</span> dès maintenant !</h2>
+                    <p class="text-blue-600 text-lg mb-6 md:w-1/2 text-center">
+                        Découvrez par vous-même la puissance de notre FAQ intelligente. Accédez à notre version de test et explorez toutes les fonctionnalités que FAiQ a à offrir.
+                    </p>
+                    <button @click="$inertia.visit(route('public.ask.index', { team: 'faiq' }))"
+                            class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
+                        Accéder à la version de test
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="bg-gray-900 py-6">
-            <div class="container mx-auto px-6 text-center text-gray-400">
-                &copy; 2023 FAiQ. Tous droits réservés.
+        <!-- Section CTA Finale -->
+        <section class="bg-gradient-to-b from-blue-500 to-blue-600 py-20 overflow-hidden">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold text-white animate-fade-in-down">Prêt à transformer votre support client avec FAiQ ?</h2>
+                <button @click="$inertia.visit(route('register'))" class="mt-4 px-8 py-3 bg-blue-200 text-blue-600 hover:text-white hover:bg-blue-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50">
+                    Inscrivez-vous dès maintenant
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer amélioré -->
+        <footer class="bg-gray-900 py-8">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <!-- Logo et Copyright -->
+                    <div class="text-gray-400 mb-4 md:mb-0">
+                        <span class="text-xl font-bold text-white">FAiQ</span> &copy; 2023. Tous droits réservés.
+                    </div>
+                    <!-- Liens utiles -->
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Mentions légales</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Politique de confidentialité</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Conditions d'utilisation</a>
+                    </div>
+                </div>
             </div>
         </footer>
     </div>
 </template>
 
 <style scoped>
-/* Animations Tailwind CSS */
+/* Vos styles existants restent inchangés */
 
-/* Effet Parallaxe */
-.parallax-bg {
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
+/* Styles pour le header */
+header {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* Ajustements pour l'effet de parallaxe sur l'animation Lottie */
-.parallax {
-    perspective: 1px;
+header nav a {
+    font-size: 16px;
+    font-weight: 500;
 }
 
-.parallax > * {
-    transform: translateZ(0);
-}
+/* Styles pour le menu mobile (à implémenter si nécessaire) */
 
-/* Animations supplémentaires */
-@keyframes fade-in-down {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Espace pour compenser le header fixe */
+.pt-20 {
+    padding-top: 80px; /* Ajustez cette valeur si nécessaire */
 }
-
-.animate-fade-in-down {
-    animation: fade-in-down 0.5s ease-out;
-}
-
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in-up {
-    animation: fade-in-up 0.5s ease-out;
-}
-
-.animate-bounce-in {
-    animation: bounceIn 1s;
-}
-
-@keyframes bounceIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.3);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.05);
-    }
-    70% {
-        transform: scale(0.9);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes wiggle {
-    0%,
-    100% {
-        transform: rotate(-3deg);
-    }
-    50% {
-        transform: rotate(3deg);
-    }
-}
-
-.animate-wiggle {
-    animation: wiggle 1s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%,
-    100% {
-        transform: translateY(-10px);
-    }
-    50% {
-        transform: translateY(10px);
-    }
-}
-
-.animate-float {
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes blob {
-    0%,
-    100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-}
-
-.animate-blob {
-    animation: blob 8s infinite;
-}
-
-.animation-delay-2000 {
-    animation-delay: 2s;
-}
-
-.animate-spin-slow {
-    animation: spin 4s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Styles supplémentaires */
 </style>
