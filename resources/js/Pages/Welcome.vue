@@ -155,7 +155,7 @@ onMounted(() => {
         </section>
 
         <!-- Section Fonctionnalités -->
-        <section class="bg-blue-50 py-20" id="features">
+        <section class="bg-blue-50 py-12" id="features">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de FAiQ</h2>
                 <div class="flex flex-col md:flex-row mt-8">
@@ -177,7 +177,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Fonctionnalité 2 -->
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
+                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
                             <div class="flex w-full mx-auto h-1/2">
@@ -194,7 +194,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Fonctionnalité 3 -->
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
+                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
                             <div class="flex w-full mx-auto h-1/2">
@@ -211,7 +211,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Fonctionnalité 4 -->
-                    <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
+                    <div class="flex w-full md:w-1/2 lg:w-1/3 p-4">
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
                             <!-- Animation Lottie -->
                             <div class="flex w-full mx-auto h-1/2">
