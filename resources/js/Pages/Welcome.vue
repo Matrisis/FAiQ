@@ -88,7 +88,7 @@ onMounted(() => {
         </header>
 
         <!-- Espace pour compenser le header fixe -->
-        <div class="pt-18"></div>
+        <div class="pt-12"></div>
 
         <!-- Section Héroïque en Plein Écran avec Effet Parallaxe -->
         <section class="overflow-hidden h-screen bg-gradient-to-b from-blue-600 to-blue-300" id="hero">
@@ -147,7 +147,7 @@ onMounted(() => {
                     <p class="text-gray-700 mb-4">
                         Grâce à FAiQ, vous pouvez personnaliser votre FAQ pour qu'elle corresponde à votre image de marque, tout en bénéficiant d'une intégration facile sur votre site web ou application.
                     </p>
-                    <button @click="scrollTo('features')" class="mt-4 px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                    <button @click="scrollTo('features')" class="mt-4 px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 ">
                         Découvrir les fonctionnalités
                     </button>
                 </div>
@@ -155,7 +155,7 @@ onMounted(() => {
         </section>
 
         <!-- Section Fonctionnalités -->
-        <section class="bg-blue-50 py-12" id="features">
+        <section class="bg-blue-50 py-20" id="features">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de FAiQ</h2>
                 <div class="flex flex-col md:flex-row mt-8">
@@ -336,7 +336,7 @@ onMounted(() => {
         </section>
 
         <!-- Section Avantages -->
-        <section class="bg-blue-50 py-20">
+        <section class="bg-blue-50 py-20" id="advantages">
             <div class="container mx-auto px-6">
                 <h2 class="text-4xl font-bold text-center text-blue-700 mb-12">Les avantages de <span class="text-blue-400">FAiQ</span> pour votre entreprise</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
