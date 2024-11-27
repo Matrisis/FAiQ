@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import LandingLayout from "@/Layouts/LandingLayout.vue";
 
 const plans = ref([
     {
@@ -44,39 +45,9 @@ const plans = ref([
 </script>
 
 <template>
-    <div>
-        <!-- Header -->
-        <header class="bg-white shadow-md fixed w-full z-50">
-            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <!-- Logo -->
-                <div class="text-2xl font-bold text-blue-700 cursor-pointer" @click="$router.push('/')">
-                    FAiQ
-                </div>
-                <!-- Navigation -->
-                <nav class="hidden md:flex space-x-6">
-                    <a href="/" class="text-gray-700 hover:text-blue-700">Accueil</a>
-                    <a href="/pricing" class="text-gray-700 hover:text-blue-700">Tarifs</a>
-                    <a href="/contact" class="text-gray-700 hover:text-blue-700">Contact</a>
-                </nav>
-                <!-- Bouton Inscription -->
-                <div class="hidden md:block">
-                    <button @click="$inertia.visit(route('register'))"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                        S'inscrire
-                    </button>
-                </div>
-                <!-- Menu Mobile -->
-                <div class="md:hidden">
-                    <!-- Vous pouvez ajouter un menu mobile ici -->
-                </div>
-            </div>
-        </header>
-
-        <!-- Espace pour compenser le header fixe -->
-        <div class="pt-20"></div>
-
+    <LandingLayout>
         <!-- Section Pricing -->
-        <section class="bg-gray-100 py-16">
+        <section class="h-full bg-gray-100 py-16">
             <div class="container mx-auto px-6">
                 <h2 class="text-4xl font-bold text-center text-blue-800 mb-12">Nos offres tarifaires</h2>
                 <div class="flex flex-col md:flex-row justify-center items-stretch md:space-x-6">
@@ -109,24 +80,7 @@ const plans = ref([
         </section>
 
         <!-- Footer -->
-        <footer class="bg-gray-900 py-8">
-            <div class="container mx-auto px-6">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <!-- Logo et Copyright -->
-                    <div class="text-gray-400 mb-4 md:mb-0">
-                        <span class="text-xl font-bold text-white">FAiQ</span> &copy; 2023. Tous droits réservés.
-                    </div>
-                    <!-- Liens utiles -->
-                    <div class="flex space-x-6">
-                        <a href="/contact" class="text-gray-400 hover:text-white">Contact</a>
-                        <a href="/legal" class="text-gray-400 hover:text-white">Mentions légales</a>
-                        <a href="/privacy" class="text-gray-400 hover:text-white">Politique de confidentialité</a>
-                        <a href="/terms" class="text-gray-400 hover:text-white">Conditions d'utilisation</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
+    </LandingLayout>
 </template>
 
 <style scoped>

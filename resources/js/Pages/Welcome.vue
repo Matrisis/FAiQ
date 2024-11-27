@@ -17,9 +17,6 @@ import thinking from '@/Lotties/thinking.json';
 import LandingLayout from "@/Layouts/LandingLayout.vue";
 
 const rellaxAnimation = ref(null);
-const isMenuOpen = ref(false); // État pour le menu mobile
-const router = useRouter(); // Utilisation du router pour la navigation
-
 
 const scrollTo = (id) => {
     const element = document.getElementById(id);
@@ -38,9 +35,6 @@ onMounted(() => {
 
 <template>
     <LandingLayout>
-        <!-- Espace pour compenser le header fixe -->
-        <div class="pt-12"></div>
-
         <!-- Section Héroïque en Plein Écran avec Effet Parallaxe -->
         <section class="overflow-hidden h-screen bg-gradient-to-b from-blue-600 to-blue-300" id="hero">
             <!-- Arrière-plan Parallaxe -->

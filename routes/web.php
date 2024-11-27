@@ -18,9 +18,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::prefix("/")->group(function () {
-    Route::get('/', function () { return Inertia::render('Welcome'); });
-    Route::get('/pricing', function () { return Inertia::render('Welcome/Pricing'); });
+Route::prefix("/")->name("landing.")->group(function () {
+    Route::get('/', function () { return Inertia::render('Welcome'); })->name("home");
+    Route::get('/pricing', function () { return Inertia::render('Welcome/Pricing'); })->name("pricing");
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', Subscribed::class, LockedMiddleware::class])->group(function () {
