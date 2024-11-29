@@ -46,7 +46,7 @@ onMounted(() => {
                 <!-- Contenu Texte -->
                 <div class="flex mt-6 md:mt-0 flex-col w-full md:w-1/2 justify-center items-start text-center md:text-left text-white z-10">
                     <h1 class="text-5xl font-bold leading-tight animate-fade-in-down">
-                        Bienvenue sur <span class="text-blue-700">FAiQ</span>
+                        Bienvenue sur <span class="text-blue-700">EasyFAiQ</span>
                     </h1>
                     <p class="leading-normal text-2xl mt-4 animate-fade-in-up">
                         Augmentez votre satisfaction client grâce à notre service IA de support client, satisfait ou remboursé.
@@ -85,12 +85,12 @@ onMounted(() => {
                 </div>
                 <!-- Contenu Texte -->
                 <div class="w-full md:w-1/2">
-                    <h2 class="text-4xl font-bold text-blue-800 mb-6">Qu'est-ce que <span class="text-blue-200">FAiQ</span> ?</h2>
+                    <h2 class="text-4xl font-bold text-blue-800 mb-6">Qu'est-ce que <span class="text-blue-200">EasyFAiQ</span> ?</h2>
                     <p class="text-gray-700 mb-4">
-                        FAiQ est une application innovante qui permet aux entreprises de créer une FAQ intelligente, propulsée par l'intelligence artificielle. Elle offre des réponses précises et instantanées aux questions de vos clients, améliorant ainsi leur satisfaction et réduisant la charge de travail de votre équipe support.
+                        EasyFAiQ est une application innovante qui permet aux entreprises de créer une FAQ intelligente, propulsée par l'intelligence artificielle. Elle offre des réponses précises et instantanées aux questions de vos clients, améliorant ainsi leur satisfaction et réduisant la charge de travail de votre équipe support.
                     </p>
                     <p class="text-gray-700 mb-4">
-                        Grâce à FAiQ, vous pouvez personnaliser votre FAQ pour qu'elle corresponde à votre image de marque, tout en bénéficiant d'une intégration facile sur votre site web ou application.
+                        Grâce à EasyFAiQ, vous pouvez personnaliser votre FAQ pour qu'elle corresponde à votre image de marque, tout en bénéficiant d'une intégration facile sur votre site web ou application.
                     </p>
                     <button @click="scrollTo('features')" class="mt-4 px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 ">
                         Découvrir les fonctionnalités
@@ -102,7 +102,7 @@ onMounted(() => {
         <!-- Section Fonctionnalités -->
         <section class="bg-blue-50 py-20" id="features">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de FAiQ</h2>
+                <h2 class="text-3xl font-bold text-center text-blue-800">Découvrez les fonctionnalités de EasyFAiQ</h2>
                 <div class="flex flex-col md:flex-row mt-8">
                     <!-- Fonctionnalité 1 -->
                     <div class="w-full md:w-1/2 lg:w-1/3 p-4 flex flex-col items-center">
@@ -182,7 +182,7 @@ onMounted(() => {
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl font-bold text-center text-blue-800">Comment ça marche</h2>
                 <p class="mt-4 text-center text-gray-600">
-                    Suivez ces étapes simples pour commencer à utiliser FAiQ et améliorer votre support client.
+                    Suivez ces étapes simples pour commencer à utiliser EasyFAiQ et améliorer votre support client.
                 </p>
                 <div class="flex flex-wrap mt-12">
                     <!-- Étape 1 -->
@@ -198,7 +198,7 @@ onMounted(() => {
                             </div>
                             <h3 class="text-xl font-semibold text-blue-800 mb-2 text-center">1. Inscrivez-vous.</h3>
                             <p class="text-gray-600 text-center">
-                                Inscrivez-vous sur FAiQ en quelques clics pour accéder à toutes les fonctionnalités.
+                                Inscrivez-vous sur EasyFAiQ en quelques clics pour accéder à toutes les fonctionnalités.
                             </p>
                         </div>
                     </div>
@@ -283,7 +283,7 @@ onMounted(() => {
         <!-- Section Avantages -->
         <section class="bg-blue-50 py-20" id="advantages">
             <div class="container mx-auto px-6">
-                <h2 class="text-4xl font-bold text-center text-blue-700 mb-12">Les avantages de <span class="text-blue-400">FAiQ</span> pour votre entreprise</h2>
+                <h2 class="text-4xl font-bold text-center text-blue-700 mb-12">Les avantages de <span class="text-blue-400">EasyFAiQ</span> pour votre entreprise</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                     <!-- Avantage 1 -->
                     <div class="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300">
@@ -358,16 +358,16 @@ onMounted(() => {
             </div>
         </section>
 
-        <!-- Section Essayez FAiQ dès maintenant -->
+        <!-- Section Essayez EasyFAiQ dès maintenant -->
         <section class="bg-white py-20" id="try">
             <div class="flex">
                 <!-- Contenu Texte -->
                 <div class="w-full flex flex-col items-center">
-                    <h2 class="text-4xl font-bold text-blue-600 mb-6 text-center">Essayez <span class="text-blue-300">FAiQ</span> dès maintenant !</h2>
+                    <h2 class="text-4xl font-bold text-blue-600 mb-6 text-center">Essayez <span class="text-blue-300">EasyFAiQ</span> dès maintenant !</h2>
                     <p class="text-blue-600 text-lg mb-6 md:w-1/2 text-center">
-                        Découvrez par vous-même la puissance de notre FAQ intelligente. Accédez à notre version de test et explorez toutes les fonctionnalités que FAiQ a à offrir.
+                        Découvrez par vous-même la puissance de notre FAQ intelligente. Accédez à notre version de test et explorez toutes les fonctionnalités que EasyFAiQ a à offrir.
                     </p>
-                    <button @click="$inertia.visit(route('public.ask.index', { team: 'faiq' }))"
+                    <button @click="$inertia.visit(route('public.ask.index', { team: 'EasyFAiQ' }))"
                             class="mx-auto md:mx-0 mt-6 px-8 py-3 text-white rounded-full bg-blue-700 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 animate-bounce-in">
                         Accéder à la version de test
                     </button>
@@ -378,7 +378,7 @@ onMounted(() => {
         <!-- Section CTA Finale -->
         <section class="bg-gradient-to-b from-blue-500 to-blue-600 py-20 overflow-hidden">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="text-4xl font-bold text-white animate-fade-in-down">Prêt à transformer votre support client avec FAiQ ?</h2>
+                <h2 class="text-4xl font-bold text-white animate-fade-in-down">Prêt à transformer votre support client avec EasyFAiQ ?</h2>
                 <button @click="$inertia.visit(route('register'))" class="mt-4 px-8 py-3 bg-blue-200 text-blue-600 hover:text-white hover:bg-blue-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50">
                     Inscrivez-vous dès maintenant
                 </button>

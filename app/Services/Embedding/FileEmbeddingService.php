@@ -72,7 +72,7 @@ class FileEmbeddingService
         $parser = new \Smalot\PdfParser\Parser();
         $pdf = $parser->parseFile(Storage::path($file->path));
         $text = mb_convert_encoding($pdf->getText(), 'UTF-8', 'UTF-8');
-        $split_text = str_split($text, 50000);
+        $split_text = str_split($text, 5000);
         $cleaned_text = [];
         $verify_service = new VerifyingService();
         foreach ($split_text as $sp) {

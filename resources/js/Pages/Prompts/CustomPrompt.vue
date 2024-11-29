@@ -42,7 +42,7 @@ const updatePrompt = () => {
         </template>
 
         <template #description>
-            Prompt FAiQ
+            Prompt EasyFAiQ
         </template>
 
         <template #form>

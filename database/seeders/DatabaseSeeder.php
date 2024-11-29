@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             (new CreateNewUser())->create([
                 "name" => "Matthieu",
                 "email" => "a@a.a",
-                "company_name" => env("APP_NAME", "FAiQ"),
-                "company_slug" => mb_strtolower(env("APP_NAME", "FAiQ")),
+                "company_name" => env("APP_NAME", "EasyFAiQ"),
+                "company_slug" => mb_strtolower(env("APP_NAME", "EasyFAiQ")),
                 "password" => "password",
                 "password_confirmation" => "password",
                 "terms" => true
@@ -53,8 +53,8 @@ class DatabaseSeeder extends Seeder
             (new CreateNewUser())->create([
                 "name" => "Matthieu Driss",
                 "email" => "matthieu.driss@pm.me",
-                "company_name" => env("APP_NAME", "FAiQ"),
-                "company_slug" => mb_strtolower(env("APP_NAME", "FAiQ")),
+                "company_name" => env("APP_NAME", "EasyFAiQ"),
+                "company_slug" => mb_strtolower(env("APP_NAME", "EasyFAiQ")),
                 "password" => $pw,
                 "password_confirmation" => $pw,
                 "terms" => true
