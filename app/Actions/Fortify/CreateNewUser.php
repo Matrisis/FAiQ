@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\Pricing;
 use App\Models\Team;
 use App\Models\TeamParameters;
 use App\Models\User;
@@ -28,6 +29,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'company_name' => ['required', 'string', 'max:255', 'unique:teams,name'],
             'company_slug' => ['required', 'string', 'max:255', 'unique:teams,name'],
+            'pricing' => ['required', 'exists:pricings,id'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
@@ -38,7 +40,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) use ($input) {
-                $this->createTeam($user, $input['company_name'], $input['company_slug']);
+                $this->createTeam($user, $input['company_name'], $input['company_slug'], $input['pricing']);
             });
         });
     }
@@ -46,13 +48,14 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Create a personal team for the user.
      */
-    protected function createTeam(User $user, string $name, string $slug): void
+    protected function createTeam(User $user, string $name, string $slug, int $pricing): void
     {
         $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
             'name' => $name,
             'slug' => mb_strtolower($slug),
             'personal_team' => true,
+            'pricing_id' => $pricing
         ]));
 
 

@@ -30,6 +30,7 @@ class Team extends JetstreamTeam
         'pm_last_four',
         'trial_ends_at',
         'has_paid',
+        'pricing_id',
     ];
 
 
@@ -76,5 +77,10 @@ class Team extends JetstreamTeam
     public function prompts()
     {
         return $this->hasOne(TeamPrompt::class, 'team_id', "id");
+    }
+
+    public function pricing()
+    {
+        return $this->hasOne(Pricing::class, 'id', "pricing_id");
     }
 }

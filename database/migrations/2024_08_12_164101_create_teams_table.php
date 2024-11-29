@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug');
             $table->boolean('locked')->default(true);
             $table->boolean('has_paid')->default(false);
+            $table->foreignId("pricing_id")->nullable()->constrained("pricings")->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

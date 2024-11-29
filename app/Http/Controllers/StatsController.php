@@ -43,8 +43,10 @@ class StatsController extends Controller
 
         $topVotedAnswers = $topVotedAnswersQuery->orderBy('votes', 'desc')->take(5)->get();
 
-        $priceOld = Pricing::where("name", "old")->first()->price;
-        $priceNew = Pricing::where("name", "new")->first()->price;
+        $pricing = Pricing::find($team->pricing_id);
+
+        $priceOld = $pricing->price_request;
+        $priceNew = $pricing->price_request;
 
         $newAnswersPrice = $newAnswers * $priceNew;
         $oldAnswersPrice = $oldAnswers * $priceOld;

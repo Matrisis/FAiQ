@@ -22,8 +22,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
-        Pricing::insert(["name" => "new", "price" => 0.03]);
-        Pricing::insert(["name" => "old", "price" => 0.01]);
+        Pricing::insert([
+            "name" => "Basique",
+            "price_init" => 3000.00,
+            "price_init_id" => "prod_RJ4eV4MCoC8G2x",
+            "price_request" => 0.25,
+            "price_request_id" => "prod_RJ4hExixDRovBN",
+        ],
+        [
+            "name" => "Flexible",
+            "price_init" => 0.00,
+            "price_init_id" => "prod_RJ4floTNGH9W4P",
+            "price_request" => 0.50,
+            "price_request_id" => "prod_RJ4g0dK8Imkcyi",
+        ]);
 
         if(app()->environment('local')) {
             (new CreateNewUser())->create([
@@ -33,6 +45,7 @@ class DatabaseSeeder extends Seeder
                 "company_slug" => mb_strtolower(env("APP_NAME", "EasyFAiQ")),
                 "password" => "password",
                 "password_confirmation" => "password",
+                "pricing" => Pricing::first()->id,
                 "terms" => true
             ]);
             User::first()->update([

@@ -5,7 +5,7 @@ import LandingLayout from "@/Layouts/LandingLayout.vue";
 const plans = ref([
     {
         name: 'Pack Basique',
-        price: '3 000€ + 0,09€ / requête',
+        price: '3 000€ + 0,25€ / question',
         features: [
             'Tarif fixe avec un coût additionnel par requête',
             'Idéal pour des besoins prévisibles',
@@ -17,7 +17,7 @@ const plans = ref([
     },
     {
         name: 'Option Flexible',
-        price: '0,15€ / requête',
+        price: '0,5€ / question',
         features: [
             'Paiement à l’usage, sans engagement',
             'Idéal pour des besoins variables',
