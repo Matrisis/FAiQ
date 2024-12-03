@@ -16,7 +16,7 @@ class BillingService
      */
     public static function checkout(Team $team)
     {
-        $pricing = Pricing::findOrFail($team->pricing_id);
+        $pricing = $team->pricing;
         $priceId = $pricing->price_init_id;
         $user = auth()->user();
 
@@ -74,11 +74,11 @@ class BillingService
      */
     public static function createSubscription(Team $team)
     {
-        $pricing = Pricing::findOrFail($team->pricing_id);
-        $subscriptionPriceId = $pricing->subscription_price_id;
+        $pricing = $team->pricing;
+        $subscriptionPriceId = $pricing->subscription_price_id; // Metered price ID
 
         try {
-            $team->newSubscription('default')
+            $team->newSubscription($pricing->name)
                 ->meteredPrice($subscriptionPriceId)
                 ->create();
 
@@ -92,24 +92,14 @@ class BillingService
     /**
      * Reports usage to Stripe for metered billing.
      */
-    public static function reportUsage(Team $team, int $quantity)
+    public static function reportUsage(Team $team, int $quantity): void
     {
-        $subscription = $team->subscription('default');
+        $subscription = $team->subscription($team->pricing->name);
 
         if (!$subscription) {
             throw new \Exception('Team does not have an active subscription.');
         }
 
-        $subscriptionItemId = $subscription->items()->firstWhere('stripe_price', $team->pricing->subscription_price_id)->stripe_id;
-
-        // Report the usage to Stripe
-        Cashier::stripe()->subscriptionItems->createUsageRecord(
-            $subscriptionItemId,
-            [
-                'quantity'  => $quantity,
-                'timestamp' => now()->timestamp,
-                'action'    => 'increment',
-            ]
-        );
+        $subscription->reportUsage();
     }
 }

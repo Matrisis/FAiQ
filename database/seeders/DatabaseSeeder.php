@@ -27,14 +27,14 @@ class DatabaseSeeder extends Seeder
             "init_id" => "prod_RJ4eV4MCoC8G2x",
             "price_init_id" => "price_1QQSVdAUBCE5hHWS8BS28N5o",
             "subscription_id" => "prod_RKYSHUSzXMoY8I",
-            "subscription_price_id" => "price_1QRtLjAUBCE5hHWSztBqi0w9",
+            "subscription_price_id" => "price_1QRtlpAUBCE5hHWSayo9i6yU",
         ]);
         Pricing::create([
             "name" => "Flexible",
             "init_id" => "prod_RJ4floTNGH9W4P",
             "price_init_id" => "price_1QQSWDAUBCE5hHWSHnVq4bon",
             "subscription_id" => "prod_RKYTfHv3sNdAWd",
-            "subscription_price_id" => "price_1QRtMuAUBCE5hHWSXOWKI5gM",
+            "subscription_price_id" => "price_1QRtpIAUBCE5hHWSBOqVpWMa",
         ]);
 
         if(app()->environment('local')) {
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
                 "company_slug" => mb_strtolower(env("APP_NAME", "EasyFAiQ")),
                 "password" => "password",
                 "password_confirmation" => "password",
-                "pricing" => Pricing::first()->id,
+                "pricing" => Pricing::find(1)->id,
                 "terms" => true
             ]);
             User::first()->update([
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
                 "is_admin" => true,
             ]);
             Team::first()->update([
-                "has_paid" => true,
+                "has_paid" => false,
                 "locked" => false,
             ]);
             TeamParameters::first()->update([
