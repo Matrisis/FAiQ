@@ -14,6 +14,7 @@ class RequestLogger extends Model
         'question',
         'new',
         'team_id',
+        'paid'
     ];
 
     public function team()

@@ -17,7 +17,7 @@ class Team extends JetstreamTeam
     use SoftDeletes;
 
     protected $with = [
-        'parameters', 'prompts'
+        'parameters', 'prompts', 'pricing'
     ];
 
     protected $fillable = [
@@ -66,7 +66,7 @@ class Team extends JetstreamTeam
 
     public function isAccessible(): bool
     {
-        return !$this->isLocked() && $this->hasPaid();
+        return !$this->isLocked() && $this->hasPaid() && $this->subscribed();
     }
 
     public function parameters()

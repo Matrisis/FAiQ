@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('ip');
             $table->string('question');
             $table->boolean('new')->default(true);
+            $table->boolean('paid')->default("false");
             $table->foreignId("team_id")->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

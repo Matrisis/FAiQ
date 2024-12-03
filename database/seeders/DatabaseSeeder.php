@@ -22,19 +22,19 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
-        Pricing::insert([
-            "name" => "Basique",
-            "price_init" => 3000.00,
-            "price_init_id" => "prod_RJ4eV4MCoC8G2x",
-            "price_request" => 0.25,
-            "price_request_id" => "prod_RJ4hExixDRovBN",
-        ],
-        [
+        Pricing::create([
+            "name" => "Pro",
+            "init_id" => "prod_RJ4eV4MCoC8G2x",
+            "price_init_id" => "price_1QQSVdAUBCE5hHWS8BS28N5o",
+            "subscription_id" => "prod_RKYSHUSzXMoY8I",
+            "subscription_price_id" => "price_1QRtLjAUBCE5hHWSztBqi0w9",
+        ]);
+        Pricing::create([
             "name" => "Flexible",
-            "price_init" => 0.00,
-            "price_init_id" => "prod_RJ4floTNGH9W4P",
-            "price_request" => 0.50,
-            "price_request_id" => "prod_RJ4g0dK8Imkcyi",
+            "init_id" => "prod_RJ4floTNGH9W4P",
+            "price_init_id" => "price_1QQSWDAUBCE5hHWSHnVq4bon",
+            "subscription_id" => "prod_RKYTfHv3sNdAWd",
+            "subscription_price_id" => "price_1QRtMuAUBCE5hHWSXOWKI5gM",
         ]);
 
         if(app()->environment('local')) {

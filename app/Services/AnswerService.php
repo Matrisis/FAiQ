@@ -70,14 +70,22 @@ class AnswerService
                 'answer' => mb_convert_encoding($previous_answers->first()->answer, "UTF-8", 'UTF-8'),
                 'answer_id' => $previous_answers->first()->id
             ], $channel);
-            RequestLoggerService::create($this->team, $question, $request->ip(), false);
+            try {
+                RequestLoggerService::create($this->team, $question, $request->ip(), false);
+            } catch (\Exception $e) {
+                print($e->getMessage() . "\n");
+            }
         } else {
             $job_service->askStream(
                 channel: $channel,
                 team: $this->team,
                 question: $question
             );
-            RequestLoggerService::create($this->team, $question, $request->ip(), true);
+            try {
+                RequestLoggerService::create($this->team, $question, $request->ip(), true);
+            } catch (\Exception $e) {
+                print($e->getMessage() . "\n");
+            }
         }
     }
 

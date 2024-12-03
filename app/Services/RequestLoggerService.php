@@ -7,12 +7,17 @@ use App\Models\Team;
 
 class RequestLoggerService
 {
+    /**
+     * @throws \Exception
+     */
     public static function create(Team $team, string $question, string $ip, bool $new = true) {
-       return RequestLogger::create([
+        BillingService::reportUsage($team, 1);
+        return RequestLogger::create([
            'team_id' => $team->id,
            'question' => $question,
            'ip' => $ip,
-           'new' => $new
+           'new' => $new,
+           'paid' => false
        ]);
     }
 

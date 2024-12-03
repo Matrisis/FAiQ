@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('pricings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->double('price_init');
+            $table->string('init_id');
             $table->string('price_init_id');
-            $table->double('price_request');
-            $table->string('price_request_id');
+            $table->string("subscription_id");
+            $table->string('subscription_price_id');
             $table->timestamps();
         });
     }
