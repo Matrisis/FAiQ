@@ -28,7 +28,7 @@ class SubscriptionController extends Controller
         return Inertia::render("Subscription", [
             "team" => $team,
             "active_subscription" => BillingService::isSubscribed($team),
-            "invoices" => $invoices->toJson(),
+            "invoices" => $invoices,
         ]);
     }
 
@@ -58,17 +58,4 @@ class SubscriptionController extends Controller
         return BillingService::subscribe($team);
     }
 
-    /**
-     * Download an invoice PDF.
-     */
-    public function downloadInvoice(Request $request, $invoiceId)
-    {
-        $user = Auth::user();
-        $team = $user->currentTeam;
-
-        return $team->downloadInvoice($invoiceId, [
-            'vendor'  => 'Your Company Name',
-            'product' => 'Your Product Name',
-        ]);
-    }
 }
