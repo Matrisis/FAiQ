@@ -35,7 +35,7 @@ const cancelSubscription = () => {
 </script>
 <template>
     <AppLayout title="Gestion de l'abonnement">
-        <div class="bg-gray-50 flex flex-col items-center py-12 sm:px-6 lg:px-8 w-full">
+        <div class="min-h-screen bg-gray-50 flex flex-col items-center py-12 sm:px-6 lg:px-8 w-full">
             <div class="flex flex-col max-w-md w-full space-y-8 w-full">
                 <div class="text-center">
                     <h2 class=" text-3xl font-extrabold text-gray-900">
