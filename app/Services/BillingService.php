@@ -44,6 +44,17 @@ class BillingService
         return $team->checkout([$priceId => 1], $sessionOptions);
     }
 
+    public static function invoices(Team $team): \Illuminate\Support\Collection|array
+    {
+        return $team->subscription($team->pricing->name)->invoices();
+    }
+
+    public static function isSubscribed(Team $team): bool
+    {
+        $subscription = $team->subscription($team->pricing->name);
+        return $team->subscribed($team->pricing->name) && !$subscription->canceled();
+    }
+
     /**
      * @throws \Exception
      */
@@ -124,7 +135,7 @@ class BillingService
 
     public static function cancelSubscription(Team $team): void
     {
-        $team->subscription->update(['canceled_at' => now()]);
+        $team->subscription($team->pricing->name)->cancelNowAndInvoice();
     }
 
 }

@@ -23,14 +23,14 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->withPersonalTeam()->create();
 
         Pricing::create([
-            "name" => "Pro",
+            "name" => "Abonnement Pro",
             "init_id" => "prod_RJ4eV4MCoC8G2x",
             "price_init_id" => "price_1QQSVdAUBCE5hHWS8BS28N5o",
             "subscription_id" => "prod_RKYSHUSzXMoY8I",
             "subscription_price_id" => "price_1QRtlpAUBCE5hHWSayo9i6yU",
         ]);
         Pricing::create([
-            "name" => "Flexible",
+            "name" => "Abonnement Flexible",
             "init_id" => "prod_RJ4floTNGH9W4P",
             "price_init_id" => "price_1QQSWDAUBCE5hHWSHnVq4bon",
             "subscription_id" => "prod_RKYTfHv3sNdAWd",

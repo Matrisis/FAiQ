@@ -170,6 +170,10 @@ const logout = () => {
                                             Profile
                                         </DropdownLink>
 
+                                        <DropdownLink :href="route('admin.subscription.index', {team: $page.props.auth.user.current_team})">
+                                            Facturation
+                                        </DropdownLink>
+
                                         <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
                                             API Tokens
                                         </DropdownLink>
@@ -273,6 +277,10 @@ const logout = () => {
                                 Profile
                             </ResponsiveNavLink>
 
+                            <ResponsiveNavLink :href="route('admin.subscription.index', {team: $page.props.auth.user.current_team})" :active="route().current('admin.subscription.index')">
+                                Facturation
+                            </ResponsiveNavLink>
+
                             <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens
                             </ResponsiveNavLink>
@@ -343,6 +351,23 @@ const logout = () => {
             <main>
                 <slot />
             </main>
+            <footer class="bg-gray-900 py-8">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <!-- Logo et Copyright -->
+                    <div class="text-gray-400 mb-4 md:mb-0">
+                        <span class="text-xl font-bold text-white">EasyFAiQ</span> &copy; {{ new Date().getFullYear() }}. Tous droits réservés.
+                    </div>
+                    <!-- Liens utiles -->
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Mentions légales</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Politique de confidentialité</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Conditions d'utilisation</a>
+                    </div>
+                </div>
+            </div>
+            </footer>
         </div>
     </div>
 </template>

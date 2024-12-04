@@ -9,6 +9,7 @@ use App\Http\Controllers\ManagementController;
 use App\Http\Controllers\Parameters;
 use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TeamPromptController;
 use App\Http\Middleware\LockedMiddleware;
 use App\Http\Middleware\Maintenance;
@@ -90,6 +91,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/{team}/checkout', [BillingController::class, 'checkout'])->name('checkout');
             Route::get('/{team}/success', [BillingController::class, 'success'])->name('success');
             Route::get('/{team}/cancel', [BillingController::class, 'cancel'])->name('cancel');
+        });
+
+        Route::prefix('/subscription')->name('subscription.')->group(function () {
+            Route::get('/{team}/', [SubscriptionController::class, 'index'])->name('index');
+            Route::get('/{team}/cancel', [SubscriptionController::class, 'cancel'])->name('cancel');
+            Route::get('/{team}/resume', [SubscriptionController::class, 'resume'])->name('resume');
+            Route::post('/{team}/refund', [SubscriptionController::class, 'refund'])->name('refund');
+            Route::get('/{team}/invoice/{invoiceId}', [SubscriptionController::class, 'downloadInvoice'])->name('download');
         });
     });
 

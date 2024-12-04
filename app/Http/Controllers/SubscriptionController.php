@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use App\Services\BillingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Exception\ApiErrorException;
@@ -15,80 +17,45 @@ class SubscriptionController extends Controller
     /**
      * Show subscription details and invoices.
      */
-    public function index(Request $request)
+    public function index(Request $request, Team $team)
     {
-        $user = Auth::user();
-        $team = $user->currentTeam;
-        $subscription = $team->subscription('default');
-
-        $invoices = $team->invoices();
-
-        return response()->json([
-            'subscription' => $subscription,
-            'invoices'     => $invoices,
+        if ($request->user()->cannot('view', $team)) {
+            abort(403);
+        }
+        $team = Team::find($team->id);
+        $subscription = $team->subscription($team->pricing->name);
+        $invoices = BillingService::invoices($team);
+        return Inertia::render("Subscription", [
+            "team" => $team,
+            "active_subscription" => BillingService::isSubscribed($team),
+            "invoices" => $invoices->toJson(),
         ]);
     }
 
     /**
      * Cancel the subscription.
      */
-    public function cancel(Request $request)
+    public function cancel(Request $request, Team $team)
     {
-        $user = Auth::user();
-        $team = $user->currentTeam;
-        $subscription = $team->subscription('default');
-
-        if (!$subscription) {
-            return response()->json(['message' => 'No active subscription found.'], 404);
+        if ($request->user()->cannot('view', $team)) {
+            abort(403);
         }
-
-        $subscription->cancel();
-
-        return response()->json(['message' => 'Subscription cancelled successfully.']);
+        BillingService::cancelSubscription($team);
+        return back();
     }
 
     /**
      * Resume the subscription.
      */
-    public function resume(Request $request)
+    public function resume(Request $request, Team $team)
     {
-        $user = Auth::user();
-        $team = $user->currentTeam;
-        $subscription = $team->subscription('default');
-
-        if (!$subscription || !$subscription->onGracePeriod()) {
-            return response()->json(['message' => 'Cannot resume subscription.'], 400);
+        if ($request->user()->cannot('view', $team)) {
+            abort(403);
         }
-
-        $subscription->resume();
-
-        return response()->json(['message' => 'Subscription resumed successfully.']);
-    }
-
-    /**
-     * Request a refund for the last charge.
-     */
-    public function refund(Request $request)
-    {
-        $user = Auth::user();
-        $team = $user->currentTeam;
-        $latestInvoice = $team->invoicesIncludingPending()->first();
-
-        if (!$latestInvoice) {
-            return response()->json(['message' => 'No invoices found to refund.'], 404);
+        if(BillingService::isSubscribed($team)) {
+            return redirect()->route('dashboard');
         }
-
-        $paymentIntentId = $latestInvoice->asStripeInvoice()->payment_intent;
-
-        try {
-            $refund = Cashier::stripe()->refunds->create([
-                'payment_intent' => $paymentIntentId,
-            ]);
-
-            return response()->json(['message' => 'Refund requested successfully.', 'refund' => $refund]);
-        } catch (ApiErrorException $e) {
-            return response()->json(['message' => 'Failed to process refund.', 'error' => $e->getMessage()], 500);
-        }
+        return BillingService::subscribe($team);
     }
 
     /**
