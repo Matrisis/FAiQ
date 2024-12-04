@@ -5,6 +5,7 @@ namespace App\Actions\Jetstream;
 use App\Models\Team;
 use App\Models\TeamParameters;
 use App\Models\User;
+use App\Services\BillingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Contracts\DeletesTeams;
@@ -52,6 +53,7 @@ class DeleteUser implements DeletesUsers
                 $team_parameters->accessible = false;
                 $team_parameters->save();
             }
+            BillingService::cancelSubscription($team);
             $team->delete();
         });
     }

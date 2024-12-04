@@ -54,6 +54,13 @@ class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
+
+    public function hasActiveSubscription()
+    {
+        $sub = $this->subscription($this->pricing->name);
+        return $sub && $sub->active();
+    }
+
     public function hasPaid(): bool
     {
         return $this->has_paid;

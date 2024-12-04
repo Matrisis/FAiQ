@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Exceptions\IncompletePayment;
+use Stripe\Subscription;
 
 class BillingService
 {
@@ -44,9 +45,23 @@ class BillingService
     }
 
     /**
+     * @throws \Exception
+     */
+    public static function subscribe(Team $team)
+    {
+        $pricing = $team->pricing;
+        $subscriptionPriceId = $pricing->subscription_price_id; // Metered price ID
+        return $team->newSubscription($pricing->name)
+            ->meteredPrice($subscriptionPriceId)
+        ->checkout([
+            'success_url' => route('admin.billing.success', ['team' => $team->id]) . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('admin.billing.cancel', ['team' => $team->id]),
+        ]);
+    }
+    /**
      * Handle the success callback after the one-time fee payment.
      */
-    public static function success(Request $request, Team $team): \Illuminate\Http\RedirectResponse
+    public static function success(Request $request, Team $team)
     {
         $sessionId = $request->get('session_id');
 
@@ -60,10 +75,14 @@ class BillingService
             abort(422, 'Payment not successful');
         }
 
-        // Payment was successful; create the metered subscription
-        self::createSubscription($team);
 
-        // Update the team to indicate the one-time fee has been paid
+        // Payment was successful; create the metered subscription
+        try {
+            self::createSubscription($team);
+        } catch (\Exception $e) {
+            return self::subscribe($team);
+        }
+
         $team->update(['has_paid' => true]);
 
         return Redirect::route('admin.billing.index', ['team' => $team->id]);
@@ -102,4 +121,10 @@ class BillingService
 
         $subscription->reportUsage();
     }
+
+    public static function cancelSubscription(Team $team): void
+    {
+        $team->subscription->update(['canceled_at' => now()]);
+    }
+
 }

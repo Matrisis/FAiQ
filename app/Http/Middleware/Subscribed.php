@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\BillingService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,7 +10,10 @@ use App\Models\Team;
 
 class Subscribed
 {
-    public function handle(Request $request, Closure $next): Response
+    /**
+     * @throws \Exception
+     */
+    public function handle(Request $request, Closure $next)
     {
 
         $team = Team::find($request->user()->current_team_id);
@@ -22,6 +26,10 @@ class Subscribed
 
         if (! $team->hasPaid()) {
             return redirect()->route('admin.billing.index', ['team' => $team->id]);
+        }
+
+        if (! $team->subscribed($team->pricing->name)) {
+            return BillingService::subscribe($team);
         }
 
         return $next($request);

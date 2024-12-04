@@ -71,6 +71,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 Route::prefix("questions")->name("questions.")->group(function () {
                     Route::get("/", [QuestionsController::class, 'get'])->name("get");
                 });
+
+
             });
 
             Route::prefix('/management')->name('management.')->group(function () {
@@ -105,7 +107,7 @@ Route::middleware([])->prefix("/{team}")->name("public.")->group(function () {
     Route::prefix('/')->name('ask.')->group(function () {
         Route::get("/maintenance", function (string $team) {
             $team = Team::where('slug', $team)->with('parameters')->firstOrFail();
-            if ($team && $team->parameters->accessible) {
+            if ($team && $team->parameters->accessible && $team->subscribed($team->pricing->name)) {
                 return redirect()->route('public.ask.index', ['team' => $team->slug]);
             }
             return Inertia::render("Maintenance");
