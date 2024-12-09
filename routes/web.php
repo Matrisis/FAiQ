@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\AskController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManagementController;
@@ -25,7 +26,13 @@ Route::prefix("/")->name("landing.")->group(function () {
     Route::get('/pricing', function () {
         return Inertia::render('Welcome/Pricing');
     })->name("pricing");
+    Route::prefix('/contact')->name("contact.")->group(function () {
+        Route::get('/', [ContactController::class, 'index'])->name('index');
+        Route::post('/', [ContactController::class, 'create'])->name('create');
+    });
 });
+
+
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', Subscribed::class, LockedMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

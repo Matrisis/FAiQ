@@ -26,7 +26,7 @@ const resumeSubscription = () => {
 }
 
 const cancelSubscription = () => {
-    if (props.active_subscription && confirm("Voulez-vous annuler votre abonnement ?")) {
+    if (props.active_subscription && confirm("Voulez-vous    annuler votre abonnement ?")) {
         window.location.href = route('admin.subscription.cancel', {team: props.team.id})
     } else
         alert("Abonnement non actif")
