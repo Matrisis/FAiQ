@@ -27,13 +27,17 @@ const scrollTo = (id) => {
                     <a :href="route('landing.home')" class="text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Accueil</a>
                     <a :href="route('landing.pricing')" class="text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Tarifs</a>
                     <a target="_blank" :href="route('public.ask.index', {team: 'EasyFAiQ'})" class="text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Essayer</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Nous contacter</a>
+                    <a :href="route('landing.contact.index')" class="text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Nous contacter</a>
                 </nav>
                 <!-- Bouton Inscription pour écrans larges -->
                 <div class="hidden md:block">
                     <button @click="$inertia.visit(route('register'))"
                             class="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                         S'inscrire
+                    </button>
+                    <button @click="$inertia.visit(route('login'))"
+                            class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                        Connexion
                     </button>
                 </div>
                 <!-- Menu Mobile -->
@@ -53,10 +57,14 @@ const scrollTo = (id) => {
                 <nav class="px-6 pt-4 pb-4 space-y-6" >
                     <a :href="route('landing.pricing')" class="block text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Tarifs</a>
                     <a :href="route('public.ask.index', {team: 'EasyFAiQ'})" class="block text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Essayer</a>
-                    <a :href="route('landing.pricing')" class="block text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Nous contacter</a>
+                    <a :href="route('landing.contact.index')" class="block text-gray-700 hover:text-blue-700 cursor-pointer hover:underline">Nous contacter</a>
                     <button @click="$inertia.visit(route('register')); isMenuOpen = false"
                             class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
                         S'inscrire
+                    </button>
+                    <button @click="$inertia.visit(route('login')); isMenuOpen = false"
+                            class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                        Connexion
                     </button>
                 </nav>
             </div>
@@ -74,7 +82,7 @@ const scrollTo = (id) => {
                     </div>
                     <!-- Liens utiles -->
                     <div class="flex space-x-6">
-                        <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                        <a :href="route('landing.contact.index')" class="text-gray-400 hover:text-white">Contact</a>
                         <a href="#" class="text-gray-400 hover:text-white">Mentions légales</a>
                         <a href="#" class="text-gray-400 hover:text-white">Politique de confidentialité</a>
                         <a href="#" class="text-gray-400 hover:text-white">Conditions d'utilisation</a>
