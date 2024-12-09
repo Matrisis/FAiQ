@@ -6,6 +6,7 @@ use App\Models\Contact;
 use App\Mail\Contact as ContactMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
@@ -20,14 +21,26 @@ class ContactController extends Controller
     }
 
     public function create(Request $request) {
-        $validated = $request->validate([
-            'name' => ['required', 'max:50', 'string'],
-            'email' => ['required', 'max:50', 'email'],
-            'company' => ['max:50', 'string'],
-            'phone' => ['required', 'max:50', 'min:10'],
-            'subject' => ['required', 'max:50', 'string'],
-            'message' => ['required'],
-        ]);
+        if (Auth::check()) {
+            $validated = $request->validate([
+                'phone' => ['required', 'max:50', 'min:10'],
+                'subject' => ['required', 'max:50', 'string'],
+                'message' => ['required'],
+            ]);
+            $validated['name'] = Auth::user()->name;
+            $validated['email'] = Auth::user()->email;
+            $validated['company'] = Auth::user()->currentTeam->name;
+            Contact::create($validated);
+        } else {
+            $validated = $request->validate([
+                'name' => ['required', 'max:50', 'string'],
+                'email' => ['required', 'max:50', 'email'],
+                'company' => ['max:50', 'string'],
+                'phone' => ['required', 'max:50', 'min:10'],
+                'subject' => ['required', 'max:50', 'string'],
+                'message' => ['required'],
+            ]);
+        }
         Contact::create($validated);
         // Here send email
 

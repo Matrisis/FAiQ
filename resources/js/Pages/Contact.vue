@@ -18,9 +18,9 @@ const props = defineProps({
 })
 
 const form = reactive({
-    name: '',
-    email: '',
-    company: '',
+    name: props.user.name,
+    email: props.user.email,
+    company: props.team.name,
     phone: '',
     subject: '',
     message: ''
@@ -47,7 +47,6 @@ function submit() {
 
 <template>
 
-    {{ user }}
     <LandingLayout v-if="user == null" title="Contact">
         <div class="py-12">
             <div class="min-h-screen max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-center ">
@@ -98,7 +97,7 @@ function submit() {
     <AppLayout v-else title="Contact">
         <div class="py-12">
             <div class="min-h-screen max-w-7xl mx-auto sm:px-6 lg:px-8 flex justify-center ">
-                <div class="p-4 mx-auto max-w-xl bg-white font-[sans-serif]">
+                <div class="p-4 mx-auto max-w-xl font-[sans-serif]">
                     <h1 class="text-3xl text-gray-800 font-extrabold text-center">Contactez-nous</h1>
                     <div class="py-4 flex justify-center" v-if="failed">
                         <div class="text-red-500">
@@ -113,14 +112,17 @@ function submit() {
                     <form class="mt-6" @submit.prevent="submit">
                         <input type='text' placeholder='Nom'
                                v-model="form.name"
-                               class="w-full rounded-md py-3 px-4 text-gray-800 bg-gray-100 focus:bg-transparent text-sm outline-blue-500"
+                               class="opacity-50 w-full rounded-md py-3 px-4 text-gray-800 bg-gray-100 focus:bg-transparent text-sm outline-blue-500"
+                               disabled
                                required />
                         <input type='email' placeholder='Email'
-                               class="mt-4 w-full rounded-md py-3 px-4 text-gray-800 bg-gray-100 focus:bg-transparent text-sm outline-blue-500"
+                               class="opacity-50 mt-4 w-full rounded-md py-3 px-4 text-gray-800 bg-gray-100 focus:bg-transparent text-sm outline-blue-500"
                                v-model="form.email"
+                               disabled
                                required />
                         <input type='text' placeholder='Entreprise'
-                               class="mt-4 w-full rounded-md py-3 px-4 text-gray-800 bg-gray-100 focus:bg-transparent text-sm outline-blue-500"
+                               class="opacity-50 mt-4 w-full rounded-md py-3 px-4 text-gray-800 bg-gray-100 focus:bg-transparent text-sm outline-blue-500"
+                               disabled
                                v-model="form.company"
                         />
                         <input type='tel' placeholder='Téléphone'
