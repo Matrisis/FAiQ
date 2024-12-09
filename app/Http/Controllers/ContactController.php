@@ -42,9 +42,7 @@ class ContactController extends Controller
             ]);
         }
         Contact::create($validated);
-        // Here send email
 
-        // return response()->json(['success' => true]);
         Mail::to(User::first()->email)
             ->send(new ContactMail(
                 name:  $validated['name'],
@@ -52,7 +50,8 @@ class ContactController extends Controller
                 company:  $validated['company'],
                 contactSubject:  $validated['subject'],
                 phone:  $validated['phone'],
-                message:  $validated['message'])
+                message:  $validated['message'],
+                loggedIn: Auth::check()),
             );
 
         return response()->json(['success' => true]);

@@ -22,7 +22,8 @@ class Contact extends Mailable
         public string $company,
         public string $contactSubject,
         public string $phone,
-        public string $message
+        public string $message,
+        public bool $loggedIn
     )
     {
         //

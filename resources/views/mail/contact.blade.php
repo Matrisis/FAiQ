@@ -1,11 +1,11 @@
 <x-mail::message>
-
-    Bonjour,
-
     Nom: {{ $name }}
     Email: {{ $email }}
     Company: {{ $company }}
     Phone: {{ $phone }}
+    Connecté : {{ $loggedIn ? 'Oui' : 'Non' }}
+
+    Sujet : {{ $contactSubject }}
 
     Message:
 
