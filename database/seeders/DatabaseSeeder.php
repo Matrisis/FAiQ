@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         if(app()->environment('local')) {
             (new CreateNewUser())->create([
                 "name" => "Matthieu",
-                "email" => "a@a.a",
+                "email" => "matthieu.driss@pm.me",
                 "company_name" => env("APP_NAME", "EasyFAiQ"),
                 "company_slug" => mb_strtolower(env("APP_NAME", "EasyFAiQ")),
                 "password" => "password",

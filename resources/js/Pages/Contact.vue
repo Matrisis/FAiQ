@@ -18,9 +18,9 @@ const props = defineProps({
 })
 
 const form = reactive({
-    name: props.user.name,
-    email: props.user.email,
-    company: props.team.name,
+    name: props.user ? props.user.name : '',
+    email: props.email ? props.user.email : '',
+    company:  props.team ? props.team.name : '',
     phone: '',
     subject: '',
     message: ''
