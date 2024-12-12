@@ -12,7 +12,8 @@ const plans = ref([
             'Support standard inclus',
         ],
         buttonText: 'Commencer',
-        buttonLink: '/register',
+        buttonLink:  route("register"),
+
         popular: false,
     },
     {
@@ -24,7 +25,7 @@ const plans = ref([
             'Arrêtez quand vous voulez',
         ],
         buttonText: 'Choisir ce plan',
-        buttonLink: '/register',
+        buttonLink: route("register"),
         popular: true,
     },
     {
@@ -36,7 +37,7 @@ const plans = ref([
             'Support 24/7 premium',
         ],
         buttonText: 'Contactez-nous',
-        buttonLink: '/contact',
+        buttonLink: route("landing.contact.index"),
         popular: false,
     },
 ]);
@@ -86,12 +87,13 @@ const plans = ref([
                             </ul>
                         </div>
                         <div class="text-center">
-                            <button
-                                @click="$router.push(plan.buttonLink)"
-                                class="px-6 py-3 bg-blue-600 text-white text-lg rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-                            >
-                                {{ plan.buttonText }}
-                            </button>
+                            <a :href="plan.buttonLink">
+                                <button
+                                    class="px-6 py-3 bg-blue-600 text-white text-lg rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                                >
+                                    {{ plan.buttonText }}
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
