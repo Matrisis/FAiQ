@@ -9,8 +9,6 @@ const props = defineProps({
     invoices: Object
 });
 
-console.log(props.invoices)
-
 
 const headers = [
     { text: "Numero", value: "number", sortable: true},
@@ -72,6 +70,7 @@ const cancelSubscription = () => {
 
                 <div class="flex flex-col justify-center items-center w-full">
                     <EasyDataTable
+                        v-if="props.invoices"
                         table-class-name="customize-table"
                         buttons-pagination
                         :headers="headers"

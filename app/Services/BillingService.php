@@ -44,9 +44,9 @@ class BillingService
         return $team->checkout([$priceId => 1], $sessionOptions);
     }
 
-    public static function invoices(Team $team): \Illuminate\Support\Collection|array
+    public static function invoices(Team $team): \Illuminate\Support\Collection|array|null
     {
-        return $team->subscription($team->pricing->name)->invoices();
+        return $team->subscription($team->pricing->name)?->invoices();
     }
 
     public static function isSubscribed(Team $team): bool
