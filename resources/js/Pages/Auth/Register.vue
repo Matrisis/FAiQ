@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import LandingLayout from "@/Layouts/LandingLayout.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import Checkbox from "@/Components/Checkbox.vue";
 
 const getURLParams = (key) => {
     const params = new URLSearchParams(window.location.search);
@@ -150,7 +152,6 @@ const submit = () => {
                 <div class="flex flex-col items-center p-8">
                     <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Choisissez un forfait</h2>
                     <div class="w-full text-center text-red-600 text-sm" v-if="form.errors.email">{{ form.errors.email }}</div>
-                    Forfait {{ form.pricing_id }}
                     <div class="flex flex-col lg:flex-row flex-wrap justify-center items-center">
                         <div
                             v-for="plan in plans"
@@ -179,6 +180,18 @@ const submit = () => {
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                    <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
+                        <InputLabel for="terms">
+                            <div class="flex items-center">
+                                <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
+
+                                <div class="ms-2">
+                                    I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">Privacy Policy</a>
+                                </div>
+                            </div>
+                            <InputError class="mt-2" :message="form.errors.terms" />
+                        </InputLabel>
                     </div>
                     <div class="mt-8 text-center">
                         <button

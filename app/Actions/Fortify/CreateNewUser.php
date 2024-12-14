@@ -29,7 +29,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'company_name' => ['required', 'string', 'max:255', 'unique:teams,name'],
             'company_slug' => ['required', 'string', 'max:255', 'unique:teams,name'],
-            'pricing_ic' => ['required', 'exists:pricings,id'],
+            'pricing_id' => ['required', 'exists:pricings,id'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
