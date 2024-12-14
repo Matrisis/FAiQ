@@ -4,6 +4,7 @@ import { useForm } from "@inertiajs/vue3";
 import LandingLayout from "@/Layouts/LandingLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import Checkbox from "@/Components/Checkbox.vue";
+import InputError from "@/Components/InputError.vue";
 
 const getURLParams = (key) => {
     const params = new URLSearchParams(window.location.search);
@@ -44,6 +45,7 @@ const form = useForm({
     password: "",
     password_confirmation: "",
     pricing_id: getURLParams("forfait"),
+    terms: false,
 });
 
 const submit = () => {
@@ -127,7 +129,6 @@ const submit = () => {
                         <label class="block text-gray-700 font-semibold mb-2">Slug de l'entreprise</label>
                         <input
                             required
-                            autocomplete="organization"
                             v-model="form.company_slug"
                             type="text"
                             placeholder="Slug de l'entreprise"
@@ -185,12 +186,11 @@ const submit = () => {
                         <InputLabel for="terms">
                             <div class="flex items-center">
                                 <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
-
                                 <div class="ms-2">
                                     I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">Privacy Policy</a>
                                 </div>
                             </div>
-                            <InputError class="mt-2" :message="form.errors.terms" />
+                            <div class="text-red-600 text-sm" v-if="form.errors.terms">{{ form.errors.terms }}</div>
                         </InputLabel>
                     </div>
                     <div class="mt-8 text-center">

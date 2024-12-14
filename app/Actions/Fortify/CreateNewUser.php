@@ -40,7 +40,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) use ($input) {
-                $this->createTeam($user, $input['company_name'], $input['company_slug'], $input['pricing']);
+                $this->createTeam($user, $input['company_name'], $input['company_slug'], $input['pricing_id']);
             });
         });
     }
@@ -48,14 +48,14 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Create a personal team for the user.
      */
-    protected function createTeam(User $user, string $name, string $slug, int $pricing): void
+    protected function createTeam(User $user, string $name, string $slug, int $pricing_id): void
     {
         $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
             'name' => $name,
             'slug' => mb_strtolower($slug),
             'personal_team' => true,
-            'pricing_id' => $pricing
+            'pricing_id' => $pricing_id
         ]));
 
 
