@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Pricing;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Laravel\Cashier\Cashier;
@@ -60,14 +61,26 @@ class BillingService
      */
     public static function subscribe(Team $team)
     {
+        $user = $team->owner()->first();
+        if (!$team->hasStripeId()) {
+            $team->createAsStripeCustomer([
+                'email' => $user->email,
+            ]);
+        } else {
+            // Update the Stripe customer's email if it has changed
+            $team->updateStripeCustomer([
+                'email' => $user->email,
+            ]);
+        }
         $pricing = $team->pricing;
-        $subscriptionPriceId = $pricing->subscription_price_id; // Metered price ID
-        return $team->newSubscription($pricing->name)
-            ->meteredPrice($subscriptionPriceId)
-        ->checkout([
-            'success_url' => route('admin.billing.success', ['team' => $team->id]) . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('admin.billing.cancel', ['team' => $team->id]),
-        ]);
+        return $team->newSubscription($pricing->name, $pricing->subscription_price_id)
+            ->meteredPrice($pricing->meter_price_id)
+            ->trialDays(7)
+            ->allowPromotionCodes()
+            ->checkout([
+                'success_url' => route('admin.billing.success', ['team' => $team->id]) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('admin.billing.cancel', ['team' => $team->id]),
+            ]);
     }
     /**
      * Handle the success callback after the one-time fee payment.
@@ -84,14 +97,6 @@ class BillingService
 
         if ($session->payment_status !== 'paid') {
             abort(422, 'Payment not successful');
-        }
-
-
-        // Payment was successful; create the metered subscription
-        try {
-            self::createSubscription($team);
-        } catch (\Exception $e) {
-            return self::subscribe($team);
         }
 
         $team->update(['has_paid' => true]);
@@ -131,6 +136,17 @@ class BillingService
         }
 
         $subscription->reportUsage();
+    }
+
+
+    public static function getUsage(Team $team)
+    {
+        $subscription = $team->subscription($team->pricing->name);
+
+        if (!$subscription) {
+            throw new \Exception('Team does not have an active subscription.');
+        }
+        return $team->subscription($team->pricing->name)->usageRecords()->first();
     }
 
     public static function cancelSubscription(Team $team): void

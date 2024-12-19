@@ -18,6 +18,11 @@ use App\Http\Middleware\Subscribed;
 use App\Models\Team;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Cashier\Http\Controllers\WebhookController;
+
+// Webhook stipe
+Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
+
 
 Route::prefix("/")->name("landing.")->group(function () {
     Route::get('/', function () {

@@ -28,9 +28,11 @@ class Subscribed
             return redirect()->route('admin.billing.index', ['team' => $team->id]);
         }
 
+        /*
         if (! $team->subscribed($team->pricing->name)) {
-            return BillingService::subscribe($team);
+            return redirect()->route('admin.billing.index', ['team' => $team->id]);
         }
+        */
 
         return $next($request);
     }

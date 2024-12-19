@@ -37,7 +37,8 @@ class BillingController extends Controller
             abort(403);
         }
 
-        return BillingService::checkout($team);
+        //return BillingService::checkout($team);
+        return BillingService::subscribe($team);
     }
 
     /**

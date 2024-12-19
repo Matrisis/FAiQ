@@ -23,18 +23,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->withPersonalTeam()->create();
 
         Pricing::create([
-            "name" => "Abonnement Pro",
-            "init_id" => "prod_RJ4eV4MCoC8G2x",
-            "price_init_id" => "price_1QQSVdAUBCE5hHWS8BS28N5o",
-            "subscription_id" => "prod_RKYSHUSzXMoY8I",
-            "subscription_price_id" => "price_1QRtlpAUBCE5hHWSayo9i6yU",
-        ]);
-        Pricing::create([
-            "name" => "Abonnement Flexible",
-            "init_id" => "prod_RJ4floTNGH9W4P",
-            "price_init_id" => "price_1QQSWDAUBCE5hHWSHnVq4bon",
-            "subscription_id" => "prod_RKYTfHv3sNdAWd",
-            "subscription_price_id" => "price_1QRtpIAUBCE5hHWSBOqVpWMa",
+            "name" => "Debutant",
+            "subscription_id" => "prod_RPs8XHbO4HiRkA",
+            "subscription_price_id" => "price_1QX2OQAUBCE5hHWSW65fmG5x",
+            "meter_price_id" => "price_1QX2P9AUBCE5hHWSHaneckr2",
         ]);
 
         if(app()->environment('local')) {
@@ -45,7 +37,7 @@ class DatabaseSeeder extends Seeder
                 "company_slug" => mb_strtolower(env("APP_NAME", "EasyFAiQ")),
                 "password" => "password",
                 "password_confirmation" => "password",
-                "pricing" => Pricing::find(1)->id,
+                "pricing_id" => Pricing::find(1)->id,
                 "terms" => true
             ]);
             User::first()->update([
