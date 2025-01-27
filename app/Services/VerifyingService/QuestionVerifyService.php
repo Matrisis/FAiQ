@@ -6,15 +6,38 @@ use App\Models\Embedding\File;
 use App\Models\FileQuestions;
 use App\Services\Chatting\ChatService;
 
+/**
+ * Service for managing question generation and verification
+ * 
+ * This service handles:
+ * - Generating questions from content
+ * - Verifying question quality
+ * - Validating question answerability
+ */
 class QuestionVerifyService
 {
     private string $model;
 
+    /**
+     * Create a new QuestionVerifyService instance
+     *
+     * @param string $model AI model to use
+     */
     public function __construct(string $model = "gpt-4o-mini")
     {
         $this->model = $model;
     }
 
+    /**
+     * Generate questions from text
+     *
+     * @param string $text Source text
+     * @param File $file Associated file
+     * @param string|null $custom_prompt Custom generation prompt
+     * @param int $nb_questions Number of questions to generate
+     * @param int|null $max_tokens Maximum response length
+     * @return FileQuestions|null Generated questions
+     */
     public function create(string $text, File $file, string $custom_prompt = null, int $nb_questions = 3, int $max_tokens = null) : ?FileQuestions
     {
         try {
@@ -49,6 +72,13 @@ class QuestionVerifyService
         }
     }
 
+    /**
+     * Verify questions against text
+     *
+     * @param FileQuestions $file_question Questions to verify
+     * @param string $text Content to verify against
+     * @return string Verification result
+     */
     public function check(FileQuestions $file_question, string $text) : string
     {
         $questions = $file_question->questions;

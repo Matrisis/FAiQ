@@ -14,17 +14,40 @@ use http\Encoding\Stream\Inflate;
 use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
 
+/**
+ * Service for managing file content embeddings
+ * 
+ * This service handles:
+ * - Processing different file types
+ * - Extracting content for embedding
+ * - Managing file-specific embedding storage
+ * - Handling file import/export operations
+ */
 class FileEmbeddingService
 {
     private Team $team;
     private string $model;
 
+    /**
+     * Create a new FileEmbeddingService instance
+     *
+     * @param Team $team Team context
+     * @param string $model AI model to use
+     */
     public function __construct(Team $team, $model = "gpt-4o-mini")
     {
         $this->team = $team;
         $this->model = $model;
     }
 
+    /**
+     * Get processable lines from file
+     *
+     * @param File $file File to process
+     * @param int $tries Number of processing attempts
+     * @param string|null $file_type Override file type
+     * @return array Processed lines
+     */
     public function getLines(File $file, int $tries = 5, string $file_type = null) : array
     {
         $file_path = Storage::path($file->path);
@@ -33,6 +56,13 @@ class FileEmbeddingService
         return $this->$function($file, $tries);
     }
 
+    /**
+     * Import file content with embeddings
+     *
+     * @param File $file Target file
+     * @param array $content Array of content parts with embeddings
+     * @return bool Success status
+     */
     public function import(File $file, array $content): bool
     {
         try {
@@ -55,7 +85,13 @@ class FileEmbeddingService
         }
     }
 
-
+    /**
+     * Upload file to OpenAI for processing
+     *
+     * @param File $file File to upload
+     * @param int $tries Number of attempts
+     * @return array Upload response
+     */
     private function fileUpload(File $file, int $tries) : array {
         $response = OpenAI::files()->upload([
             'purpose' => 'search',
@@ -65,7 +101,12 @@ class FileEmbeddingService
     }
 
     /**
-     * @throws \Exception
+     * Process PDF file
+     *
+     * @param File $file PDF file to process
+     * @param int $tries Number of processing attempts
+     * @return array Processed content lines
+     * @throws \Exception On processing failure
      */
     private function getPDF(File $file, int $tries) : array
     {
@@ -104,6 +145,14 @@ class FileEmbeddingService
         return $cleaned_text;
     }
 
+    /**
+     * Clean and format text content
+     *
+     * @param FileQuestions $file_question Associated questions
+     * @param string $text Text to clean
+     * @param int $tries Number of cleaning attempts
+     * @return string Cleaned text
+     */
     private function cleanText(FileQuestions $file_question, string $text, int $tries)
     {
         print("Cleaning text..." . PHP_EOL);

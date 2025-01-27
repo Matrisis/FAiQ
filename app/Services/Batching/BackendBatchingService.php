@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use OpenAI\Laravel\Facades\OpenAI;
 
+/**
+ * Backend service for managing batch processing operations
+ * 
+ * This service handles the low-level batch processing operations including:
+ * - Creating and managing batch jobs
+ * - Processing batch lines
+ * - Handling OpenAI batch API interactions
+ * - Managing file operations for batch processing
+ */
 class BackendBatchingService
 {
     private const METHOD_POST = 'POST';
@@ -23,12 +32,27 @@ class BackendBatchingService
     private Team $team;
     private string $duration;
 
+    /**
+     * Create a new BackendBatchingService instance
+     *
+     * @param Team $team Team context for batch operations
+     * @param string $duration Duration window for batch processing
+     */
     public function __construct(Team $team, string $duration = "24h")
     {
         $this->team = $team;
         $this->duration = $duration;
     }
 
+    /**
+     * Create a new batch processing request
+     *
+     * @param string $action Type of action ('embedding', 'chatting')
+     * @param string $type Content type ('text', 'file')
+     * @param array|string $content Content to process
+     * @return bool Success status
+     * @throws \Exception If action or type not supported
+     */
     public function create(string $action, string $type, array|string $content) : bool
     {
         throw_if(!in_array($action, ["embedding", "chatting"]), new \Exception("Action not supported"));
@@ -46,6 +70,12 @@ class BackendBatchingService
         }
     }
 
+    /**
+     * Publish a batch for processing
+     *
+     * @param string $type Type of batch to publish
+     * @return bool Success status
+     */
     public function publish(string $type) : bool
     {
         try {
@@ -77,6 +107,11 @@ class BackendBatchingService
         }
     }
 
+    /**
+     * Retrieve and process completed batches
+     *
+     * @return bool Success status
+     */
     public function retrieve() : bool
     {
         $jobs = BatchJob::whereNull("finished_at")->whereNotNull("batch_id")->get();
@@ -126,6 +161,14 @@ class BackendBatchingService
         return true;
     }
 
+    /**
+     * Generate API request for batch processing
+     *
+     * @param string $action Action type
+     * @param string $model AI model to use
+     * @param array|string $content Content to process
+     * @return array Request data
+     */
     private function getRequest(string $action, string $model, array|string $content) : array {
         $endpoint = $action === "embedding" ? self::EMBEDDING_ENDPOINT : self::CHAT_ENDPOINT;
         $line = [
@@ -138,6 +181,13 @@ class BackendBatchingService
         return $line;
     }
 
+    /**
+     * Generate multiple requests for batch processing
+     *
+     * @param array $content Content array with lines
+     * @return array Array of request data
+     * @throws \Exception If lines not provided
+     */
     private function getRequests(array $content) : array {
         throw_if(!array_key_exists("lines", $content), new \Exception("Must provide lines"));
         $lines = [];
@@ -147,6 +197,12 @@ class BackendBatchingService
         return $lines;
     }
 
+    /**
+     * Append line to batch file
+     *
+     * @param string $file_path Path to batch file
+     * @param string $line Line to append
+     */
     private function appendToFile(string $file_path, string $line) : void
     {
         $file = Storage::path($file_path);
@@ -156,11 +212,23 @@ class BackendBatchingService
         file_put_contents($file, $line . "\n", FILE_APPEND);
     }
 
+    /**
+     * Generate unique file path for batch
+     *
+     * @return string Generated file path
+     */
     private function generateFilePath() : string
     {
         return  "batch/" . $this->team->id . "/" . Str::uuid() . ".jsonl";
     }
 
+    /**
+     * Get or create current batch job
+     *
+     * @param string $type Batch type
+     * @param bool $new Force create new batch
+     * @return BatchJob
+     */
     private function getCurrentBatch(string $type, bool $new = false) : BatchJob {
         if ($new) {
             return BatchJob::find(
@@ -176,6 +244,12 @@ class BackendBatchingService
             });
     }
 
+    /**
+     * Download batch results file
+     *
+     * @param string $fileId OpenAI file ID
+     * @return string Local file path
+     */
     private function download(string $fileId) : string {
         $filePath = "batch/". $this->team->id ."/retrieved-" . $fileId . ".jsonl";
         $content = OpenAI::files()->download($fileId);
@@ -183,6 +257,15 @@ class BackendBatchingService
         return $filePath;
     }
 
+    /**
+     * Create batch job lines
+     *
+     * @param BatchJob $batch Batch job
+     * @param array $line Line data
+     * @param array|string $content Original content
+     * @param int|null $file_id Associated file ID
+     * @return bool Success status
+     */
     private function createLines(BatchJob $batch, array $line, array|string $content, int $file_id = null) : bool
     {
         $this->appendToFile($batch->batch_file, json_encode($line));

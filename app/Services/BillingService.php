@@ -11,10 +11,22 @@ use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Subscription;
 
+/**
+ * Service for managing billing and subscription operations
+ * 
+ * This service handles:
+ * - Subscription management
+ * - Payment processing
+ * - Usage tracking and reporting
+ * - Billing-related customer operations
+ */
 class BillingService
 {
     /**
-     * Initiate the checkout process for the one-time signup fee.
+     * Initiate checkout process for one-time signup fee
+     *
+     * @param Team $team Team to process checkout for
+     * @return mixed Checkout session
      */
     public static function checkout(Team $team)
     {
@@ -45,11 +57,23 @@ class BillingService
         return $team->checkout([$priceId => 1], $sessionOptions);
     }
 
+    /**
+     * Get team's subscription invoices
+     *
+     * @param Team $team Team to get invoices for
+     * @return \Illuminate\Support\Collection|array|null Collection of invoices
+     */
     public static function invoices(Team $team): \Illuminate\Support\Collection|array|null
     {
         return $team->subscription($team->pricing->name)?->invoices();
     }
 
+    /**
+     * Check if team has active subscription
+     *
+     * @param Team $team Team to check
+     * @return bool Subscription status
+     */
     public static function isSubscribed(Team $team): bool
     {
         $subscription = $team->subscription($team->pricing->name);
@@ -57,7 +81,11 @@ class BillingService
     }
 
     /**
-     * @throws \Exception
+     * Create new subscription for team
+     *
+     * @param Team $team Team to subscribe
+     * @return mixed Checkout session
+     * @throws \Exception On subscription creation failure
      */
     public static function subscribe(Team $team)
     {
@@ -82,8 +110,13 @@ class BillingService
                 'cancel_url' => route('admin.billing.cancel', ['team' => $team->id]),
             ]);
     }
+
     /**
-     * Handle the success callback after the one-time fee payment.
+     * Handle successful payment callback
+     *
+     * @param Request $request HTTP request
+     * @param Team $team Team context
+     * @return mixed Redirect response
      */
     public static function success(Request $request, Team $team)
     {
@@ -105,7 +138,10 @@ class BillingService
     }
 
     /**
-     * Create a metered subscription for the team.
+     * Create metered subscription
+     *
+     * @param Team $team Team to create subscription for
+     * @throws \Exception On creation failure
      */
     public static function createSubscription(Team $team)
     {
@@ -125,7 +161,11 @@ class BillingService
     }
 
     /**
-     * Reports usage to Stripe for metered billing.
+     * Report usage for metered billing
+     *
+     * @param Team $team Team to report usage for
+     * @param int $quantity Usage quantity
+     * @throws \Exception If no active subscription
      */
     public static function reportUsage(Team $team, int $quantity): void
     {
@@ -138,7 +178,13 @@ class BillingService
         $subscription->reportUsage();
     }
 
-
+    /**
+     * Get team's usage records
+     *
+     * @param Team $team Team to get usage for
+     * @return mixed Usage records
+     * @throws \Exception If no active subscription
+     */
     public static function getUsage(Team $team)
     {
         $subscription = $team->subscription($team->pricing->name);
@@ -149,9 +195,13 @@ class BillingService
         return $team->subscription($team->pricing->name)->usageRecords()->first();
     }
 
+    /**
+     * Cancel team's subscription
+     *
+     * @param Team $team Team to cancel subscription for
+     */
     public static function cancelSubscription(Team $team): void
     {
         $team->subscription($team->pricing->name)->cancelNowAndInvoice();
     }
-
 }

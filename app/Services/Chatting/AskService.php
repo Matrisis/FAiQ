@@ -9,18 +9,38 @@ use App\Models\TeamPrompt;
 use App\Services\EmbeddingService;
 use Illuminate\Support\Facades\Event;
 
+/**
+ * Service for handling AI-powered question answering
+ * 
+ * This service manages the core Q&A functionality including:
+ * - Processing user questions
+ * - Retrieving relevant context
+ * - Generating AI responses
+ * - Managing custom prompts and context
+ */
 class AskService
 {
-
     private string $model;
     private Team $team;
 
+    /**
+     * Create a new AskService instance
+     *
+     * @param Team $team Team context for Q&A
+     * @param string $model AI model to use
+     */
     public function __construct(Team $team, string $model = "gpt-4o-mini") {
         $this->model = $model;
         $this->team = $team;
     }
 
-
+    /**
+     * Process a question and generate an answer
+     *
+     * @param string $question User's question
+     * @param int|null $max_tokens Maximum response length
+     * @return array Response data including answer and context
+     */
     public function ask(string $question, int $max_tokens = null): array
     {
         $custom_prompt = $this->retrieveCustomPrompt();
@@ -46,6 +66,14 @@ class AskService
         ];
     }
 
+    /**
+     * Stream an answer response
+     *
+     * @param string $channel Broadcast channel
+     * @param string $question User's question
+     * @param int|null $max_tokens Maximum response length
+     * @return array Response data
+     */
     public function stream(string $channel, string $question, int $max_tokens = null) : array
     {
         $custom_prompt = $this->retrieveCustomPrompt();
@@ -100,5 +128,4 @@ class AskService
         return $prompt . "Format as markdown. Only return the answer.
         If you cannot define a good and reliable answer to the question, say no matter the language exactly : I don't know.";
     }
-
 }

@@ -6,15 +6,37 @@ use App\Models\Embedding\File;
 use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
 
+/**
+ * Service for processing document images and extracting text
+ * 
+ * This service handles:
+ * - Converting PDFs to images
+ * - Extracting text from images using AI vision
+ * - Managing temporary file storage
+ */
 class VisionService
 {
     private File $file;
 
-    public function __construct(File $file) {
+    /**
+     * Create a new VisionService instance
+     *
+     * @param File $file File to process
+     */
+    public function __construct(File $file)
+    {
         $this->file = $file;
     }
 
-    private function fileToImage(File $file, string $format = "jpeg") : array {
+    /**
+     * Convert file to image format
+     *
+     * @param File $file Source file
+     * @param string $format Output image format
+     * @return array Array of generated image paths
+     */
+    private function fileToImage(File $file, string $format = "jpeg") : array
+    {
         $file_pdf = new \Spatie\PdfToImage\Pdf(Storage::path($file->path));
         $file_pdf->setOutputFormat($format);
         $dir = "pdf_images" . "/" . $file->team_id;
@@ -24,7 +46,13 @@ class VisionService
         return Storage::allFiles($dir);
     }
 
-
+    /**
+     * Convert image to text using AI vision
+     *
+     * @param array $images Array of image paths
+     * @param string $format Image format
+     * @return string Extracted text content
+     */
     private function imageToText(array $images, string $format = "jpeg") : string
     {
         $images_content = [
@@ -64,7 +92,12 @@ class VisionService
         return $merged_data;
     }
 
-
+    /**
+     * Process file and extract text content
+     *
+     * @param string $format Output image format
+     * @return string Extracted text content
+     */
     public function create(string $format = "jpeg") : string {
         $image_file = $this->fileToImage($this->file, $format);
         $text_file = $this->imageToText($image_file, $format);

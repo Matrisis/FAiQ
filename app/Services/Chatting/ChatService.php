@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
 use Psy\Readline\Hoa\Event;
 
+/**
+ * Service for managing direct chat interactions with AI
+ * 
+ * This service handles:
+ * - Direct chat interactions with OpenAI
+ * - Response streaming
+ * - Chat message formatting
+ * - Error handling for AI interactions
+ */
 class ChatService
 {
 
@@ -20,11 +29,23 @@ class ChatService
 
     private string $model;
 
+    /**
+     * Create a new ChatService instance
+     *
+     * @param string $model AI model to use
+     */
     public function __construct(string $model = "gpt-4o-mini")
     {
         $this->model = $model;
     }
 
+    /**
+     * Process a chat interaction
+     *
+     * @param array $messages Chat messages
+     * @param int|null $max_tokens Maximum response length
+     * @return array|null Chat response data
+     */
     public function chat(array $messages, int $max_tokens = null) : ?array
     {
         $data = [
@@ -45,6 +66,14 @@ class ChatService
         }
     }
 
+    /**
+     * Stream a chat response
+     *
+     * @param string $channel Broadcast channel
+     * @param array $messages Chat messages
+     * @param int|null $max_tokens Maximum response length
+     * @return array|null Response data
+     */
     public function steam(string $channel, $messages, int $max_tokens = null) : ?array {
         $data = [
             'model' => $this->model,
