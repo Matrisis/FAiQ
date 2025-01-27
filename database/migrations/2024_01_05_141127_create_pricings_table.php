@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("subscription_id");
             $table->string('subscription_price_id');
             $table->string('meter_price_id');
+            $table->integer("requests_count");
             $table->timestamps();
         });
     }

@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             "subscription_id" => "prod_RPs8XHbO4HiRkA",
             "subscription_price_id" => "price_1QX2OQAUBCE5hHWSW65fmG5x",
             "meter_price_id" => "price_1QX2P9AUBCE5hHWSHaneckr2",
+            "requests_count" => 400
         ]);
 
         if(app()->environment('local')) {
