@@ -178,9 +178,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 🆘 Support
 
-- Documentation: [docs.faiq.ai](https://docs.faiq.ai)
+- Documentation: [docs.faiq.ai](https://github.com/Matrisis/FAiQ/tree/main/docs)
 - Issues: [GitHub Issues](https://github.com/your-org/faiq/issues)
-- Email: support@faiq.ai
 
 ## 🔐 Security
 
