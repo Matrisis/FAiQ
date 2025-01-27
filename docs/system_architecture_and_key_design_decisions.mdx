@@ -1,0 +1,51 @@
+# System Architecture and Key Design Decisions
+The FAiQ project is built using a Model-View-Controller (MVC) pattern, with Laravel as the framework. This documentation outlines the key components, design decisions, and technical infrastructure of the project.
+
+## Project Structure
+The project is organized into the following directories:
+- `app`: Contains the application's core code, including models, controllers, and services.
+- `config`: Holds configuration files for the application, such as database settings and API keys.
+- `database`: Includes database migrations, seeders, and factories.
+- `public`: Serves as the public directory, containing the application's entry point and assets.
+- `resources`: Contains front-end assets, including CSS, JavaScript, and Vue components.
+- `routes`: Defines the application's routes, including web, API, and console routes.
+- `storage`: Stores the application's files, including logs and cached data.
+- `tests`: Includes unit and feature tests for the application.
+
+## Database Schema
+The database schema is defined in the `database/migrations` directory. Key tables include:
+- `users`: Stores information about registered users.
+- `teams`: Represents teams that users can belong to.
+- `team_invitations`: Manages team invitations.
+- `file_questions`: Stores questions related to files.
+- `answers`: Contains answers to questions.
+- `embeddings`: Represents embeddings, which are used for various AI-related tasks.
+- `batch_jobs`: Manages batch jobs, which are used for processing large datasets.
+- `subscriptions`: Stores subscription information for users.
+
+## Key Design Decisions
+- **MVC Pattern**: The application follows the MVC pattern, separating concerns into models, views, and controllers.
+- **Laravel Framework**: The project uses Laravel as its framework, leveraging its built-in features and tools.
+- **Front-end Assets**: Front-end assets, such as CSS and JavaScript files, are stored in the `resources` directory.
+
+## Setup Instructions
+To set up the project, follow these steps:
+1. Clone the repository using Git.
+2. Run `composer install` to install dependencies.
+3. Run `npm install` to install front-end dependencies.
+4. Create a database and update the `.env` file with the database credentials.
+5. Run `php artisan migrate` to migrate the database.
+6. Run `php artisan serve` to start the application.
+
+## Diagrams
+The following diagram illustrates the application's architecture:
+```mermaid
+graph LR
+    A[Front-end] -->|Request|> B[Controller]
+    B -->|Query|> C[Model]
+    C -->|Data|> B
+    B -->|Response|> A
+    C -->|Data|> D[Database]
+    D -->|Data|> C
+```
+This diagram shows how the front-end interacts with the controller, which then queries the model. The model retrieves data from the database and returns it to the controller, which sends a response back to the front-end.
